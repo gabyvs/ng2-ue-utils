@@ -1,0 +1,34 @@
+/src
+
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+/.idea/
+atlassian-ide-plugin.xml
+
+
+# typings
+typings/
+typings.json
+
+# testing
+karma.conf.js
+karma.debug.js
+karma.tests.js
+/coverage
+
+# demo
+/demo
+devserver-config.json
+/webpack/
+tslint.json
+
+#local
+*.tgz
+
+#typescript sources
+*.ts
+*.js.map
+!*.d.ts
+tsconfig.json

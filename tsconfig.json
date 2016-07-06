@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "sourceMap": true,
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "removeComments": false,
+    "noImplicitAny": false,
+    "outDir": "./build"
+  },
+  "exclude": [
+    "node_modules",
+    "demo"
+  ],
+  "compileOnSave": false,
+  "buildOnSave": false
+}

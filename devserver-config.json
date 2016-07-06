@@ -1,0 +1,10 @@
+{
+  "defaultUrl": "http://localhost:8080",
+  "rules": [
+    {
+      "path": "^/",
+      "resetPath": true,
+      "target": "http://localhost:8080/"
+    }
+  ]
+}
