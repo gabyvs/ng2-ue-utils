@@ -4,7 +4,7 @@ Set of angular2 components, directives, pipes and services that will be shared a
 ## Install from npm
 
 ```bash
-npm i ng2-bootstrap --save
+npm install ng2-ue-utils --save
 ```
 
 ## Prerequisites
