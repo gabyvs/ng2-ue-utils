@@ -53,6 +53,49 @@ And you are ready to go! :)
 
 * Loading dots
 
+### Directives
+
+* ToggleOnHover
+
 ### Pipes
 
 * DateMomentPipe
+
+## Running it locally
+
+Clone the repository and run
+```bash
+npm install
+```
+
+Start the demo app by running
+```bash
+npm start
+```
+This will start webpack devserver and a node server too. Go to localhost:3000 to see the demo app running in your machine.
+
+Run tests locally by running
+```bash
+npm test
+```
+
+or for debugging tests
+```bash
+npm run test:debug
+```
+
+For creating the distribution files
+```bash
+npm run build
+```
+This will create a build folder in the root folder and store the transpiled javascript files and source maps there.
+
+Test your changes on another project by creating a tarball
+```bash
+npm pack
+```
+This will generate a .tgz file in the root folder. Use the following command in your other project to get it installed.
+```bash
+npm install /path/to/ng2-ue-utils-someversion.tgz
+```
+And you will be ready to use it locally!
