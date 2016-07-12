@@ -56,6 +56,7 @@ And you are ready to go! :)
 ### Directives
 
 * ToggleOnHover
+* FocusOnInit
 
 ### Pipes
 
