@@ -38,6 +38,6 @@ export class DateMomentPipe implements PipeTransform {
         if (date.isValid()) {
             return date.format(args || 'lll');
         }
-        return timestamp.toString();
+        return 'Invalid date';
     }
 }

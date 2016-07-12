@@ -60,6 +60,7 @@ And you are ready to go! :)
 ### Pipes
 
 * DateMomentPipe
+* FromNowPipe
 
 ## Running it locally
 
@@ -68,7 +69,7 @@ Clone the repository and run
 npm install
 ```
 
-Start the demo app by running
+Start the demo app by running (will use ports 8080 and 3000 by default)
 ```bash
 npm start
 ```
@@ -94,8 +95,23 @@ Test your changes on another project by creating a tarball
 ```bash
 npm pack
 ```
-This will generate a .tgz file in the root folder. Use the following command in your other project to get it installed.
+This will generate a .tgz file in the root folder. 
+
+In your other project, use the following command to install the tarball: (note - delete this repo's source files in `node_modules` before installing from tarball, if already present)
 ```bash
 npm install /path/to/ng2-ue-utils-someversion.tgz
 ```
 And you will be ready to use it locally!
+
+## Contributing
+In `/src`, find the appropriate directory for your new component(or directive/pipe/service)
+and create a new directory there.
+
+Include your source code and any applicable tests. Ensure tests pass.  Document usage instructions for your
+component in the source code.
+
+Extend demo.html with implementation of your component.
+
+Extend `index.js` and `index.d.ts` in root with your component.
+
+Build this repo into a tarball and run it locally in your other project using the directions above to verify implementation.

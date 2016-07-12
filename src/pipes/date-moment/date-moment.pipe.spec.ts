@@ -21,4 +21,8 @@ describe('FromNowPipe', () => {
     it('transforms an undefined input to "unknown"', () => {
         expect(pipe.transform(undefined)).toEqual('unknown');
     });
+    
+    it('transforms an invalid input to "Invalid date"', () => {
+        expect(pipe.transform(9999999999999999999999)).toEqual('Invalid date');
+    });
 });
