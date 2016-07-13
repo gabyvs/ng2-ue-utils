@@ -49,6 +49,6 @@ var server = new webpackDevServer(compiler, {
 
 // We fire up the development server and give notice in the terminal
 // that we are starting the initial bundle
-server.listen(8080, 'localhost', function () {
-    console.log('[Webpack] Server running in port 8080.');
+server.listen(8081, 'localhost', function () {
+    console.log('[Webpack] Server running in port 8081.');
 });

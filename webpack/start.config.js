@@ -5,7 +5,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = exports = require("./base.config.js");
 exports.devtool = 'inline-source-map';
 exports.debug = true;
-exports.entry.app = ['webpack/hot/dev-server', 'webpack-dev-server/client?http://localhost:8080'].concat(exports.entry.app);
+exports.entry.app = ['webpack/hot/dev-server', 'webpack-dev-server/client?http://localhost:8081'].concat(exports.entry.app);
 exports.plugins = [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.ProvidePlugin({
