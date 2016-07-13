@@ -7,22 +7,22 @@
     </div>
 </div>
 <div class="component">
-    <h2>Date Moment Pipe</h2>
-    <div class="explanation">A pipe which converts timestamps into formatted dates - angular2 native date pipe was broken for some browsers on RC2</div>
+    <h2>Date Moment Pipe: Pipe</h2>
+    <div class="explanation">Converts timestamps into formatted dates - angular2 native date pipe was broken for some browsers on RC2</div>
     <div class="flex-container left">
         <span>{{ today | dateMoment }}</span>
     </div>
 </div>
 <div class="component">
-    <h2>From Now Pipe</h2>
-    <div class="explanation">A pipe which converts timestamps into relative time strings</div>
+    <h2>From Now Pipe: Pipe</h2>
+    <div class="explanation">Converts timestamps into relative time strings</div>
     <div class="flex-container left">
         <span>{{ recent | fromNow }}</span>
     </div>
 </div>
 <div class="component">
-    <h2>On Hover Show</h2>
-    <div class="explanation">A directive which hides and shows elements on hover events</div>
+    <h2>On Hover Show: Directive</h2>
+    <div class="explanation">Hides and shows elements on hover events</div>
     <div class="flex-container left">
         <div toggleOnHover>
             <div class="hide-on-hover">This will be hidden on hover</div>
@@ -31,9 +31,18 @@
     </div>
 </div>
 <div class="component">
-    <h2>Focus On Init</h2>
-    <div class="explanation">A directive which gives focus to an element on init using the `ngOnInit` lifecycle hook</div>
+    <h2>Focus On Init: Directive</h2>
+    <div class="explanation">Gives focus to an element on init using the `ngOnInit` lifecycle hook</div>
     <div class="flex-container left">
         <input type="text" focusOnInit>
+    </div>
+</div>
+<div class="component">
+    <h2>Filtering: Component</h2>
+    <div class="explanation">Accepts filtering criteria as an input and emits `emitFilter` event as an output. 
+        User is provided with a filtering criteria dropdown and an input which emits `emitFilter` on keyup.</div>
+    <div class="flex-container left">
+        <div>`emitFilter` event heard by parent, event payload is: {{ emitFilterCriteria | json }}</div>
+        <filtering (emitFilter)="onFilter($event)" [filterFields]="customFilterFields"></filtering>
     </div>
 </div>

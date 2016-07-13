@@ -1,0 +1,13 @@
+<div class="input-group input-group-sm">
+    <div class="input-group-btn" dropdown>
+        <button id="single-button" type="button" class="btn btn-default" dropdownToggle>
+            <span class="filtering-text">{{ filteredBy.label }}</span> <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
+            <li role="menuitem" (click)="filterBy(allField, term.value)"><a class="dropdown-item">{{ allField.label }}</a></li>
+            <li class="divider dropdown-divider"></li>
+            <li *ngFor="let field of filterFields" class="inner-item" role="menuitem" (click)="filterBy(field, term.value)"><a class="dropdown-item">{{ field.label }}</a></li>
+        </ul>
+    </div>
+    <input type="text" class="form-control" #term (keyup)="filter(term.value)" />
+</div>
