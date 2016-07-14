@@ -53,6 +53,8 @@ And you are ready to go! :)
 
 * Loading dots
 * Hint Scroll
+* Modal
+* Filtering
 
 ### Directives
 

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
-import { Subject }       from 'rxjs';
+import { Subject } from 'rxjs';
 
 import { DROPDOWN_DIRECTIVES } from 'ng2-bootstrap/ng2-bootstrap';
 
@@ -9,8 +9,13 @@ import { DROPDOWN_DIRECTIVES } from 'ng2-bootstrap/ng2-bootstrap';
  * to its parent so that its handler can filter a collection.  `emitFilter` is called on `keyup` whenever the user types 
  * something into the input field.
  * 
- * The default `filterFields` input value should be overridden to suit your use case, it is included to demonstrate the
- * expected data model.
+ * The `filterFields` input expects a FilterField array, interface is defined below.  Valid input might look like this:
+ *
+ *      [
+ *          { field: 'fullName',  label: 'Name' },
+ *          { field: 'email',     label: 'Email' },
+ *          { field: 'userName',  label: 'Username' }
+ *      ]
  * 
  * ### Simple Example
  *
@@ -24,7 +29,7 @@ declare const require: any;
 const template: string = require('./filtering.html');
 const styles: any = require('!!css-loader!less-loader!./filtering.less');
 
-export interface FilterField {
+export interface IFilterField {
     field: string;
     label: string;
 }
@@ -37,11 +42,7 @@ export interface FilterField {
 })
 export class Filtering implements OnInit {
 
-    @Input() filterFields: FilterField[] = [
-        { field: 'fullName', label: 'Name' },
-        { field: 'email', label: 'Email' },
-        { field: 'userName', label: 'Username' }
-    ];
+    @Input() public filterFields: IFilterField[];
 
     @Output() public emitFilter = new EventEmitter();
 

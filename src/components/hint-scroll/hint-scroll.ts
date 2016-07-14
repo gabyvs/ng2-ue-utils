@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ContentChild, ElementRef, Input } from '@angular/core';
+import { AfterViewInit, Component, ContentChild, ElementRef } from '@angular/core';
 
 import * as _ from 'lodash';
 

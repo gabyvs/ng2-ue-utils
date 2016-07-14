@@ -21,6 +21,11 @@ describe('Component: Filtering', () => {
                 fixture = f;
                 filtering = f.componentInstance;
                 element = f.nativeElement;
+                filtering.filterFields =  [
+                    { field: 'fullName',  label: 'Name' },
+                    { field: 'email',     label: 'Email' },
+                    { field: 'userName',  label: 'Username' }
+                ];
             });
     })));
 
