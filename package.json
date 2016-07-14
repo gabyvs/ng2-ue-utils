@@ -5,7 +5,7 @@
   "main": "index.js",
   "typings": "index.d.ts",
   "scripts": {
-    "build": "npm run clean && tsc",
+    "build": "npm run clean && tsc && npm run build:less && npm run build:html",
     "clean": "rm -rf ./build",
     "postinstall": "npm run typingsInstall",
     "start:neza": "node node_modules/nezaldi --conf=devserver-config.json",
@@ -14,7 +14,9 @@
     "test:phantom": "karma start karma.conf.js",
     "test:debug": "karma start karma.debug.js --no-single-run --auto-watch --browsers Chrome",
     "test": "npm run clean && npm run test:phantom",
-    "typingsInstall": "typings install"
+    "typingsInstall": "typings install",
+    "build:less": "cd src && find . -name '*.less' | cpio -pdm ../build && cd ..",
+    "build:html": "cd src && find . -name '*.html' | cpio -pdm ../build && cd .."
   },
   "repository": {
     "type": "git",
