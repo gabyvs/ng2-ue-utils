@@ -22,3 +22,47 @@ h2 {
 .explanation {
     color: #000000;
 }
+
+.emitFilterPrompt {
+    margin: 5px 0;
+}
+
+.emitFilterResult {
+    display: inline-block;
+    background-color: rgba(74, 74, 74, 0.8);
+    color: rgba(59, 255, 0, 0.9);
+    display: block;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+.hintScroll-demo {
+    width: 200px;
+    margin-left: 50px;
+    table {
+        width: 100%;
+        tr {
+            display: flex;
+            flex-flow: row;
+            height: 40px;
+            th, td {
+                width: 33%;
+                vertical-align: middle;
+                font-size: 16px;
+                padding: 5px;
+            }
+            th {
+                text-align: center;
+            }
+            &:nth-child(even) {
+                background-color: rgba(173, 216, 230, 0.2);
+            }
+        }
+        tbody {
+            overflow: scroll;
+            height: 200px;
+            border: 1px solid lightgray;
+            display: block;
+        }
+    }
+}

@@ -52,6 +52,7 @@ And you are ready to go! :)
 ### Components
 
 * Loading dots
+* Hint Scroll
 
 ### Directives
 

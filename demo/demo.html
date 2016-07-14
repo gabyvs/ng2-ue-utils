@@ -42,7 +42,68 @@
     <div class="explanation">Accepts filtering criteria as an input and emits `emitFilter` event as an output. 
         User is provided with a filtering criteria dropdown and an input which emits `emitFilter` on keyup.</div>
     <div class="flex-container left">
-        <div>`emitFilter` event heard by parent, event payload is: {{ emitFilterCriteria | json }}</div>
+        <i class="emitFilterPrompt">`emitFilter` event heard by parent, event payload is:</i>
+        <span class="emitFilterResult" *ngIf="emitFilterCriteria">{{ emitFilterCriteria | json }}</span>
         <filtering (emitFilter)="onFilter($event)" [filterFields]="customFilterFields"></filtering>
+    </div>
+</div>
+<div class="component">
+    <h2>HintScroll: Component</h2>
+    <div class="explanation">Appends elements to the top or bottom of a container to indicate the presence
+        of scrollable content.</div>
+    <div class="flex-container left hintScroll-demo">
+        <scrollable-container #scrollableComponent>
+            <table>
+                <thead #scrollableTop>
+                    <tr>
+                        <th>col1</th>
+                        <th>col2</th>
+                        <th>col3</th>
+                    </tr>
+                </thead>
+                <tbody #scrollableContent (scroll)="scrollableComponent.onScroll()">
+                    <tr>
+                        <td>1</td>
+                        <td>...</td>
+                        <td>...</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>...</td>
+                        <td>...</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>...</td>
+                        <td>...</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>...</td>
+                        <td>...</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>...</td>
+                        <td>...</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>...</td>
+                        <td>...</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>...</td>
+                        <td>...</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>...</td>
+                        <td>...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </scrollable-container>
     </div>
 </div>
