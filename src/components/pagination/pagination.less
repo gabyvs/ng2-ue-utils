@@ -1,0 +1,27 @@
+@import '../../common/variables.less';
+
+:host {
+    display: block;
+    float: right;
+}
+.alm-pagination {
+    float: right;
+    &-text {
+        color: @header-color;
+        font-weight: @table-header-font-weight;
+        margin-right: 5px;
+    }
+    &-symbol {
+        font-weight: bold;
+        border-radius: 0px;
+        &:disabled {
+            color: @disabled-button-color;
+        }
+        &.forward:before {
+            content: ">"
+        }
+        &.backward:before {
+            content: "<"
+        }
+    }
+}

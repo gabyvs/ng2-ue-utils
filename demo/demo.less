@@ -29,18 +29,29 @@ h2 {
     margin: 5px 0;
 }
 
-.emitFilterResult {
+.resultBlock {
+    margin: 10px;
+    &.paginationResult {
+        display: block;
+        div, span {
+            float: right;
+            clear: right;
+            margin-right: 25px;
+        }
+    }
+}
+
+.codeBlock {
     display: inline-block;
     background-color: rgba(74, 74, 74, 0.8);
-    color: rgba(59, 255, 0, 0.9);
+    color: whitesmoke;
     display: block;
     padding: 8px;
-    margin-bottom: 10px;
+    margin: 10px;
 }
 
 .hintScroll-demo {
     width: 200px;
-    margin-left: 50px;
     table {
         width: 100%;
         tr {

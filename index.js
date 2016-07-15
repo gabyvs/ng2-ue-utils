@@ -2,6 +2,7 @@ exports.LoadingDots = require('./build/components/loading-dots/loading-dots').Lo
 exports.HintScroll = require('./build/components/hint-scroll/hint-scroll').HintScroll;
 exports.Filtering = require('./build/components/filtering/filtering').Filtering;
 exports.Modal = require('./build/components/modal/modal').Modal;
+exports.Pagination = require('./build/components/pagination/pagination').Pagination;
 exports.DateMomentPipe = require('./build/pipes/date-moment/date-moment.pipe').DateMomentPipe;
 exports.FromNowPipe = require('./build/pipes/from-now/from-now.pipe').FromNowPipe;
 exports.ToggleOnHover = require('./build/directives/toggle-on-hover/toggle-on-hover').ToggleOnHover;

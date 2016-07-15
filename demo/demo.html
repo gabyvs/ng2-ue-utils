@@ -42,9 +42,11 @@
     <div class="explanation">Accepts filtering criteria as an input and emits `emitFilter` event as an output. 
         User is provided with a filtering criteria dropdown and an input which emits `emitFilter` on keyup.</div>
     <div class="flex-container left">
-        <i class="emitFilterPrompt">`emitFilter` event heard by parent, event payload is:</i>
-        <span class="emitFilterResult" *ngIf="emitFilterCriteria">{{ emitFilterCriteria | json }}</span>
         <filtering (emitFilter)="onFilter($event)" [filterFields]="customFilterFields"></filtering>
+        <div *ngIf="emitFilterCriteria" class="resultBlock">
+            <i>`emitFilter` event heard by parent, event payload is:</i>
+            <div class="codeBlock">{{ emitFilterCriteria | json }}</div>
+        </div>
     </div>
 </div>
 <div class="component">
@@ -123,6 +125,17 @@
         </modal>
         <div class="elsewhereOnThePage">
             <button (click)="openModal(myModal)">Open modal</button>
+        </div>
+    </div>
+</div>
+<div class="component">
+    <h2>HintScroll: Component</h2>
+    <div class="explanation">Pagination controls for a wrapper-contained list of entities.</div>
+    <div class="flex-container left">
+        <pagination [settings]="paginationState" (emitPaginate)="onPaginate($event)"></pagination>
+        <div *ngIf="paginationEvent" class="resultBlock paginationResult">
+            <span>Event payload is:</span>
+            <div class="codeBlock">{{ paginationEvent | json }}</div>
         </div>
     </div>
 </div>

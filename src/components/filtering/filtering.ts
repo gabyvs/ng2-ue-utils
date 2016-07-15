@@ -29,11 +29,6 @@ declare const require: any;
 const template: string = require('./filtering.html');
 const styles: any = require('!!css-loader!less-loader!./filtering.less');
 
-export interface IFilterField {
-    field: string;
-    label: string;
-}
-
 @Component({
     directives: [DROPDOWN_DIRECTIVES],
     selector: 'filtering',
@@ -42,7 +37,7 @@ export interface IFilterField {
 })
 export class Filtering implements OnInit {
 
-    @Input() public filterFields: IFilterField[];
+    @Input() public filterFields: Filtering.IFilterField[];
 
     @Output() public emitFilter = new EventEmitter();
 
@@ -68,5 +63,12 @@ export class Filtering implements OnInit {
             .subscribe(term => {
                 this.emitFilter.emit({ filterBy: this.filteredBy.field, filterText: term });
             });
+    }
+}
+
+export module Filtering {
+    export interface IFilterField {
+        field: string;
+        label: string;
     }
 }
