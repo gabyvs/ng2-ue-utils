@@ -1,0 +1,66 @@
+@import '../../common/variables';
+.success {
+    border-color: @success-color!important;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px @success-color;
+    //transition: border-color 200ms,box-shadow 200ms;
+}
+.error {
+    border-color: @input-border-error-color!important;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px @box-shadow-input-error-color;
+    //transition: border-color 200ms,box-shadow 200ms;
+}
+.property {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: text;
+    padding: 3px 10px;
+    line-height: 26px;
+    border-radius: 4px;
+    border: 1px solid transparent; // comment this for the cool effect
+    transition: border-color 200ms,box-shadow 200ms;
+}
+.property:hover {
+    border: 1px solid @input-border-color;
+}
+input {
+    padding-left: 10px;
+    //max-width: calc(~"100% - 14px"); // uncomment this to see the buttons
+    //border-radius: 4px 0px 0px 4px; // uncomment this to see the buttons
+}
+.glyphicon {
+    color: @icon-color;
+    cursor: pointer;
+    line-height: 26px;
+    padding: 3px;
+    border: 1px solid @input-border-color;
+    top: 0px;
+    border-left: 0px;
+    &-ok {
+        border-radius: 0px 4px 4px 0px;
+    }
+    &:hover {
+        color: @icon-hover-color;
+    }
+}
+.ng-valid[required] {
+    border-left: 5px solid @required-color;
+    padding-left: 5px;
+}
+.ng-invalid {
+    border-color: @input-border-error-color;
+    border-left: 5px solid @input-border-error-color;
+    padding-left: 5px;
+}
+.ng-invalid:focus {
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px @box-shadow-input-error-color;
+    //box-shadow: 0 0 6px @error-color;
+}
+div.alert {
+    position: absolute;
+    top: 34px;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    padding: 5px 0px 5px 10px;
+}

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Observable, Observer, Subject } from 'rxjs/Rx';
 
 import { DateMomentPipe } from '../src/pipes/date-moment/date-moment.pipe';
 import { FromNowPipe } from '../src/pipes/from-now/from-now.pipe';
@@ -7,6 +8,7 @@ import { Filtering } from '../src/components/filtering/filtering';
 import { HintScroll } from '../src/components/hint-scroll/hint-scroll';
 import { Modal } from '../src/components/modal/modal';
 import { Pagination } from '../src/components/pagination/pagination';
+import { ValueHandler } from '../src/components/value-handler/value-handler';
 import { ToggleOnHover } from '../src/directives/toggle-on-hover/toggle-on-hover';
 import { FocusOnInit } from '../src/directives/focus-on-init/focus-on-init';
 
@@ -15,7 +17,7 @@ const template: string = require('./demo.html');
 const styles: any = require('!!css-loader!less-loader!./demo.less');
 
 @Component({
-    directives: [LoadingDots, ToggleOnHover, FocusOnInit, Filtering, HintScroll, Modal, Pagination],
+    directives: [LoadingDots, ToggleOnHover, FocusOnInit, Filtering, HintScroll, Modal, Pagination, ValueHandler],
     pipes: [DateMomentPipe, FromNowPipe],
     selector: 'app',
     styles: [styles.toString()],
@@ -27,6 +29,7 @@ export class AppComponent {
     public emitFilterCriteria: any;
     public classForE2E: string = 'classForE2E';
     public paginationEvent: any;
+    public vhEvent: ValueHandler.IEvent;
     public paginationState: Pagination.IRangeSnapshot = {
         count: 234,
         filteredCount: 73,
@@ -38,6 +41,23 @@ export class AppComponent {
         { field: 'nj', label: 'New Jersey' },
         { field: 'ca', label: 'California' }
     ];
+    public vhAttribute: any = {
+        name: 'email',
+        value: 'example@example.com'
+    };
+    public vhValidation: ValueHandler.IValidationRule = {
+        fn: (newVal: string) => {
+            const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(newVal);
+        },
+        message: 'my invalid input msg :)'
+    };
+    public source = Observable.of(this.vhAttribute);
+    
+    public vhEditAttribute(event: ValueHandler.IEvent): void {
+        this.vhEvent = event;
+        event.subject.next();
+    }
 
     public onFilter(emitFilterCriteria): void {
         this.emitFilterCriteria = emitFilterCriteria;

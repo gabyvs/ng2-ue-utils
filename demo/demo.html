@@ -110,7 +110,7 @@
     </div>
 </div>
 <div class="component">
-    <h2>HintScroll: Component</h2>
+    <h2>Modal: Component</h2>
     <div class="explanation">Appends elements to the top or bottom of a container to indicate the presence
         of scrollable content.</div>
     <div class="flex-container left hintScroll-demo">
@@ -129,13 +129,28 @@
     </div>
 </div>
 <div class="component">
-    <h2>HintScroll: Component</h2>
+    <h2>Pagination: Component</h2>
     <div class="explanation">Pagination controls for a wrapper-contained list of entities.</div>
     <div class="flex-container left">
         <pagination [settings]="paginationState" (emitPaginate)="onPaginate($event)"></pagination>
         <div *ngIf="paginationEvent" class="resultBlock paginationResult">
-            <span>Event payload is:</span>
+            <span>`emitPaginate` event payload was:</span>
             <div class="codeBlock">{{ paginationEvent | json }}</div>
+        </div>
+    </div>
+</div>
+<div class="component">
+    <h2>Value Handler: Component</h2>
+    <div class="explanation">A span which converts to input on click, allows custom validators.</div>
+    <div class="flex-container left">
+        <span class="vhComponent">{{vhAttribute.name}}:
+            <value-handler style="position: relative" [property]="vhAttribute.name" [original]="vhAttribute.value" [validation]="vhValidation"
+                           place="bottom" (emitChange)="vhEditAttribute($event)">
+            </value-handler>
+        </span>
+        <div *ngIf="vhEvent" class="resultBlock">
+            <span>`emitChange` event payload was:</span>
+            <div class="codeBlock">{{ vhEvent | json }}</div>
         </div>
     </div>
 </div>

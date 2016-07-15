@@ -3,6 +3,7 @@ exports.HintScroll = require('./build/components/hint-scroll/hint-scroll').HintS
 exports.Filtering = require('./build/components/filtering/filtering').Filtering;
 exports.Modal = require('./build/components/modal/modal').Modal;
 exports.Pagination = require('./build/components/pagination/pagination').Pagination;
+exports.ValueHandler = require('./build/components/value-handler/value-handler').ValueHandler;
 exports.DateMomentPipe = require('./build/pipes/date-moment/date-moment.pipe').DateMomentPipe;
 exports.FromNowPipe = require('./build/pipes/from-now/from-now.pipe').FromNowPipe;
 exports.ToggleOnHover = require('./build/directives/toggle-on-hover/toggle-on-hover').ToggleOnHover;
