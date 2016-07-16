@@ -1,0 +1,67 @@
+@import '../../common/variables';
+
+:host {
+    display: block;
+    position: absolute;
+    top: 56px;
+    width: 100%;
+    z-index: 4;
+}
+.notification-container {
+    width: 100%;
+    -webkit-transition: max-height 1s;
+    -moz-transition: max-height 1s;
+    -ms-transition: max-height 1s;
+    -o-transition: max-height 1s;
+    transition: max-height 1s;
+    overflow: hidden;
+    max-height: 0;
+    text-align: center;
+    color: white;
+    font-weight: lighter;
+    cursor: default;
+    position: relative;
+    opacity: 1;
+    .notification-content {
+        padding: 10px;
+        .main-text {
+            margin-left: 5px;
+        }
+        .details-text {
+            font-size: smaller;
+            opacity: 0.6;
+        }
+    }
+}
+
+.show {
+    max-height: 100px;
+}
+.hide {
+    opacity: 0;
+    -webkit-transition: opacity 1s;
+    -moz-transition: opacity 1s;
+    -ms-transition: opacity 1s;
+    -o-transition: opacity 1s;
+    transition: opacity 1s;
+}
+.close {
+    color: white;
+    opacity: 0.4;
+    font-weight: lighter;
+    font-size: 19px;
+    font-family: verdana;
+    font-variant: small-caps;
+    &:hover {
+        opacity: 1;
+    }
+}
+.empty {
+    background-color: @progress-background-color-off;
+}
+.warning {
+    background-color: @progress-background-color-warning;
+}
+.error {
+    background-color: @progress-background-color-error;
+}

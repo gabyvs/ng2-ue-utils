@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Observable, Observer, Subject } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Rx';
 
 import { DateMomentPipe } from '../src/pipes/date-moment/date-moment.pipe';
 import { FromNowPipe } from '../src/pipes/from-now/from-now.pipe';
@@ -9,6 +9,10 @@ import { HintScroll } from '../src/components/hint-scroll/hint-scroll';
 import { Modal } from '../src/components/modal/modal';
 import { Pagination } from '../src/components/pagination/pagination';
 import { ValueHandler } from '../src/components/value-handler/value-handler';
+import { Notification } from '../src/components/notification/notification';
+import { NotificationService } from '../src/components/notification/notification-service';
+import { Progress } from '../src/components/progress/progress';
+import { ProgressService } from '../src/components/progress/progress-service';
 import { ToggleOnHover } from '../src/directives/toggle-on-hover/toggle-on-hover';
 import { FocusOnInit } from '../src/directives/focus-on-init/focus-on-init';
 
@@ -17,7 +21,9 @@ const template: string = require('./demo.html');
 const styles: any = require('!!css-loader!less-loader!./demo.less');
 
 @Component({
-    directives: [LoadingDots, ToggleOnHover, FocusOnInit, Filtering, HintScroll, Modal, Pagination, ValueHandler],
+    directives: [LoadingDots, ToggleOnHover, FocusOnInit, Filtering, HintScroll, Modal, Pagination, ValueHandler, 
+        Notification, Progress],
+    providers: [NotificationService, ProgressService],
     pipes: [DateMomentPipe, FromNowPipe],
     selector: 'app',
     styles: [styles.toString()],
@@ -45,6 +51,18 @@ export class AppComponent {
         name: 'email',
         value: 'example@example.com'
     };
+    private warning: NotificationService.INotification = {
+        message: 'My warning message',
+        type: 'warning' as NotificationService.NotificationType
+    };
+    private error: NotificationService.INotification = {
+        message: 'My error message',
+        type: 'error' as NotificationService.NotificationType
+    };
+    
+    constructor(public notificationService: NotificationService, public progressService: ProgressService){}
+    
+    // Value Handler
     public vhValidation: ValueHandler.IValidationRule = {
         fn: (newVal: string) => {
             const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -52,27 +70,62 @@ export class AppComponent {
         },
         message: 'my invalid input msg :)'
     };
-    public source = Observable.of(this.vhAttribute);
-    
     public vhEditAttribute(event: ValueHandler.IEvent): void {
         this.vhEvent = event;
         event.subject.next();
     }
-
+    public source = Observable.of(this.vhAttribute);
+    
+    // Filtering
     public onFilter(emitFilterCriteria): void {
         this.emitFilterCriteria = emitFilterCriteria;
     }
     
+    // Modal
     public openModal(myModal: Modal): void {
         myModal.open();
     }
-    
     public resolveModal(submitted): void {
         let message: string = submitted ? 'Modal was submitted!' : 'Cancelled.';
         alert(message);
     }
     
+    // Pagination
     public onPaginate(paginationEvent): void {
         this.paginationEvent = paginationEvent;
+    }
+    
+    // Notification
+    public emitWarning(): void {
+        this.notificationService.notify(this.warning);
+    }
+    public emitError(): void {
+        this.notificationService.notify(this.error);
+    }
+    
+    // Progress
+    public progress(error?: boolean): void {
+        this.progressService.notify({
+            event: 'start',
+            method: 'get',
+            stackCount: 1
+        });
+        if (error) {
+            setTimeout(() => {
+                this.progressService.notify({
+                    event: 'error',
+                    method: 'get',
+                    stackCount: 0
+                })
+            }, 3000)
+        } else {
+            setTimeout(() => {
+                this.progressService.notify({
+                    event: 'complete',
+                    method: 'get',
+                    stackCount: 0
+                })
+            }, 3000)
+        }
     }
 }

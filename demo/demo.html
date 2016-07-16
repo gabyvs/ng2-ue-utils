@@ -1,5 +1,23 @@
 <h1>Demo App for Angular2 Unified Experience Utilities</h1>
 <div class="component">
+    <h2>Notification: Component + Service</h2>
+    <div class="explanation">A component for displaying notifications whose api is exposed through Notification Service.</div>
+    <div class="flex-container left notification-container">
+        <notification></notification>
+        <button (click)="emitError()">Emit an error</button>
+        <button (click)="emitWarning()">Emit a warning</button>
+    </div>
+</div>
+<div class="component">
+    <h2>Progress: Component + Service</h2>
+    <div class="explanation">A component for displaying a progress bar whose api is exposed through Notification Service.</div>
+    <div class="flex-container left notification-container">
+        <progress-bar></progress-bar>
+        <button (click)="progress()">Start progress (successful)</button>
+        <button (click)="progress(true)">Start progress (errs)</button>
+    </div>
+</div>
+<div class="component">
     <h2>Loading Dots</h2>
     <div class="explanation">A directive which animates an ellipsis to indicate that a section of your page is still being loaded</div>
     <div class="flex-container left">

@@ -1,0 +1,36 @@
+@import '../../common/variables';
+
+:host { display: block; }
+
+.progress-container {
+    width: 100%;
+    height: 2px;
+    z-index: 5;
+    position: absolute;
+    top: 56px;
+}
+.progress-reporter {
+    height: 100%;
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+.empty {
+    background-color: @progress-background-color-off;
+}
+.on {
+    background-color: @progress-background-color-on;
+}
+.default {
+    background-color: @progress-background-color-default;
+}
+.success {
+    background-color: @progress-background-color-success;
+}
+.warning {
+    background-color: @progress-background-color-warning;
+}
+.error {
+    background-color: @progress-background-color-error;
+}
