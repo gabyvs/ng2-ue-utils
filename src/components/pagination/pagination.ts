@@ -63,7 +63,9 @@ export class Pagination {
     }
 }
 
-export module Pagination {
+export namespace Pagination {
+    'use strict';
+    
     export interface IRangeSnapshot {
         count: number;
         filteredCount: number;

@@ -129,9 +129,10 @@ export class Progress implements OnDestroy, OnInit {
     }
 
     public ngOnInit () {
-        this.subscription = this.progressService.observe$.filter(status => status.event !== 'next').subscribe((event: ProgressService.IEvent) => {
-            this.onEmit(event);
-        });
+        this.subscription = this.progressService.observe$.filter(status => status.event !== 'next')
+            .subscribe((event: ProgressService.IEvent) => {
+                this.onEmit(event);
+            });
     }
 
     public ngOnDestroy () {

@@ -13,7 +13,8 @@ export class NotificationService {
     }
 }
 
-export module NotificationService {
+export namespace NotificationService {
+    'use strict';
 
     export interface INotification {
         message: string;

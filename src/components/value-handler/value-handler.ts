@@ -6,7 +6,7 @@ import { FocusOnInit } from '../../directives/focus-on-init/focus-on-init';
 
 /**
  * This component transitions from a span to an input on click events, allowing the user to adjust it's value.  Once in
- * edit mode, a new value can be submitted by pressing `enter` or `tab`, or the update can be cancelled on 'blur'. You
+ * edit mode, a new value can be saved by pressing `enter` or `tab`, or the update can be cancelled on 'blur'. You
  * can optionally pass in validation logic.
  *
  * @input value: string                             
@@ -22,7 +22,7 @@ import { FocusOnInit } from '../../directives/focus-on-init/focus-on-init';
  * original value of the component. `value` will reset to this on cancel (blur).
  * 
  * @input validation: ValueHandler.ValidationRule   
- * an object containing a validator function and invalid message to be applied to user input on update attempt.
+ * an object containing an input validator function and an invalid input message.
  * 
  * @input place: string
  * specifies placement of the component tooltip, defaults to 'top'.
@@ -48,7 +48,7 @@ const styles: any = require('!!css-loader!less-loader!./value-handler.less');
     selector: 'value-handler',
     styles: [styles.toString()],
     template: `
-        <span class="property" [tooltip]="value" (click)="editing = true" tooltipPlacement="{{tooltipPlace}}"
+        <span class="property" [tooltip]="value" (click)="startEditing()" tooltipPlacement="{{tooltipPlace}}"
             #propertySpan [tooltipEnable]="enableTooltip"
             *ngIf="!editing" [ngClass]="{ 'success': success, 'error': error }">{{value}}</span>
         <input class="form-control" #propertyInput focusOnInit
@@ -117,6 +117,10 @@ export class ValueHandler implements AfterViewInit {
 
     public validate (value: string) {
         this.inputValueStream.next(value);
+    }
+    
+    public startEditing (): void {
+        this.editing = true;
     }
 
     private onError () {
@@ -206,11 +210,13 @@ export class ValueHandler implements AfterViewInit {
     }
 }
 
-export module ValueHandler {
-    export interface IValidationRule { fn: Function, message: string  }
+export namespace ValueHandler {
+    'use strict';
+    
+    export interface IValidationRule { fn: Function; message: string;  }
     export interface IEvent {
-        property: string,
-        subject: Subject<any>,
-        value: string,
+        property: string;
+        subject: Subject<any>;
+        value: string;
     }
 }

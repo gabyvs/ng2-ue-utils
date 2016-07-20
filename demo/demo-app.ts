@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
-
 import { DateMomentPipe } from '../src/pipes/date-moment/date-moment.pipe';
 import { FromNowPipe } from '../src/pipes/from-now/from-now.pipe';
 import { LoadingDots } from '../src/components/loading-dots/loading-dots';
@@ -23,8 +21,8 @@ const styles: any = require('!!css-loader!less-loader!./demo.less');
 @Component({
     directives: [LoadingDots, ToggleOnHover, FocusOnInit, Filtering, HintScroll, Modal, Pagination, ValueHandler, 
         Notification, Progress],
-    providers: [NotificationService, ProgressService],
     pipes: [DateMomentPipe, FromNowPipe],
+    providers: [NotificationService, ProgressService],
     selector: 'app',
     styles: [styles.toString()],
     template: template
@@ -36,6 +34,7 @@ export class AppComponent {
     public classForE2E: string = 'classForE2E';
     public paginationEvent: any;
     public vhEvent: ValueHandler.IEvent;
+    public modalResult: string;
     public paginationState: Pagination.IRangeSnapshot = {
         count: 234,
         filteredCount: 73,
@@ -59,22 +58,22 @@ export class AppComponent {
         message: 'My error message',
         type: 'error' as NotificationService.NotificationType
     };
-    
-    constructor(public notificationService: NotificationService, public progressService: ProgressService){}
-    
-    // Value Handler
     public vhValidation: ValueHandler.IValidationRule = {
         fn: (newVal: string) => {
-            const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            const re = /\S+@\S+\.\S+/;
             return re.test(newVal);
         },
         message: 'my invalid input msg :)'
     };
+    
+    constructor(public notificationService: NotificationService, public progressService: ProgressService) {}
+    
+    // Value Handler
     public vhEditAttribute(event: ValueHandler.IEvent): void {
         this.vhEvent = event;
+        this.vhAttribute.value = event.value;
         event.subject.next();
     }
-    public source = Observable.of(this.vhAttribute);
     
     // Filtering
     public onFilter(emitFilterCriteria): void {
@@ -86,8 +85,7 @@ export class AppComponent {
         myModal.open();
     }
     public resolveModal(submitted): void {
-        let message: string = submitted ? 'Modal was submitted!' : 'Cancelled.';
-        alert(message);
+        this.modalResult = submitted ? 'submitted!' : 'cancelled.';
     }
     
     // Pagination
@@ -116,16 +114,16 @@ export class AppComponent {
                     event: 'error',
                     method: 'get',
                     stackCount: 0
-                })
-            }, 3000)
+                });
+            }, 3000);
         } else {
             setTimeout(() => {
                 this.progressService.notify({
                     event: 'complete',
                     method: 'get',
                     stackCount: 0
-                })
-            }, 3000)
+                });
+            }, 3000);
         }
     }
 }

@@ -13,15 +13,16 @@ export class ProgressService {
     }
 }
 
-export module ProgressService {
-
+export namespace ProgressService {
+    'use strict';
+    
     export interface IEvent {
         event: EventType;
         method: EventMethod;
         stackCount: number;
     }
 
-    export type EventType = 'error' | 'warning' | 'start' | 'complete';
+    export type EventType = 'error' | 'warning' | 'start' | 'complete' | 'next';
     export type EventMethod = 'get' | 'put' | 'post' | 'delete';
 
 }

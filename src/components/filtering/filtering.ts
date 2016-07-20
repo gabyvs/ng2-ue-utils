@@ -66,7 +66,9 @@ export class Filtering implements OnInit {
     }
 }
 
-export module Filtering {
+export namespace Filtering {
+    'use strict';
+    
     export interface IFilterField {
         field: string;
         label: string;
