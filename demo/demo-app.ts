@@ -65,6 +65,20 @@ export class AppComponent {
         },
         message: 'my invalid input msg :)'
     };
+    public scrollableDivs: string[] = [
+        'myContent1',
+        'myContent2',
+        'myContent3',
+        'myContent4',
+        'myContent5',
+        'myContent6',
+        'myContent7',
+        'myContent8',
+        'myContent9',
+        'myContent10',
+        'myContent11',
+        'myContent12',
+    ];
     
     constructor(public notificationService: NotificationService, public progressService: ProgressService) {}
     
