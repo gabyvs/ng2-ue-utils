@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ContentChild, ViewChild, ElementRef, Inject } from '@angular/core';
+import { AfterViewInit, Component, ContentChild, ElementRef, Inject } from '@angular/core';
 
 import * as _ from 'lodash';
 
@@ -62,7 +62,6 @@ import * as _ from 'lodash';
  * ```
  */
     
-
 @Component({
     selector: 'scrollable-container',
     styles: [`
@@ -99,10 +98,9 @@ export class HintScroll implements AfterViewInit {
 
     public onScroll = _.debounce(this.verifyVisibility, 500);
     
-    constructor(@Inject(ElementRef) private el: ElementRef){}
+    constructor(@Inject(ElementRef) private el: ElementRef) {}
 
     public ngAfterViewInit () {
-        window.vm = this;
         setTimeout(() => {
             if (!this.content) { 
                 this.fromTop = this.el.nativeElement.clientHeight - 1 + 'px';
