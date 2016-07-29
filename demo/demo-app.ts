@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { DateMomentPipe } from '../src/pipes/date-moment/date-moment.pipe';
-import { FromNowPipe } from '../src/pipes/from-now/from-now.pipe';
+import { DateMoment } from '../src/pipes/date-moment/date-moment';
+import { FromNow } from '../src/pipes/from-now/from-now';
 import { LoadingDots } from '../src/components/loading-dots/loading-dots';
 import { Filtering } from '../src/components/filtering/filtering';
 import { HintScroll } from '../src/components/hint-scroll/hint-scroll';
@@ -21,7 +21,7 @@ const styles: any = require('!!css-loader!less-loader!./demo.less');
 @Component({
     directives: [LoadingDots, ToggleOnHover, FocusOnInit, Filtering, HintScroll, Modal, Pagination, ValueHandler, 
         Notification, Progress],
-    pipes: [DateMomentPipe, FromNowPipe],
+    pipes: [DateMoment, FromNow],
     providers: [NotificationService, ProgressService],
     selector: 'app',
     styles: [styles.toString()],

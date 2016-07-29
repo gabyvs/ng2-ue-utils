@@ -1,12 +1,12 @@
 import { beforeEach } from '@angular/core/testing';
 
-import { FromNowPipe } from './from-now.pipe';
+import { FromNow } from './from-now';
 import * as moment from 'moment';
 
 describe('FromNowPipe', () => {
-    let pipe: FromNowPipe;
+    let pipe: FromNow;
     beforeEach(() => {
-        pipe = new FromNowPipe();
+        pipe = new FromNow();
     });
     it('transforms a timestamp of yesterday to "a day ago"', () => {
         let yesterday = moment().subtract(1, 'd').valueOf() as number;

@@ -31,7 +31,7 @@ import * as moment from 'moment';
  *
  */
 @Pipe({name: 'dateMoment'})
-export class DateMomentPipe implements PipeTransform {
+export class DateMoment implements PipeTransform {
     public transform(timestamp: number, args?: string): string {
         if (!timestamp) { return 'unknown'; }
         const date = moment(timestamp);

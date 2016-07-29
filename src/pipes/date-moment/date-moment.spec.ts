@@ -1,11 +1,11 @@
-import { DateMomentPipe } from './date-moment.pipe';
+import { DateMoment } from './date-moment';
 import * as moment from 'moment';
 
 describe('FromNowPipe', () => {
-    let pipe: DateMomentPipe;
+    let pipe: DateMoment;
 
     beforeEach(() => {
-        pipe = new DateMomentPipe();
+        pipe = new DateMoment();
     });
 
     it('by default, transforms a timestamp to a string containing short month name, day of month, year, short time', () => {

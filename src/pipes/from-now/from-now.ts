@@ -19,7 +19,7 @@ import * as moment from 'moment';
  */
 
 @Pipe({name: 'fromNow'})
-export class FromNowPipe implements PipeTransform {
+export class FromNow implements PipeTransform {
     public transform(timestamp: number): string {
         if (!timestamp) { return 'unknown'; }
         return moment(timestamp).fromNow();
