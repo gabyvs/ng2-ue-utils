@@ -1,20 +1,24 @@
-import { AfterViewInit, Component, ContentChild, ElementRef, Inject } from '@angular/core';
+import { AfterViewInit, Component, ContentChild, ElementRef, Inject, Input, Output, EventEmitter } from '@angular/core';
 
 import * as _ from 'lodash';
 
 /**
  * A component which renders indicators when there is hidden content which can be scrolled to bring into view.  It wraps
- * its contained elements in divs which display when the user has scrolled more than 10 pixels from the top or bottom of
- * its contents.
- * 
- * Attach the local var `#scrollableComponent` to the <scrollable-container> tag as shown below.
+ * your contents and adds arrows which display when the user has scrolled more than 10 pixels from the top or bottom of
+ * the contents.
  *
- * If you need a buffer between the element upon which you attach the directive and the content (eg: for the table
- * headers in a <table>), then attach the local var `#scrollableContent` to the scrollable content's container.  Also 
+ * IMPORTANT: If you need a buffer between the element upon which you attach the directive and the content (eg: for the 
+ * table headers in a <table>):
  * 
- * Add a `scroll` event handler which calls `scrollableComponent.onScroll()`.
+ *      1) Attach the local var `#scrollableComponent` to the <scrollable-container> tag as shown below.
+ * 
+ *      2) Attach the local var `#scrollableContent` to the scrollable content's container.
+ * 
+ *      3) Add a `scroll` event handler which calls `scrollableComponent.onScroll()` to the same element with 
+ *          `#scrollableContent`.
  *
- * Finally, add the `#scrollableTop` local var to the element directly above your scrollable content in the DOM tree.
+ *      4) Add the `#scrollableTop` local var to the element directly above your scrollable content in the DOM tree,
+ *          which will act as a buffer between the top of the `scrollable-container` tag and the scrollable content.
  * 
  * See demo implementation for styles.
  * 
@@ -39,7 +43,7 @@ import * as _ from 'lodash';
  *
  * Using divs, no buffer needed for table headers:
  * ```
- *  <scrollable-container (scroll)="scrollableComponent.onScroll()">
+ *  <scrollable-container>
  *      <div>
  *          my content
  *      </div>
@@ -73,6 +77,7 @@ import * as _ from 'lodash';
             position: absolute;
             display: flex;
             z-index: 2;
+            cursor: default;
         }
         .arrow {
             margin: auto;
@@ -80,21 +85,40 @@ import * as _ from 'lodash';
             transform: rotate(90deg) scale(3);
         }
         .bottom { bottom: 0; }
+        .bottom-fix { bottom: -1px; }
+        .content-wrapper {
+            max-height: inherit;
+            height: inherit;
+            overflow-x: auto;
+            overflow-y: scroll;
+        }
     `],
     template: `
     <div class="hint-scroll" *ngIf="showTop()" [ngStyle]="{'top': fromTop}"><div class="arrow">&lsaquo;</div></div>
-    <ng-content></ng-content> 
-    <div class="hint-scroll bottom" *ngIf="showBottom()"><div class="arrow">&rsaquo;</div></div>
+    <div [ngClass]="{ 'content-wrapper': !targetContainer }" (scroll)="onScroll()">
+        <ng-content></ng-content>
+    </div>
+    <div class="hint-scroll bottom" [ngClass]="{ 'bottom-fix': !targetContainer }" *ngIf="showBottom()">
+        <div class="arrow">&rsaquo;</div>
+    </div>
     `
 })
 export class HintScroll implements AfterViewInit {
 
-    @ContentChild('scrollableContent') private content: ElementRef;
+    @ContentChild('scrollableContent') private targetContainer: ElementRef;
     @ContentChild('scrollableTop') private top: ElementRef;
-
+    
+    @Output() public checkedVisibility = new EventEmitter();
+    
+    @Input() public set newContentLoaded (newContentLoaded: boolean) {
+        if (newContentLoaded) {
+            this.verifyVisibility();
+            this.checkedVisibility.emit('success');
+        }
+    }
+    
     private scrollableEl: HTMLElement;
     private fromTop: string;
-    private hasTargetContainer: boolean = false;
 
     public onScroll = _.debounce(this.verifyVisibility, 500);
     
@@ -102,25 +126,33 @@ export class HintScroll implements AfterViewInit {
 
     public ngAfterViewInit () {
         setTimeout(() => {
-            if (!this.content) { 
-                this.fromTop = this.el.nativeElement.clientHeight - 1 + 'px';
-                return; 
+            if (this.targetContainer) {
+                this.scrollableEl = this.targetContainer.nativeElement;
+                this.fromTop = this.top.nativeElement.clientHeight - 1 + 'px';
+            } else {
+                this.fromTop = '0px';
             }
-            this.hasTargetContainer = true;
-            this.scrollableEl = this.content.nativeElement;
-            this.fromTop = this.top.nativeElement.clientHeight - 1 + 'px';
+            this.verifyVisibility();
         });
     }
 
     private showTop () {
         let firstElementTop: number;
         let bodyTop: number;
-        if (this.hasTargetContainer) {
+        let children: HTMLElement[] | HTMLCollection;
+        if (this.targetContainer) {
             if (!this.scrollableEl || !this.scrollableEl.children.length) { return false; }
-            firstElementTop = this.scrollableEl.children[0].getBoundingClientRect().top;
+            children = this.scrollableEl.children;
+            firstElementTop = children[0].getBoundingClientRect().top;
             bodyTop = this.scrollableEl.getBoundingClientRect().top;
         } else {
-            firstElementTop = this.el.nativeElement.children[0].getBoundingClientRect().top;
+            if (!this.el.nativeElement || 
+                !this.el.nativeElement.getElementsByClassName('content-wrapper')[0] ||
+                !this.el.nativeElement.getElementsByClassName('content-wrapper')[0].children.length) { 
+                return false; 
+            }
+            children = this.el.nativeElement.getElementsByClassName('content-wrapper')[0].children;
+            firstElementTop = children[0].getBoundingClientRect().top;
             bodyTop = this.el.nativeElement.getBoundingClientRect().top;
         }
         return firstElementTop < (bodyTop - 10);
@@ -129,12 +161,20 @@ export class HintScroll implements AfterViewInit {
     private showBottom () {
         let lastElementBottom: number;
         let bodyBottom: number;
-        if (this.hasTargetContainer) {
+        let children: HTMLElement[] | HTMLCollection;
+        if (this.targetContainer) {
             if (!this.scrollableEl || !this.scrollableEl.children.length) { return false; }
-            lastElementBottom = this.scrollableEl.children[this.scrollableEl.children.length - 1].getBoundingClientRect().bottom;
+            children = this.scrollableEl.children;
+            lastElementBottom = children[children.length - 1].getBoundingClientRect().bottom;
             bodyBottom = this.scrollableEl.getBoundingClientRect().bottom;
         } else {
-            lastElementBottom = this.el.nativeElement.children[this.el.nativeElement.children.length - 1].getBoundingClientRect().bottom;
+            if (!this.el.nativeElement ||
+                !this.el.nativeElement.getElementsByClassName('content-wrapper')[0] ||
+                !this.el.nativeElement.getElementsByClassName('content-wrapper')[0].children.length) { 
+                return false; 
+            }
+            children = this.el.nativeElement.getElementsByClassName('content-wrapper')[0].children;
+            lastElementBottom = children[children.length - 1].getBoundingClientRect().bottom;
             bodyBottom = this.el.nativeElement.getBoundingClientRect().bottom;
         }
         return lastElementBottom > (bodyBottom + 10);
