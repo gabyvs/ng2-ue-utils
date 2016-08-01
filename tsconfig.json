@@ -26,9 +26,11 @@
     "src/pipes/from-now/from-now.spec.ts",
     "src/services/client/client.spec.ts",
     "src/services/client/client-request-options.spec.ts",
+    "src/services/client/client-observer.spec.ts",
     "src/services/context/context.spec.ts",
     "src/services/context/context-helper.spec.ts",
-    "src/services/context/jwt.spec.ts"
+    "src/services/context/jwt.spec.ts",
+    "src/services/router/api-routes.spec.ts"
   ],
   "compileOnSave": false,
   "buildOnSave": false

@@ -9,10 +9,6 @@ import { WindowRef } from '../window-ref';
 export const GTM_APP_NAME = new OpaqueToken('GTMAppName');
 export const APP_BASEPATH = new OpaqueToken('AppBasepath');
 
-export class Cookie {
-    constructor(public key: string, public value: string) {}
-}
-
 export interface IContext {
     orgName: string;
 }

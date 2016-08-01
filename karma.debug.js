@@ -6,9 +6,10 @@ module.exports = function (config) {
         basePath: '',
         port: 3334,
         logLevel: config.LOG_INFO,
-        browsers: ['PhantomJS'], //use PhantomJS as default
-        singleRun: true, //just run once by default
+        browsers: ['Chrome'], //use PhantomJS as default
+        singleRun: false, //just run once by default
         frameworks: ['jasmine'], //use jasmine as framework
+        autoWatch: true, //use jasmine as framework
         files: [
             'node_modules/zone.js/dist/zone.min.js',
             'node_modules/zone.js/dist/async-test.js',
