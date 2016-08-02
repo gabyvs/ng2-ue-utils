@@ -13,6 +13,7 @@ import { Progress } from '../src/components/progress/progress';
 import { ProgressService } from '../src/components/progress/progress-service';
 import { ToggleOnHover } from '../src/directives/toggle-on-hover/toggle-on-hover';
 import { FocusOnInit } from '../src/directives/focus-on-init/focus-on-init';
+import { ListHeaders } from '../src/components/list-headers/list-headers';
 
 declare const require: any;
 const template: string = require('./demo.html');
@@ -20,7 +21,7 @@ const styles: any = require('!!css-loader!less-loader!./demo.less');
 
 @Component({
     directives: [LoadingDots, ToggleOnHover, FocusOnInit, Filtering, HintScroll, Modal, Pagination, ValueHandler, 
-        Notification, Progress],
+        Notification, Progress, ListHeaders],
     pipes: [DateMoment, FromNow],
     providers: [NotificationService, ProgressService],
     selector: 'app',
@@ -33,6 +34,7 @@ export class AppComponent {
     public emitFilterCriteria: any;
     public classForE2E: string = 'classForE2E';
     public paginationEvent: any;
+    public listheaderEvent: any;
     public vhEvent: ValueHandler.IEvent;
     public modalResult: string;
     public paginationState: Pagination.IRangeSnapshot = {
@@ -79,6 +81,11 @@ export class AppComponent {
         'myContent11',
         'myContent12',
     ];
+    public headers = [
+        { label: 'display name',    property: 'displayName',    styles: { width: '23%' }},
+        { label: 'description',     property: 'description',    styles: { width: '54%' }},
+        { label: 'modified',        property: 'lastModifiedAt', styles: { width: '23%' }}
+    ];
     
     constructor(public notificationService: NotificationService, public progressService: ProgressService) {}
     
@@ -104,6 +111,7 @@ export class AppComponent {
     
     // Pagination
     public onPaginate(paginationEvent): void {
+        console.log(paginationEvent);
         this.paginationEvent = paginationEvent;
     }
     
@@ -140,5 +148,9 @@ export class AppComponent {
             }, 3000);
         }
     }
-    
+
+    public sort(listheaderEvent): void {
+        console.log(ListHeaders);
+        this.listheaderEvent = listheaderEvent;
+    }
 }
