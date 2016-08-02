@@ -51,20 +51,29 @@ And you are ready to go! :)
 
 ### Components
 
-* Loading dots
-* Hint Scroll
-* Modal
 * Filtering
+* Hint scroll
+* Loading dots
+* Modal
+* Notification
+* Pagination
+* Progress bar
+* Value handler
 
 ### Directives
 
-* ToggleOnHover
-* FocusOnInit
+* Toggle on hover
+* Focus on init
 
 ### Pipes
 
-* DateMomentPipe
-* FromNowPipe
+* Date moment
+* From now
+
+### Services
+
+* Client
+* Context
 
 ## Running it locally
 
