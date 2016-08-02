@@ -17,3 +17,4 @@ export * from './services/client/client';
 export * from './services/client/client.mock';
 export * from './services/context/context';
 export * from './services/window-ref';
+export * from './components/list-headers/list-headers';

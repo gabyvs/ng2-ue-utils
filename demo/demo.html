@@ -182,3 +182,14 @@
         </div>
     </div>
 </div>
+<div class="component">
+    <h2>Table Header</h2>
+    <div class="explanation">A span which converts to input on click, allows custom validators.</div>
+    <div class="flex-container left">
+        <list-headers (emitSort)="sort($event)" [headers]="headers"></list-headers>
+        <div *ngIf="listheaderEvent" class="resultBlock paginationResult">
+            <span>`listheaderEvent` event payload was:</span>
+            <div class="codeBlock">{{ listheaderEvent | json }}</div>
+        </div>
+    </div>
+</div>
