@@ -4,7 +4,6 @@ export * from './components/filtering/filtering';
 export * from './components/modal/modal';
 export * from './components/pagination/pagination';
 export * from './components/value-handler/value-handler';
-export * from './components/progress/progress';
 export * from './components/notification/notification';
 export * from './components/notification/notification-service';
 export * from './components/progress/progress';
