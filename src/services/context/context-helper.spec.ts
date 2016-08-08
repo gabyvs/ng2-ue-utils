@@ -3,6 +3,8 @@ import { addProviders, inject } from '@angular/core/testing';
 import { ContextHelper } from './context-helper';
 import { WindowMock, WindowRef } from '../window-ref';
 
+declare const beforeEach, describe, expect, it;
+
 describe('Context Helper', () => {
 
     const appName = 'someappfortest';

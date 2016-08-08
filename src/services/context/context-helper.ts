@@ -6,7 +6,7 @@ export class Cookie {
 }
 
 export class ContextHelper {
-    constructor(private window: WindowRef, private appName: string) {}
+    constructor(private window: WindowRef, private gtmAppName: string) {}
 
     public orgNameFromPath (path: string): string {
         const parts: RegExpExecArray = /^\/(?:o|organizations)\/([^\/]+)\//.exec(path);
@@ -31,7 +31,7 @@ export class ContextHelper {
     public updateGtmContext (orgName: string, uuid?: string, email?: string) {
         const context = {
             'organization.name': orgName,
-            'webapp.name': this.appName,
+            'webapp.name': this.gtmAppName,
             'event': 'Push Context'
         };
         if (/^[^@]+@apigee.com/.test(email || '')) {

@@ -6,8 +6,13 @@ import { ContextHelper } from './context-helper';
 import { Client } from '../client/client';
 import { WindowRef } from '../window-ref';
 
-export const GTM_APP_NAME = new OpaqueToken('GTMAppName');
-export const APP_BASEPATH = new OpaqueToken('AppBasepath');
+export interface IAppConfig {
+    appBasePath: string;
+    apiBasePath: string;
+    gtmAppName: string;
+}
+
+export const APP_CONFIG = new OpaqueToken('AppConfig');
 
 export interface IContext {
     orgName: string;
@@ -30,10 +35,9 @@ export class ContextService {
     constructor(
         private location: Location,
         private client: Client,
-        @Inject(APP_BASEPATH) private basepath,
         window: WindowRef,
-        @Inject(GTM_APP_NAME) appName) {
-        this.helper = new ContextHelper(window, appName);
+        @Inject(APP_CONFIG) private appConfig: IAppConfig) {
+        this.helper = new ContextHelper(window, this.appConfig.gtmAppName);
     }
 
     public getContext (): IContext {
@@ -55,7 +59,7 @@ export class ContextService {
         const orgFromLocalStorage = this.helper.orgNameFromLocal();
         if (orgFromLocalStorage) {
             // Redirect to the org:
-            const newPath = `/organizations/${orgFromLocalStorage}/${this.basepath}`;
+            const newPath = `/organizations/${orgFromLocalStorage}/${this.appConfig.appBasePath}`;
             this.helper.updateGtmContext(orgFromLocalStorage, userId, userName);
             this.location.go(newPath);
             return new Context(orgFromLocalStorage);
@@ -68,7 +72,7 @@ export class ContextService {
                 roles => {
                     if (roles && roles.role && roles.role[0] && roles.role[0].organization) {
                         const oName = roles.role[0].organization;
-                        const newPath = `/organizations/${oName}/${this.basepath}`;
+                        const newPath = `/organizations/${oName}/${this.appConfig.appBasePath}`;
                         this.helper.updateGtmContext(oName);
                         this.location.go(newPath);
                         return;

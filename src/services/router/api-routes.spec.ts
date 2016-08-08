@@ -6,14 +6,21 @@ import { ApiRoutes } from './api-routes';
 import { WindowRef, WindowMock } from '../window-ref';
 import { Client } from '../client/client';
 import { ClientMock } from '../client/client.mock';
-import { ContextService, GTM_APP_NAME, APP_BASEPATH } from '../context/context';
+import {ContextService, APP_CONFIG, IAppConfig} from '../context/context';
 
 declare const beforeEach, describe, expect, it;
 
 describe('Generated URLs', () => {
 
-    const appName = 'proxies';
     const orgName = 'abc';
+    const apiBasePath = 'apiproducts';
+    const appBasePath = 'products';
+    const appName = 'ProductsSPA';
+    let appConfig: IAppConfig = {
+        apiBasePath: apiBasePath,
+        appBasePath: appBasePath,
+        gtmAppName: appName
+    };
     let router;
 
     beforeEach(() => {
@@ -23,13 +30,12 @@ describe('Generated URLs', () => {
             { provide: Location, useClass: SpyLocation },
             { provide: WindowRef, useClass: WindowMock },
             { provide: Client, useClass: ClientMock },
-            { provide: GTM_APP_NAME, useValue: appName },
-            { provide: APP_BASEPATH, useValue: appName }
+            { provide: APP_CONFIG, useValue: appConfig },
         ]);
     });
 
     beforeEach(inject([Location, ApiRoutes], (l, r) => {
-        l.go(`/organizations/${orgName}/proxies`);
+        l.go(`/organizations/${orgName}/${appBasePath}`);
         router = r;
     }));
 
@@ -60,15 +66,15 @@ describe('Generated URLs', () => {
 
     it('Entity New URL', () => {
         expect(router.new())
-            .toBe('/organizations/abc/proxies');
+            .toBe(`/organizations/abc/${apiBasePath}`);
     });
 
     it('Entity One URL', () => {
         expect(router.entity('id'))
-            .toBe('/organizations/abc/proxies/id');
+            .toBe(`/organizations/abc/${apiBasePath}/id`);
     });
 
     it('List URL', () => {
-        expect(router.list()).toBe('/organizations/abc/proxies');
+        expect(router.list()).toBe(`/organizations/abc/${apiBasePath}`);
     });
 });

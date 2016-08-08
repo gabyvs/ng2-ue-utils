@@ -6,11 +6,18 @@ import { MockBackend } from '@angular/http/testing';
 
 import { Client } from '../client/client';
 import { ClientMock } from '../client/client.mock';
-import { ContextService, GTM_APP_NAME, APP_BASEPATH } from './context';
+import {ContextService, APP_CONFIG, IAppConfig} from './context';
 import { WindowMock, WindowRef } from '../window-ref';
 
 declare const beforeEach, describe, expect, it, spyOn;
-const appName = 'someappfortest';
+const apiBasePath = 'apiproducts';
+const appBasePath = 'products';
+const appName = 'ProductsSPA';
+let appConfig: IAppConfig = {
+    apiBasePath: apiBasePath,
+    appBasePath: appBasePath,
+    gtmAppName: appName
+};
 
 describe('Context Service', () => {
     let service: ContextService;
@@ -26,8 +33,7 @@ describe('Context Service', () => {
             { provide: Location, useClass: SpyLocation} ,
             { provide: WindowRef, useClass: WindowMock },
             { provide: Client, useClass: ClientMock },
-            { provide: GTM_APP_NAME, useValue: appName },
-            { provide: APP_BASEPATH, useValue: appName }
+            { provide: APP_CONFIG, useValue: appConfig }
         ]);
     });
 
@@ -40,7 +46,7 @@ describe('Context Service', () => {
 
     it('Populates the org name', () => {
         const orgName = 'fromPath';
-        loc.path = () => { return `/organizations/${orgName}/products`; };
+        loc.path = () => { return `/organizations/${orgName}/${appBasePath}`; };
         const context = service.getContext();
         expect(context.orgName).toBe(orgName);
     });
@@ -65,7 +71,7 @@ describe('Context Service', () => {
         expect(context.orgName).toBe(orgName);
         expect(loc.go).toHaveBeenCalled();
         expect(theSpy.calls.count()).toBe(1);
-        expect(theSpy.calls.argsFor(0)[0]).toBe(`/organizations/${orgName}/${appName}`);
+        expect(theSpy.calls.argsFor(0)[0]).toBe(`/organizations/${orgName}/${appBasePath}`);
     });
 
     it('Gets the org from the user orgs', () => {
@@ -85,7 +91,7 @@ describe('Context Service', () => {
         expect(theSpy.calls.argsFor(0)[0]).toBe(`/users/${user}/userroles`);
         expect(loc.go).toHaveBeenCalled();
         expect(theLocSpy.calls.count()).toBe(1);
-        expect(theLocSpy.calls.argsFor(0)[0]).toBe(`/organizations/orgFromRoles/${appName}`);
+        expect(theLocSpy.calls.argsFor(0)[0]).toBe(`/organizations/orgFromRoles/${appBasePath}`);
     });
 
     // org page does not exist yet, but we should redirect to it

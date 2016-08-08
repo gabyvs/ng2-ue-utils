@@ -10,7 +10,7 @@ import { Observable } from 'rxjs/Rx';
 import { IRangeSnapshot, Repository } from './repository';
 import {ClientMock} from '../client/client.mock';
 import {ApiRoutes} from '../router/api-routes';
-import {ContextService, GTM_APP_NAME, APP_BASEPATH} from '../context/context';
+import {ContextService, APP_CONFIG, IAppConfig} from '../context/context';
 import {ObservableClient} from '../client/observable-client';
 import {WindowRef, WindowMock} from '../window-ref';
 import {Client} from '../client/client';
@@ -67,8 +67,14 @@ class SomeObservableClient extends ObservableClient {
 // TODO: this test is wrong! it should use mocks of repository.
 describe('Repository', () => {
 
-    const appName = 'anApp';
-    const basePath = 'sometypes';
+    const apiBasePath = 'apiproducts';
+    const appBasePath = 'products';
+    const appName = 'ProductsSPA';
+    let appConfig: IAppConfig = {
+        apiBasePath: apiBasePath,
+        appBasePath: appBasePath,
+        gtmAppName: appName
+    };
     let repository: SomeTypeRepository;
     let client: ClientMock;
 
@@ -89,20 +95,19 @@ describe('Repository', () => {
             { provide: Location, useClass: SpyLocation },
             { provide: WindowRef, useClass: WindowMock },
             { provide: Client, useClass: ClientMock },
-            { provide: GTM_APP_NAME, useValue: appName },
-            { provide: APP_BASEPATH, useValue: basePath }
+            { provide: APP_CONFIG, useValue: appConfig }
         ]);
     });
 
-    beforeEach(inject([Client, Location, APP_BASEPATH, ApiRoutes], (c, l, a, r) => {
-        l.go('/organizations/abc/products');
+    beforeEach(inject([Client, Location, APP_CONFIG, ApiRoutes], (c, l, a, r) => {
+        l.go(`/organizations/abc/${appBasePath}`);
         const o = new SomeObservableClient(c, r);
-        repository = new SomeTypeRepository(o, a);
+        repository = new SomeTypeRepository(o, a.apiBasePath);
         client = c;
     }));
 
     it('Subscription will emit latest data.', done => {
-        client.on('/organizations/abc/sometypes', { sometype: []});
+        client.on(`/organizations/abc/${apiBasePath}`, { sometype: []});
 
         let flag = 0;
 
@@ -157,7 +162,7 @@ describe('Repository', () => {
     });
 
     it('Fetching should change status, and complete loading should be updated once it finishes', done => {
-        client.on('/organizations/abc/sometypes', { sometype: initArray(6) });
+        client.on(`/organizations/abc/${apiBasePath}`, { sometype: initArray(6) });
         let counts = [6, 6];
         let status = ['loading', 'loaded'];
         repository.subscribe(
@@ -183,7 +188,7 @@ describe('Repository', () => {
     });
 
     it('Fetching should load entities', done => {
-        client.on('/organizations/abc/sometypes', { sometype: initArray(6) });
+        client.on(`/organizations/abc/${apiBasePath}`, { sometype: initArray(6) });
 
         let counts = [6, 6];
         let tos = [6, 6];
@@ -216,7 +221,7 @@ describe('Repository', () => {
         client.on('/organizations/abc/userroles/orgadmin/permissions', {
             resourcePermission: [ { organization: 'abc', path: '/', permissions: []} ]
         });
-        client.on('/organizations/abc/sometypes', errorMessage, true);
+        client.on(`/organizations/abc/${apiBasePath}`, errorMessage, true);
 
         repository.subscribe(
             (state: IRangeSnapshot<SomeType>) => {
@@ -250,10 +255,10 @@ describe('Repository', () => {
         types.push(new SomeRawType(4, 'other4'));
         types.push(new SomeRawType(5, 'other5'));
         types.push(new SomeRawType(6, 'other6'));
-        client.on('/organizations/abc/sometypes', { sometype: types});
-        client.on(`/organizations/abc/sometypes/1`, types[0]);
-        client.on(`/organizations/abc/sometypes/2`, types[1]);
-        client.on(`/organizations/abc/sometypes/3`, types[2]);
+        client.on(`/organizations/abc/${apiBasePath}`, { sometype: types});
+        client.on(`/organizations/abc/${apiBasePath}/1`, types[0]);
+        client.on(`/organizations/abc/${apiBasePath}/2`, types[1]);
+        client.on(`/organizations/abc/${apiBasePath}/3`, types[2]);
         let counter = -1;
 
         repository.subscribe(
@@ -314,7 +319,7 @@ describe('Repository', () => {
     });
 
     it('Sorts entity', done => {
-        client.on('/organizations/abc/sometypes', { sometype: initArray(6) });
+        client.on(`/organizations/abc/${apiBasePath}`, { sometype: initArray(6) });
         let counter = -1;
         repository.subscribe(
             (state: IRangeSnapshot<SomeType>) => {
@@ -370,7 +375,7 @@ describe('Repository', () => {
         types.push(new SomeType(4, 'odd'));
         types.push(new SomeType(5, 'name2'));
         types.push(new SomeType(6, 'name1'));
-        client.on('/organizations/abc/sometypes', { sometype: types });
+        client.on(`/organizations/abc/${apiBasePath}`, { sometype: types });
         let counter = -1;
         repository.subscribe(
             (state: IRangeSnapshot<SomeType>) => {
@@ -434,7 +439,7 @@ describe('Repository', () => {
     });
 
     it('Getting a range of entities.', done => {
-        client.on('/organizations/abc/sometypes', { sometype: initArray(65) });
+        client.on(`/organizations/abc/${apiBasePath}`, { sometype: initArray(65) });
         let counter = -1;
 
         repository.subscribe(

@@ -9,7 +9,7 @@ import { Observable } from 'rxjs/Rx';
 import { ObservableClient } from './observable-client';
 import { ClientMock } from './client.mock';
 import { ApiRoutes } from '../router/api-routes';
-import { APP_BASEPATH, ContextService, GTM_APP_NAME } from '../context/context';
+import { APP_CONFIG, ContextService, IAppConfig } from '../context/context';
 import { WindowMock, WindowRef } from '../window-ref';
 import { Client } from './client';
 
@@ -34,8 +34,14 @@ class SomeObservableClient extends ObservableClient {
 
 describe('Generic Client', () => {
 
-    const appName = 'products';
-    const basePath = 'apiproducts';
+    const apiBasePath = 'apiproducts';
+    const appBasePath = 'products';
+    const appName = 'ProductsSPA';
+    let appConfig: IAppConfig = {
+        apiBasePath: apiBasePath,
+        appBasePath: appBasePath,
+        gtmAppName: appName
+    };
     let someObservableClient: SomeObservableClient;
     let client: ClientMock;
 
@@ -48,8 +54,7 @@ describe('Generic Client', () => {
             { provide: Location, useClass: SpyLocation },
             { provide: WindowRef, useClass: WindowMock },
             { provide: Client, useClass: ClientMock },
-            { provide: GTM_APP_NAME, useValue: appName },
-            { provide: APP_BASEPATH, useValue: basePath }
+            { provide: APP_CONFIG, useValue: appConfig }
         ]);
     });
 
@@ -91,7 +96,7 @@ describe('Generic Client', () => {
 
     it('Deletes a single entity', (done) => {
         const name = 'prodToDelete';
-        client.on(`/organizations/abc/${basePath}/${name}`, { name: name });
+        client.on(`/organizations/abc/${apiBasePath}/${name}`, { name: name });
         someObservableClient.deleteEntity(name).subscribe(
             (product: any) => {
                 expect(product.name).toBe(name);
@@ -107,7 +112,7 @@ describe('Generic Client', () => {
         const name = 'prodToUpdate';
         const entity = {  data: 'data', name: name };
         const updatedEntity = {  data: 'updated', name: name };
-        client.on(`/organizations/abc/${basePath}/${name}`, updatedEntity);
+        client.on(`/organizations/abc/${apiBasePath}/${name}`, updatedEntity);
 
         someObservableClient.updateEntity(name, entity).subscribe(
             (product: any) => {
@@ -124,7 +129,7 @@ describe('Generic Client', () => {
         const name = 'prodToCreate';
         const entity = {  data: 'data', name: name };
         const createdEntity = { createdAt: new Date(), data: 'data', name: name };
-        client.on(`/organizations/abc/${basePath}`, createdEntity);
+        client.on(`/organizations/abc/${apiBasePath}`, createdEntity);
 
         someObservableClient.createEntity(entity).subscribe(
             (product: any) => {
@@ -140,7 +145,7 @@ describe('Generic Client', () => {
     it('Gets a single entity', (done) => {
         const name = 'prodToGet';
         const entity = {  data: 'data', name: name };
-        client.on(`/organizations/abc/${basePath}/${name}`, entity);
+        client.on(`/organizations/abc/${apiBasePath}/${name}`, entity);
 
         someObservableClient.getEntity(name).subscribe(
             (product: any) => {
@@ -156,7 +161,7 @@ describe('Generic Client', () => {
     it('Gets a list of entities', (done) => {
         const name = 'prodToGet';
         const entity = {  data: 'data', name: name };
-        client.on(`/organizations/abc/${basePath}`, { sometype: [ entity ]});
+        client.on(`/organizations/abc/${apiBasePath}`, { sometype: [ entity ]});
 
         someObservableClient.getList().subscribe(
             (list: any[]) => {
