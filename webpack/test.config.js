@@ -42,6 +42,7 @@ exports.module = {
             include:path.resolve(__dirname, '../src'),
             loader: 'istanbul-instrumenter-loader',
             exclude: [
+                /window-ref.ts/,
                 /\.spec\.ts$/,
                 /node_modules/
             ]
