@@ -1,4 +1,5 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
+import * as _ from 'lodash';
 
 declare const require: any;
 const styles: any = require('!!css-loader!less-loader!./list-headers.less');
@@ -13,9 +14,22 @@ const styles: any = require('!!css-loader!less-loader!./list-headers.less');
  * <list-headers (emitSort)="sort($event)" [headers]="headers"></list-headers>
  *
  * ```
+ * 
+ * In model:
+ * ```
+ *  class Component {
+ *      public headers = [
+ *          { label: 'display name',    property: 'displayName',    styles: { width: '23%' }},
+ *          { label: 'description',     property: 'description',    styles: { width: '54%' }, sortOnInit: 'desc'},
+ *          { label: 'modified',        property: 'lastModifiedAt', styles: { width: '23%' }}
+ *      ];
+ *  }
+ * ```
  *
- * This will trigger sort() upon clicking on one of the header values to be sorted
- * Header values is also set as headers using the interface defined in its own namespace.
+ * This will trigger sort() upon clicking on one of the header values to be sorted.
+ * 
+ * Header values are also set as headers using the interface defined in its own namespace.  Note that the default
+ * sorting criteria can be set by adding the optional `sortOnInit` property to the desired header.
  */
 
 @Component({
@@ -31,12 +45,12 @@ const styles: any = require('!!css-loader!less-loader!./list-headers.less');
         </div>
     `
 })
-export class ListHeaders {
-    @Input() public headers: ListHeaders.IHeader;
+export class ListHeaders implements OnInit {
+    @Input() public headers: ListHeaders.IHeader[];
     @Output() public emitSort = new EventEmitter();
 
-    private sortedBy = 'name';
-    private ascOrder = true;
+    private sortedBy: string;
+    private ascOrder: boolean;
 
     public sort(header) {
         if (!header) { return; }
@@ -46,7 +60,18 @@ export class ListHeaders {
             this.ascOrder = true;
         }
         this.sortedBy = header;
-        this.emitSort.emit({ order: this.ascOrder ? 'asc' : 'desc', sortBy: this.sortedBy });
+        this.emitSort.emit({ 
+            order: this.ascOrder ? 'asc' as ListHeaders.ascOrder : 'desc' as ListHeaders.ascOrder, 
+            sortBy: this.sortedBy 
+        });
+    }
+    
+    public ngOnInit() {
+        const sortHeader: ListHeaders.IHeader = _.find(this.headers, (header: ListHeaders.IHeader) => {
+            return header.sortOnInit;
+        }) || this.headers[0];
+        this.ascOrder = sortHeader.sortOnInit ? sortHeader.sortOnInit === 'asc' : true;
+        this.sortedBy = sortHeader.property;
     }
 }
 
@@ -61,5 +86,8 @@ export namespace ListHeaders {
         label: string;
         property: string;
         styles: IStyle;
-    }    
+        sortOnInit?: ascOrder;
+    }
+    
+    export type ascOrder = 'asc' | 'desc';
 }

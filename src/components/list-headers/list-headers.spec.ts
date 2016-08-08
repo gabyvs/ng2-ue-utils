@@ -10,11 +10,11 @@ describe('Component: ListHeaders', () => {
 
     let initialize = () => {
         listHeaders.headers = [
-            { label: 'name', property: 'fullName' },
-            { property: 'email' },
-            { property: 'userName' },
-            { label: 'actions'}
+            { label: 'display name',    property: 'displayName',    styles: { width: '23%' } },
+            { label: 'description',     property: 'description',    sortOnInit: 'desc',    styles: { width: '54%' } },
+            { label: 'modified',        property: 'lastModifiedAt', styles: { width: '23%' } }
         ];
+        listHeaders.ngOnInit();
         fixture.detectChanges();
     };
 
@@ -36,29 +36,31 @@ describe('Component: ListHeaders', () => {
     })));
 
     it('should render headers', () => {
-        expect(element.querySelectorAll('div').length).toBe(4);
+        expect(element.querySelectorAll('div').length).toBe(3);
     });
 
     it('should emit on sorting', (done) => {
+        expect(listHeaders.sortedBy).toBe('description');
+        expect(listHeaders.ascOrder).toBe(false);
         listHeaders.emitSort.subscribe((x) => {
             expect(x.order).toBe('asc');
-            expect(x.sortBy).toBe('email');
+            expect(x.sortBy).toBe('description');
             done();
         });
-        listHeaders.sort('email');
+        listHeaders.sort('description');
     });
     
     it('should sort descending if same category is chosen', (done) => {
         let subscription1: any = listHeaders.emitSort.subscribe((x) => {
             expect(x.order).toBe('asc');
-            expect(x.sortBy).toBe('fullName');
+            expect(x.sortBy).toBe('displayName');
             done();
         });
-        listHeaders.sort('fullName');
+        listHeaders.sort('displayName');
         subscription1.unsubscribe();
         listHeaders.emitSort.subscribe((x) => {
             expect(x.order).toBe('desc');
-            expect(x.sortBy).toBe('fullName');
+            expect(x.sortBy).toBe('displayName');
             done();
         });
     });

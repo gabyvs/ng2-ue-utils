@@ -82,9 +82,9 @@ export class AppComponent {
         'myContent12',
     ];
     public headers = [
-        { label: 'display name',    property: 'displayName',    styles: { width: '23%' }},
-        { label: 'description',     property: 'description',    styles: { width: '54%' }},
-        { label: 'modified',        property: 'lastModifiedAt', styles: { width: '23%' }}
+        { label: 'display name',    property: 'displayName',    styles: { width: '23%' } },
+        { label: 'description',     property: 'description',    sortOnInit: 'desc',     styles: { width: '54%' } },
+        { label: 'modified',        property: 'lastModifiedAt', styles: { width: '23%' } }
     ];
     
     constructor(public notificationService: NotificationService, public progressService: ProgressService) {}
