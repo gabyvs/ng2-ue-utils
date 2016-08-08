@@ -89,7 +89,6 @@ describe('Repository', () => {
     beforeEach(() => {
         addProviders([
             HTTP_PROVIDERS,
-            ApiRoutes,
             ContextService,
             { provide: XHRBackend, useClass: MockBackend },
             { provide: Location, useClass: SpyLocation },
@@ -99,9 +98,10 @@ describe('Repository', () => {
         ]);
     });
 
-    beforeEach(inject([Client, Location, APP_CONFIG, ApiRoutes], (c, l, a, r) => {
+    beforeEach(inject([Client, Location, APP_CONFIG, ContextService], (c, l, a, s) => {
         l.go(`/organizations/abc/${appBasePath}`);
-        const o = new SomeObservableClient(c, r);
+        let router = new ApiRoutes(s, a.apiBasePath);
+        const o = new SomeObservableClient(c, router);
         repository = new SomeTypeRepository(o, a.apiBasePath);
         client = c;
     }));

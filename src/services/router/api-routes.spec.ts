@@ -6,7 +6,7 @@ import { ApiRoutes } from './api-routes';
 import { WindowRef, WindowMock } from '../window-ref';
 import { Client } from '../client/client';
 import { ClientMock } from '../client/client.mock';
-import {ContextService, APP_CONFIG, IAppConfig} from '../context/context';
+import { ContextService, APP_CONFIG, IAppConfig } from '../context/context';
 
 declare const beforeEach, describe, expect, it;
 
@@ -26,7 +26,6 @@ describe('Generated URLs', () => {
     beforeEach(() => {
         addProviders([
             ContextService,
-            ApiRoutes,
             { provide: Location, useClass: SpyLocation },
             { provide: WindowRef, useClass: WindowMock },
             { provide: Client, useClass: ClientMock },
@@ -34,9 +33,9 @@ describe('Generated URLs', () => {
         ]);
     });
 
-    beforeEach(inject([Location, ApiRoutes], (l, r) => {
+    beforeEach(inject([Location, ContextService, APP_CONFIG], (l, c, a) => {
         l.go(`/organizations/${orgName}/${appBasePath}`);
-        router = r;
+        router = new ApiRoutes(c, a.apiBasePath);
     }));
 
     it('Gets org name', () => {

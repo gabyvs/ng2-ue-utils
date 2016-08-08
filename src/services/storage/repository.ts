@@ -89,10 +89,9 @@ export abstract class Repository<T> extends Observable<IRangeSnapshot<T>> {
             this.doError(error);
             return;
         }
-        const range = this.storage.range(this.start, this.end);
-
         this.permissions().subscribe(
             permissions => {
+                const range = this.storage.range(this.start, this.end);
                 const ops = permissions ? permissions.allowsOperations(`/${this.basePath}`) : [];
                 this.latest = {
                     allowCreate: ops.indexOf('put') >= 0,

@@ -1,10 +1,7 @@
-import { Inject, Injectable } from '@angular/core';
+import { ContextService } from '../context/context';
 
-import { ContextService, APP_CONFIG, IAppConfig } from '../context/context';
-
-@Injectable()
 export class ApiRoutes {
-    constructor (private context: ContextService, @Inject(APP_CONFIG) public appConfig: IAppConfig) {};
+    constructor (private context: ContextService, public apiBasePath: string) {};
 
     public get orgName(): string {
         return this.context.orgName;
@@ -12,11 +9,11 @@ export class ApiRoutes {
 
     public orgUrl = (path?: string): string => `/organizations/${this.orgName}${ path ? path : ''}`;
 
-    public entity = (identifier: string): string => this.orgUrl(`/${this.appConfig.apiBasePath}/${identifier}`);
+    public entity = (identifier: string): string => this.orgUrl(`/${this.apiBasePath}/${identifier}`);
 
-    public list = (): string => this.orgUrl(`/${this.appConfig.apiBasePath}`);
+    public list = (): string => this.orgUrl(`/${this.apiBasePath}`);
 
-    public new = (): string => this.orgUrl(`/${this.appConfig.apiBasePath}`);
+    public new = (): string => this.orgUrl(`/${this.apiBasePath}`);
 
     public userInfo = (): string => '/userinfo';
 

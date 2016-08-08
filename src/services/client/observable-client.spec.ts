@@ -49,7 +49,6 @@ describe('Generic Client', () => {
         addProviders([
             HTTP_PROVIDERS,
             ContextService,
-            ApiRoutes,
             { provide: XHRBackend, useClass: MockBackend },
             { provide: Location, useClass: SpyLocation },
             { provide: WindowRef, useClass: WindowMock },
@@ -58,9 +57,10 @@ describe('Generic Client', () => {
         ]);
     });
 
-    beforeEach(inject([Client, Location, ApiRoutes], (c, l, r) => {
+    beforeEach(inject([Client, Location, ContextService, APP_CONFIG], (c, l, s, a) => {
         l.go('/organizations/abc/products'); // set the org on the URL
-        someObservableClient = new SomeObservableClient(c, r);
+        const router = new ApiRoutes(s, a.apiBasePath);
+        someObservableClient = new SomeObservableClient(c, router);
         client = c;
     }));
 
