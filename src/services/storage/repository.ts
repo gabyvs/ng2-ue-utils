@@ -31,6 +31,7 @@ export abstract class Repository<T> extends Observable<IRangeSnapshot<T>> {
     public storage: Storage<T>;
     protected abstract buildEntity (raw: any, permissions?: RolePermissions): T;
     protected abstract getId (t: T): string;
+    protected abstract getValue (t: T, prop: string): any;
 
     constructor(private client: ObservableClient, public basePath: string) {
         super(obs => {
@@ -53,11 +54,6 @@ export abstract class Repository<T> extends Observable<IRangeSnapshot<T>> {
 
         this._status = 'empty' as RepositoryStatus;
     }
-
-    // this is the default implementation
-    protected getValue = (t: T, prop: string): any => {
-        return t[prop];
-    };
 
     private loadFromClient = (): void => {
         this.client.getList()

@@ -46,6 +46,11 @@ class SomeTypeRepository extends Repository<SomeType> {
     protected getId (t: SomeType): string {
         return t.value.toString();
     }
+
+    protected getValue (t: SomeType, prop: string): any {
+        return t[prop];
+    };
+
 }
 
 class SomeObservableClient extends ObservableClient {
