@@ -15,6 +15,7 @@ import { Client } from './client';
 
 declare const beforeEach, describe, expect, it;
 
+const apiBasePath = 'apiproducts';
 class SomeObservableClient extends ObservableClient {
 
     constructor(theClient: Client, theRoutes: ApiRoutes) {
@@ -30,11 +31,22 @@ class SomeObservableClient extends ObservableClient {
             }
         });
     }
+
+    public myCustomGetter = <T>(count: number = 25, key?: string): Observable<T[]> => {
+        const theKey = key ? `&expand=true&startKey=${key}` : '';
+        let theUrl = `/organizations/abc/${apiBasePath}?count=${count}${theKey}`;
+        return this.client.get<T>(theUrl).map((response: any) => {
+            if (response && _.isArray(response.sometype)) {
+                return response.sometype;
+            } else {
+                return [];
+            }
+        });
+    };
 }
 
 describe('Generic Client', () => {
 
-    const apiBasePath = 'apiproducts';
     const appBasePath = 'products';
     const appName = 'ProductsSPA';
     let appConfig: IAppConfig = {
@@ -164,6 +176,22 @@ describe('Generic Client', () => {
         client.on(`/organizations/abc/${apiBasePath}`, { sometype: [ entity ]});
 
         someObservableClient.getList().subscribe(
+            (list: any[]) => {
+                expect(list[0].name).toBe(name);
+                done();
+            },
+            (error) => {
+                expect(error).toBeUndefined();
+                done();
+            });
+    });
+
+    it('Subclass can create a customized get method', (done) => {
+        const name = 'prodToGet';
+        const entity = {  data: 'data', name: name };
+        client.on(`/organizations/abc/${apiBasePath}?count=25`, { sometype: [ entity ]});
+
+        someObservableClient.myCustomGetter(25).subscribe(
             (list: any[]) => {
                 expect(list[0].name).toBe(name);
                 done();

@@ -15,9 +15,9 @@ interface IUserInfo {
 }
 
 export abstract class ObservableClient implements IClientObserver {
-    private spy: ClientObserver;
+    protected spy: ClientObserver;
 
-    constructor (private client: Client, private router: ApiRoutes) {
+    constructor (protected client: Client, protected router: ApiRoutes) {
         this.spy = new ClientObserver();
     }
 
