@@ -14,6 +14,7 @@ import {ContextService, APP_CONFIG, IAppConfig} from '../context/context';
 import {ObservableClient} from '../client/observable-client';
 import {WindowRef, WindowMock} from '../window-ref';
 import {Client} from '../client/client';
+import { Storage } from './storage';
 
 declare const beforeEach, describe, expect, it;
 
@@ -33,14 +34,14 @@ class SomeRawType {
     }
 }
 
-class SomeTypeRepository extends Repository<SomeType> {
+class SomeTypeStorage extends Storage<SomeType> {
 
-    constructor(theClient: ObservableClient, theBasePath: string) {
-        super(theClient, theBasePath);
+    constructor() {
+        super();
     }
 
-    protected buildEntity (raw: SomeRawType, permissions: RolePermissions) {
-        return new SomeType(raw.value, raw.name);
+    protected matchType (matchFunction: (someType: SomeType) => boolean, someType: SomeType) {
+        return matchFunction(someType);
     }
 
     protected getId (t: SomeType): string {
@@ -50,6 +51,18 @@ class SomeTypeRepository extends Repository<SomeType> {
     protected getValue (t: SomeType, prop: string): any {
         return t[prop];
     };
+
+}
+
+class SomeTypeRepository extends Repository<SomeType> {
+
+    constructor(theClient: ObservableClient, theBasePath: string, theStorage: SomeTypeStorage) {
+        super(theClient, theBasePath, theStorage);
+    }
+
+    protected buildEntity (raw: SomeRawType, permissions: RolePermissions) {
+        return new SomeType(raw.value, raw.name);
+    }
 
 }
 
@@ -107,7 +120,7 @@ describe('Repository', () => {
         l.go(`/organizations/abc/${appBasePath}`);
         let router = new ApiRoutes(s, a.apiBasePath);
         const o = new SomeObservableClient(c, router);
-        repository = new SomeTypeRepository(o, a.apiBasePath);
+        repository = new SomeTypeRepository(o, a.apiBasePath, new SomeTypeStorage());
         client = c;
     }));
 

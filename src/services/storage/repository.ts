@@ -28,12 +28,9 @@ export abstract class Repository<T> extends Observable<IRangeSnapshot<T>> {
     private start: number;
     private _status: RepositoryStatus;
     private _permissions: RolePermissions;
-    public storage: Storage<T>;
     protected abstract buildEntity (raw: any, permissions?: RolePermissions): T;
-    protected abstract getId (t: T): string;
-    protected abstract getValue (t: T, prop: string): any;
 
-    constructor(private client: ObservableClient, public basePath: string) {
+    constructor(private client: ObservableClient, public basePath: string, public storage: Storage<T>) {
         super(obs => {
             this.observers.push(obs);
             return () => {
@@ -41,7 +38,6 @@ export abstract class Repository<T> extends Observable<IRangeSnapshot<T>> {
             };
         });
         this.observers = [];
-        this.storage = new Storage<T>(this.getId, this.getValue);
         this.start = -1;
         this.end = 0;
         this.latest = {

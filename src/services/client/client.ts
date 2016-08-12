@@ -84,8 +84,13 @@ export class Client implements IClientBase {
             .catch(this.catchOrRedirect(path))
     );
 
-    public get = <T>(path: string, options?: RequestOptionsArgs): Observable<T>  =>
-        this.mapAndCatch<T>(path, this.http.get(path, new ClientRequestOptions(options)));
+    public get = <T>(path: string, options?: RequestOptionsArgs): Observable<T>  => {
+        // TODO: Fix for breaking change in Angular 2 RC5: http get requests need to have a non empty body
+        // https://github.com/angular/angular/issues/10612 Should be fixed in RC6
+        if (!options) { options = {}; }
+        if (!options.body) { options.body = ''; }
+        return this.mapAndCatch<T>(path, this.http.get(path, new ClientRequestOptions(options)));
+    };
 
     public delete = <T>(path: string, options?: RequestOptionsArgs): Observable<T>  =>
         this.mapAndCatch<T>(path, this.http.delete(path, new ClientRequestOptions(options)));

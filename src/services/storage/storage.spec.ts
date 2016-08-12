@@ -3,10 +3,62 @@ import { Storage, sortableValue, createFilter } from './storage';
 declare const beforeEach, describe, expect, it;
 
 class SomeType {
+    public shouldMatch: boolean;
+
     constructor(public value?: number, public name?: string) {
         if (!value) { this.value = 1; }
         if (!name) { this.name = `name${this.value}`; }
     }
+
+    public match = (filter: (d: SomeType) => boolean): boolean => {
+        return this.shouldMatch;
+    };
+}
+
+class SomeRawType {
+    constructor(public value?: number, public name?: string) {
+        if (!value) { this.value = 1; }
+    }
+}
+
+class SomeTypeStorage extends Storage<SomeType> {
+
+    constructor() {
+        super();
+    }
+
+    protected matchType (matchFunction: (someType: SomeType) => boolean, someType: SomeType) {
+        return matchFunction(someType);
+    }
+
+    protected getId (t: SomeType): string {
+        return t.value.toString();
+    }
+
+    protected getValue (t: SomeType, prop: string): any {
+        return t[prop];
+    };
+
+}
+
+class SomeOtherTypeStorage extends Storage<SomeType> {
+
+    constructor() {
+        super();
+    }
+
+    protected matchType (matchFunction: (someType: SomeType) => boolean, someType: SomeType): boolean {
+        return someType.match(matchFunction);
+    }
+
+    protected getId (t: SomeType): string {
+        return t.value.toString();
+    }
+
+    protected getValue (t: SomeType, prop: string): any {
+        return t[prop];
+    };
+
 }
 
 describe('Storage', () => {
@@ -21,14 +73,7 @@ describe('Storage', () => {
     };
 
     beforeEach(() => {
-        s = new Storage<SomeType>((t: SomeType) => t.value.toString(), (t: SomeType, prop: string) => t[prop]);
-    });
-
-    it('Must fail if created without identifier function', () => {
-        const wrongConstructor = () => {
-            return new Storage<SomeType>(undefined, undefined);
-        };
-        expect(wrongConstructor).toThrowError();
+        s = new SomeTypeStorage();
     });
 
     it('Sets are empty when created', () => {
@@ -252,6 +297,29 @@ describe('Storage', () => {
         s.bulkAppend(initArray(10));
         expect(s.count).toBe(10);
         expect(s.indexOf('name', 'name4')).toBe(3);
+    });
+
+    it('Provides a custom match type function', () => {
+        s = new SomeOtherTypeStorage();
+        const theTypes = initArray(10)
+        theTypes[0].shouldMatch = true;
+        theTypes[1].shouldMatch = true;
+        theTypes[2].shouldMatch = true;
+        s.bulkAppend(theTypes);
+
+        s.filterBy('whatever', 'anything here');
+        let r = s.range();
+        expect(s.count).toBe(10);
+        expect(s.filteredCount).toBe(3);
+        expect(r.length).toBe(3);
+    });
+
+    it('Index of works with custom matchers', () => {
+        s = new SomeOtherTypeStorage();
+        const theTypes = initArray(10)
+        theTypes[0].shouldMatch = true;
+        s.bulkAppend(theTypes);
+        expect(s.indexOf('name', 'name4')).toBe(0);
     });
 
 });

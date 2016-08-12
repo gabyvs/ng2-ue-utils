@@ -43,7 +43,7 @@ export const sortableValue = (d: string | number | {}): string | number => {
     return d.toString().toLowerCase();
 };
 
-export class Storage<T> {
+export abstract class Storage<T> {
     private entities: IDictionary<T>;
     private filtered: T[];
     private ordered: T[];
@@ -53,10 +53,11 @@ export class Storage<T> {
     private _sortByField: string;
     private _sortByOrder: SetOrder;
 
-    constructor (public getId: (t: T) => string, public getValue: (t: T, prop: string) => any) {
-        if (!this.getId || !this.getValue) {
-            throw new Error('Functions to get identifier and property values are required to create a Storage object');
-        }
+    protected abstract getId (t: T): string;
+    protected abstract getValue (t: T, prop: string): any;
+    protected abstract matchType (matchFunction: (d: T) => boolean, t: T): boolean;
+
+    constructor () {
         this.entities = {} as IDictionary<T>;
         this.filtered = [];
         this.ordered = [];
@@ -74,7 +75,7 @@ export class Storage<T> {
     private filterAndSort = (): void => {
         const filter = createFilter(this.filter, this.filterByField);
         this.filtered = this.filter ?
-            _.filter(this.entities, (p: T) => filter(p)) as T[] :
+            _.filter(this.entities, (p: T) => this.matchType(filter, p)) as T[] :
             _.values(this.entities) as T[];
         this.sort();
     };
@@ -141,7 +142,7 @@ export class Storage<T> {
 
     public indexOf = (fieldName: string, value: any): number => {
         const m = matcher<T>(fieldName, value);
-        return _.findIndex(this.ordered, (t: T) => m(t));
+        return _.findIndex(this.ordered, (t: T) => this.matchType(m, t));
     };
 
 }
