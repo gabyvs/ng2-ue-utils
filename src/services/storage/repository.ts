@@ -27,7 +27,7 @@ export abstract class Repository<T> extends Observable<IRangeSnapshot<T>> {
     private observers: Observer<IRangeSnapshot<T>>[];
     private start: number;
     private _status: RepositoryStatus;
-    private _permissions: RolePermissions;
+    protected _permissions: RolePermissions;
     protected abstract buildEntity (raw: any, permissions?: RolePermissions): T;
 
     constructor(protected client: ObservableClient, public basePath: string, public storage: Storage<T>) {
@@ -76,7 +76,7 @@ export abstract class Repository<T> extends Observable<IRangeSnapshot<T>> {
             );
     };
 
-    private doNext = (error?: any): void => {
+    protected doNext = (error?: any): void => {
         if (error) {
             this.doError(error);
             return;
@@ -100,7 +100,7 @@ export abstract class Repository<T> extends Observable<IRangeSnapshot<T>> {
         );
     };
 
-    private doError = (error: any): void => {
+    protected doError = (error: any): void => {
         const latest = {
             allowCreate: undefined,
             allowRead: undefined,
