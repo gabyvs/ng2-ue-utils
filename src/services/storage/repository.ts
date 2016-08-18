@@ -30,7 +30,7 @@ export abstract class Repository<T> extends Observable<IRangeSnapshot<T>> {
     private _permissions: RolePermissions;
     protected abstract buildEntity (raw: any, permissions?: RolePermissions): T;
 
-    constructor(private client: ObservableClient, public basePath: string, public storage: Storage<T>) {
+    constructor(protected client: ObservableClient, public basePath: string, public storage: Storage<T>) {
         super(obs => {
             this.observers.push(obs);
             return () => {

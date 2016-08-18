@@ -55,9 +55,10 @@ class SomeTypeStorage extends Storage<SomeType> {
 }
 
 class SomeTypeRepository extends Repository<SomeType> {
-
+    public theProtectedClient: ObservableClient;
     constructor(theClient: ObservableClient, theBasePath: string, theStorage: SomeTypeStorage) {
         super(theClient, theBasePath, theStorage);
+        this.theProtectedClient = this.client; // testing purposes
     }
 
     protected buildEntity (raw: SomeRawType, permissions: RolePermissions) {
@@ -532,5 +533,11 @@ describe('Repository', () => {
         repository.setRange(25, 50);
         repository.setRange(50, 75);
         repository.setRange(-5, 25);
+    });
+
+    it('Subclasses can access client', () => {
+        const cl = repository.theProtectedClient;
+        expect(cl).toBeDefined();
+        expect(cl.createEntity).toBeDefined();
     });
 });

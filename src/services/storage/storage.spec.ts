@@ -301,7 +301,7 @@ describe('Storage', () => {
 
     it('Provides a custom match type function', () => {
         s = new SomeOtherTypeStorage();
-        const theTypes = initArray(10)
+        const theTypes = initArray(10);
         theTypes[0].shouldMatch = true;
         theTypes[1].shouldMatch = true;
         theTypes[2].shouldMatch = true;
@@ -316,7 +316,7 @@ describe('Storage', () => {
 
     it('Index of works with custom matchers', () => {
         s = new SomeOtherTypeStorage();
-        const theTypes = initArray(10)
+        const theTypes = initArray(10);
         theTypes[0].shouldMatch = true;
         s.bulkAppend(theTypes);
         expect(s.indexOf('name', 'name4')).toBe(0);
