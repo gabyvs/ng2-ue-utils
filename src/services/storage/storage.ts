@@ -3,7 +3,7 @@ import { Dictionary } from 'lodash';
 
 export type SetOrder = 'asc' | 'desc';
 
-interface IDictionary<T> {
+export interface IDictionary<T> {
     [index: string]: T;
 }
 
