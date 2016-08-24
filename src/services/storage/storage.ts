@@ -44,14 +44,14 @@ export const sortableValue = (d: string | number | {}): string | number => {
 };
 
 export abstract class Storage<T> {
-    private entities: IDictionary<T>;
-    private filtered: T[];
-    private ordered: T[];
+    protected entities: IDictionary<T>;
+    protected filtered: T[];
+    protected ordered: T[];
 
-    private filterString: string;
-    private filterField: string;
-    private _sortByField: string;
-    private _sortByOrder: SetOrder;
+    protected filterString: string;
+    protected filterField: string;
+    protected _sortByField: string;
+    protected _sortByOrder: SetOrder;
 
     protected abstract getId (t: T): string;
     protected abstract getValue (t: T, prop: string): any;
