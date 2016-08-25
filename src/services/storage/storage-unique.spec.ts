@@ -1,4 +1,5 @@
-import { Storage, sortableValue, createFilter } from './storage';
+import { StorageUnique } from './storage-unique';
+import { sortableValue, createFilter } from './storage';
 
 declare const beforeEach, describe, expect, it;
 
@@ -21,7 +22,7 @@ class SomeRawType {
     }
 }
 
-class SomeTypeStorage extends Storage<SomeType> {
+class SomeTypeStorage extends StorageUnique<SomeType> {
 
     constructor() {
         super();
@@ -41,7 +42,7 @@ class SomeTypeStorage extends Storage<SomeType> {
 
 }
 
-class SomeOtherTypeStorage extends Storage<SomeType> {
+class SomeOtherTypeStorage extends StorageUnique<SomeType> {
 
     constructor() {
         super();

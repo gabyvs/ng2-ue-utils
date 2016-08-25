@@ -14,7 +14,7 @@ import {ContextService, APP_CONFIG, IAppConfig} from '../context/context';
 import {ObservableClient} from '../client/observable-client';
 import {WindowRef, WindowMock} from '../window-ref';
 import {Client} from '../client/client';
-import { Storage } from './storage';
+import { StorageUnique } from './storage-unique';
 
 declare const beforeEach, describe, expect, it;
 
@@ -34,7 +34,7 @@ class SomeRawType {
     }
 }
 
-class SomeTypeStorage extends Storage<SomeType> {
+class SomeTypeStorage extends StorageUnique<SomeType> {
 
     constructor() {
         super();

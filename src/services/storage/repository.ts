@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { IClientEvent } from '../client/clientObserver';
 import { ObservableClient } from '../client/observable-client';
-import { Storage, SetOrder } from '../storage/storage';
+import { SetOrder, Storage } from './storage';
 
 export type RepositoryStatus = 'empty' | 'loading' | 'loaded' | 'error';
 
