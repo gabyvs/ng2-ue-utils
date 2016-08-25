@@ -43,8 +43,9 @@ export const sortableValue = (d: string | number | {}): string | number => {
     return d.toString().toLowerCase();
 };
 
-export abstract class Storage<T> {
-    protected entities: IDictionary<T>;
+export abstract class Storage <T> {
+
+    protected entities: IDictionary<T> | T[];
     protected filtered: T[];
     protected ordered: T[];
 
@@ -52,19 +53,33 @@ export abstract class Storage<T> {
     protected filterField: string;
     protected _sortByField: string;
     protected _sortByOrder: SetOrder;
-
-    protected abstract getId (t: T): string;
+    public count: number;
+    
     protected abstract getValue (t: T, prop: string): any;
     protected abstract matchType (matchFunction: (d: T) => boolean, t: T): boolean;
+    public abstract append (entity: T): void;
+    public abstract bulkAppend (list: T[]): void;
+    public abstract remove (identifier: string | number): void;
+    protected abstract filterAndSort (): void;
 
-    constructor () {
-        this.entities = {} as IDictionary<T>;
-        this.filtered = [];
-        this.ordered = [];
-        this._sortByOrder = 'asc';
+    public get sortByField(): string {
+        return this._sortByField;
+    }
+    public get sortByOrder(): SetOrder {
+        return this._sortByOrder || 'asc';
     }
 
-    private sort = (): void => {
+    public get filter(): string {
+        return this.filterString || '';
+    }
+    public get filterByField(): string {
+        return this.filterField || '*';
+    }
+    public get filteredCount(): number {
+        return this.filtered.length;
+    }
+    
+    protected sort (): void {
         if (this.sortByField) {
             this.ordered = _.orderBy(this.filtered, (p: T) => sortableValue(this.getValue(p, this.sortByField)), this.sortByOrder);
         } else {
@@ -72,29 +87,7 @@ export abstract class Storage<T> {
         }
     };
 
-    private filterAndSort = (): void => {
-        const filter = createFilter(this.filter, this.filterByField);
-        this.filtered = this.filter ?
-            _.filter(this.entities, (p: T) => this.matchType(filter, p)) as T[] :
-            _.values(this.entities) as T[];
-        this.sort();
-    };
-
-    public get count(): number {
-        return _.keys(this.entities).length;
-    }
-    public get filteredCount(): number {
-        return this.filtered.length;
-    }
-    public get sortByOrder(): SetOrder {
-        return this._sortByOrder || 'asc';
-    }
-
-    public get sortByField(): string {
-        return this._sortByField;
-    }
-
-    public sortBy = (field: string, order: SetOrder): void => {
+    public sortBy (field: string, order: SetOrder): void {
         if (this._sortByField === field && this._sortByOrder === order) {
             return;
         }
@@ -103,14 +96,7 @@ export abstract class Storage<T> {
         this.sort();
     };
 
-    public get filter(): string {
-        return this.filterString || '';
-    }
-    public get filterByField(): string {
-        return this.filterField || '*';
-    }
-
-    public filterBy = (filter?: string, field?: string) => {
+    public filterBy (filter?: string, field?: string): void {
         if (this.filterString === filter && this.filterField === field) {
             return;
         }
@@ -119,28 +105,11 @@ export abstract class Storage<T> {
         this.filterAndSort();
     };
 
-    public remove = (identifier: string): void => {
-        delete this.entities[identifier];
-        this.filterAndSort();
-    };
-
-    public append = (entity: T): void => {
-        this.entities[this.getId(entity)] = entity;
-        this.filterAndSort();
-    };
-
-    public bulkAppend = (list: T[]): void => {
-        list.forEach(e => {
-            this.entities[this.getId(e)] = e;
-        });
-        this.filterAndSort();
-    };
-
-    public range = (start: number = 0, end: number = 25): T[] => {
+    public range (start: number = 0, end: number = 25): T[] {
         return this.ordered.slice(start, end);
     };
 
-    public indexOf = (fieldName: string, value: any): number => {
+    public indexOf (fieldName: string, value: any): number {
         const m = matcher<T>(fieldName, value);
         return _.findIndex(this.ordered, (t: T) => this.matchType(m, t));
     };

@@ -20,6 +20,7 @@ export * from './services/client/observable-client.mock';
 export * from './services/context/context';
 export * from './services/router/api-routes';
 export * from './services/storage/repository';
-export * from './services/storage/storage';
+export * from './services/storage/storage-unique';
+export * from './services/storage/storage-non-unique';
 export * from './services/window-ref';
 export * from './components/list-headers/list-headers';
