@@ -21,5 +21,7 @@ export * from './services/context/context';
 export * from './services/router/api-routes';
 export * from './services/storage/repository';
 export * from './services/storage/storage';
+export * from './services/storage/value-storage';
+export * from './services/storage/base-storage';
 export * from './services/window-ref';
 export * from './components/list-headers/list-headers';

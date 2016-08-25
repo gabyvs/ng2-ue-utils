@@ -1,4 +1,4 @@
-import { Storage, createDictionaryFilter } from './storage';
+import { ValueStorage, createValuesFilter } from './value-storage';
 import { sortableValue } from './base-storage';
 
 declare const beforeEach, describe, expect, it;
@@ -22,7 +22,7 @@ class SomeRawType {
     }
 }
 
-class SomeTypeStorage extends Storage<SomeType> {
+class SomeTypeStorage extends ValueStorage<SomeType> {
 
     constructor() {
         super();
@@ -32,17 +32,13 @@ class SomeTypeStorage extends Storage<SomeType> {
         return matchFunction(someType);
     }
 
-    protected getId (t: SomeType): string {
-        return t.value.toString();
-    }
-
     protected getValue (t: SomeType, prop: string): any {
         return t[prop];
     };
 
 }
 
-class SomeOtherTypeStorage extends Storage<SomeType> {
+class SomeOtherTypeStorage extends ValueStorage<SomeType> {
 
     constructor() {
         super();
@@ -52,17 +48,13 @@ class SomeOtherTypeStorage extends Storage<SomeType> {
         return someType.match(matchFunction);
     }
 
-    protected getId (t: SomeType): string {
-        return t.value.toString();
-    }
-
     protected getValue (t: SomeType, prop: string): any {
         return t[prop];
     };
 
 }
 
-describe('Storage', () => {
+describe('StorageNonUnique', () => {
     let s;
 
     const initArray = (num: number): SomeType[] => {
@@ -96,28 +88,30 @@ describe('Storage', () => {
         expect(r[0]).toBe(e);
     });
 
-    it('Add the same entity should not change the counts', () => {
+    it('Add the same entity should iterate the count', () => {
         const someType = new SomeType();
         s.append(someType);
         s.append(someType);
-        expect(s.count).toBe(1);
-        expect(s.filteredCount).toBe(1);
+        expect(s.count).toBe(2);
+        expect(s.filteredCount).toBe(2);
         const r = s.range();
-        expect(r.length).toBe(1);
+        expect(r.length).toBe(2);
         expect(r[0]).toBe(someType);
+        expect(r[1]).toBe(someType);
     });
 
-    it('Add products with same name should not change the counts and keep the latest', () => {
+    it('Add products with same name should iterate the count and keep both entities', () => {
         const p1 = new SomeType(1);
         const p2 = new SomeType(1);
         p2.name = p1.name;
         s.append(p1);
         s.append(p2);
-        expect(s.count).toBe(1);
-        expect(s.filteredCount).toBe(1);
+        expect(s.count).toBe(2);
+        expect(s.filteredCount).toBe(2);
         const r = s.range();
-        expect(r.length).toBe(1);
-        expect(r[0]).toBe(p2);
+        expect(r.length).toBe(2);
+        expect(r[0]).toBe(p1);
+        expect(r[1]).toBe(p2);
     });
 
     it('Add bulk to prevent sorting and filtering on each append operation', () => {
@@ -125,14 +119,6 @@ describe('Storage', () => {
         let r = s.range();
         expect(s.count).toBe(6);
         expect(r[0].name).toBe('name1');
-    });
-
-    it('Removes a product', () => {
-        s.bulkAppend(initArray(6));
-
-        expect(s.count).toBe(6);
-        s.remove(1);
-        expect(s.count).toBe(5);
     });
 
     it('Sorting by default field', () => {
@@ -165,6 +151,11 @@ describe('Storage', () => {
         s.bulkAppend(rs);
         let range = s.range();
         // not sorted initially
+        expect(range[1].name).toBe('name8');
+        expect(range[4].name).toBe('name5');
+        s.sortBy('name', 'asc');
+        range = s.range();
+        // sorted by name inverts them
         expect(range[1].name).toBe('name5');
         expect(range[4].name).toBe('name8');
         s.sortBy('name', 'desc');
@@ -328,12 +319,12 @@ describe('Storage', () => {
 describe('Filters', () => {
 
     it('Create Filter with no parameters', () => {
-        const f = createDictionaryFilter<number>();
+        const f = createValuesFilter<number>();
         expect(f(Math.floor(Math.random() * 100))).toBe(true);
     });
 
     it('Create Filter with pattern', () => {
-        const f = createDictionaryFilter<{ a?; some?; }>('some');
+        const f = createValuesFilter<{ a?; some?; }>('some');
         expect(f({a: 'some'})).toBe(true);
         expect(f({a: 'another-some-thing'})).toBe(true);
         expect(f({some: 'som'})).toBe(false);
@@ -341,19 +332,19 @@ describe('Filters', () => {
     });
 
     it('Create Filter with pattern & field', () => {
-        const f = createDictionaryFilter<{ a?; some?; b?; }>('some', 'b');
+        const f = createValuesFilter<{ a?; some?; b?; }>('some', 'b');
         expect(f({a: 'some'})).toBe(false);
         expect(f({b: 'some'})).toBe(true);
     });
 
     it('Filters are case insensitive', () => {
-        const f = createDictionaryFilter<{ a?; some?; }>('some');
+        const f = createValuesFilter<{ a?; some?; }>('some');
         expect(f({a: 'soMe'})).toBe(true);
         expect(f({a: 'another-someE-thing'})).toBe(true);
     });
 
     it('Use filter with Product', () => {
-        const fr = createDictionaryFilter<SomeType>(new SomeType().name);
+        const fr = createValuesFilter<SomeType>(new SomeType().name);
         const p = new SomeType();
         expect(fr(p)).toBe(true);
     });

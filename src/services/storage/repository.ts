@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { IClientEvent } from '../client/clientObserver';
 import { ObservableClient } from '../client/observable-client';
-import { Storage, SetOrder } from '../storage/storage';
+import { SetOrder, BaseStorage } from './base-storage';
 
 export type RepositoryStatus = 'empty' | 'loading' | 'loaded' | 'error';
 
@@ -30,7 +30,7 @@ export abstract class Repository<T> extends Observable<IRangeSnapshot<T>> {
     protected _permissions: RolePermissions;
     protected abstract buildEntity (raw: any, permissions?: RolePermissions): T;
 
-    constructor(protected client: ObservableClient, public basePath: string, public storage: Storage<T>) {
+    constructor(protected client: ObservableClient, public basePath: string, public storage: BaseStorage<T>) {
         super(obs => {
             this.observers.push(obs);
             return () => {

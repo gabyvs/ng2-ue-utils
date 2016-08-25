@@ -8,13 +8,14 @@ import { RolePermissions } from 'rbac-abacus';
 import { Observable } from 'rxjs/Rx';
 
 import { IRangeSnapshot, Repository } from './repository';
-import {ClientMock} from '../client/client.mock';
-import {ApiRoutes} from '../router/api-routes';
-import {ContextService, APP_CONFIG, IAppConfig} from '../context/context';
-import {ObservableClient} from '../client/observable-client';
-import {WindowRef, WindowMock} from '../window-ref';
-import {Client} from '../client/client';
+import { ClientMock } from '../client/client.mock';
+import { ApiRoutes } from '../router/api-routes';
+import { ContextService, APP_CONFIG, IAppConfig } from '../context/context';
+import { ObservableClient } from '../client/observable-client';
+import { WindowRef, WindowMock } from '../window-ref';
+import { Client } from '../client/client';
 import { Storage } from './storage';
+import { ValueStorage } from "./value-storage";
 
 declare const beforeEach, describe, expect, it;
 
@@ -54,9 +55,38 @@ class SomeTypeStorage extends Storage<SomeType> {
 
 }
 
+class SomeTypeValueStorage extends ValueStorage<SomeType> {
+
+    constructor() {
+        super();
+    }
+
+    protected matchType (matchFunction: (someType: SomeType) => boolean, someType: SomeType) {
+        return matchFunction(someType);
+    }
+
+    protected getValue (t: SomeType, prop: string): any {
+        return t[prop];
+    };
+
+}
+
 class SomeTypeRepository extends Repository<SomeType> {
     public theProtectedClient: ObservableClient;
     constructor(theClient: ObservableClient, theBasePath: string, theStorage: SomeTypeStorage) {
+        super(theClient, theBasePath, theStorage);
+        this.theProtectedClient = this.client; // testing purposes
+    }
+
+    protected buildEntity (raw: SomeRawType, permissions: RolePermissions) {
+        return new SomeType(raw.value, raw.name);
+    }
+
+}
+
+class SomeTypeValueRepository extends Repository<SomeType> {
+    public theProtectedClient: ObservableClient;
+    constructor(theClient: ObservableClient, theBasePath: string, theStorage: SomeTypeValueStorage) {
         super(theClient, theBasePath, theStorage);
         this.theProtectedClient = this.client; // testing purposes
     }
@@ -84,7 +114,7 @@ class SomeObservableClient extends ObservableClient {
     }
 }
 // TODO: this test is wrong! it should use mocks of repository.
-describe('Repository', () => {
+describe('EntityRepository', () => {
 
     const apiBasePath = 'apiproducts';
     const appBasePath = 'products';
@@ -95,6 +125,8 @@ describe('Repository', () => {
         gtmAppName: appName
     };
     let repository: SomeTypeRepository;
+    let repository2: SomeTypeValueRepository;
+    let repositories: Repository<SomeType>[];
     let client: ClientMock;
 
     const initArray = (num: number): SomeType[] => {
@@ -156,24 +188,23 @@ describe('Repository', () => {
             expect(state.allowRead).toBe(true);
             done();
         };
-
+        
         repository.subscribe(
-            (state: IRangeSnapshot<SomeType>) => {
-                if (flag === 0) {
-                    firstCall(state);
-                } else {
-                    secondCall(state);
-                }
-            },
-            (error) => {
-                expect(error).toBeUndefined();
-                done();
-            },
-            () => {
-                expect('should not complete').toBeUndefined();
-                done();
-            }
-        );
+                    (state: IRangeSnapshot<SomeType>) => {
+                        if (flag === 0) {
+                            firstCall(state);
+                        } else {
+                            secondCall(state);
+                        }
+                    },
+                    (error) => {
+                        expect(error).toBeUndefined();
+                        done();
+                    },
+                    () => {
+                        expect('should not complete').toBeUndefined();
+                        done();
+                    });
     });
 
     it('Service instance should not be initialized at beginning', () => {
@@ -387,6 +418,393 @@ describe('Repository', () => {
     });
 
     it('Filter entities.', done => {
+        const types: SomeType[] = [];
+        types.push(new SomeType(1, 'name1'));
+        types.push(new SomeType(2, 'name1'));
+        types.push(new SomeType(3, 'name2'));
+        types.push(new SomeType(4, 'odd'));
+        types.push(new SomeType(5, 'name2'));
+        types.push(new SomeType(6, 'name1'));
+        client.on(`/organizations/abc/${apiBasePath}`, { sometype: types });
+        let counter = -1;
+        repository.subscribe(
+            (state: IRangeSnapshot<SomeType>) => {
+                counter += 1;
+                expect(state.error).toBeUndefined();
+                switch (counter) {
+                    case 0:
+                        // First emission.
+                        expect(repository.filterField).toBe('*');
+                        expect(repository.filterString).toBe('');
+                        expect(state.count).toBe(6);
+                        expect(state.filteredCount).toBe(6);
+                        break;
+                    case 1:
+                        // Should receive all entities with unaltered filters.
+                        expect(repository.filterField).toBe('*');
+                        expect(repository.filterString).toBe('');
+                        expect(state.count).toBe(6);
+                        expect(state.filteredCount).toBe(6);
+                        break;
+                    case 2:
+                        // Should receive entities filtered by 'name' string on all fields.
+                        expect(repository.filterField).toBe('*');
+                        expect(repository.filterString).toBe('name');
+                        expect(state.count).toBe(6);
+                        expect(state.filteredCount).toBe(5);
+                        break;
+                    case 3:
+                        // Should receive entities filtered by 'name2' string only on name field
+                        expect(repository.filterField).toBe('name');
+                        expect(repository.filterString).toBe('name2');
+                        expect(state.count).toBe(6);
+                        expect(state.filteredCount).toBe(2);
+                        break;
+                    case 4:
+                        // Should remove all filters
+                        expect(repository.filterField).toBe('*');
+                        expect(repository.filterString).toBe('');
+                        expect(state.count).toBe(6);
+                        expect(state.filteredCount).toBe(6);
+                        done();
+                        break;
+                    default:
+                        expect('Should not enter default case').toBeUndefined();
+                        done();
+                        break;
+                }
+            },
+            (error) => {
+                expect(error).toBeUndefined();
+                done();
+            },
+            () => {
+                expect('should not complete').toBeUndefined();
+                done();
+            }
+        );
+        repository.filterBy('name');
+        repository.filterBy('name2', 'name');
+        repository.filterBy();
+    });
+
+    it('Getting a range of entities.', done => {
+        client.on(`/organizations/abc/${apiBasePath}`, { sometype: initArray(65) });
+        let counter = -1;
+
+        repository.subscribe(
+            (state: IRangeSnapshot<SomeType>) => {
+                counter += 1;
+                expect(state.error).toBeUndefined();
+                switch (counter) {
+                    case 0:
+                        // First emission.
+                        expect(state.count).toBe(65);
+                        expect(state.filteredCount).toBe(65);
+                        expect(state.range.length).toBe(25);
+                        expect(state.from).toBe(0);
+                        expect(state.to).toBe(25);
+                        expect(state.range[0].name).toBe('name1');
+                        expect(state.range[24].name).toBe('name25');
+                        break;
+                    case 1:
+                        // Should receive all products
+                        expect(state.count).toBe(65);
+                        expect(state.filteredCount).toBe(65);
+                        expect(state.range.length).toBe(25);
+                        expect(state.from).toBe(0);
+                        expect(state.to).toBe(25);
+                        expect(state.range[0].name).toBe('name1');
+                        expect(state.range[24].name).toBe('name25');
+                        break;
+                    case 2:
+                        // Should receive products from 25 to 50
+                        expect(state.count).toBe(65);
+                        expect(state.filteredCount).toBe(65);
+                        expect(state.range.length).toBe(25);
+                        expect(state.from).toBe(25);
+                        expect(state.to).toBe(50);
+                        expect(state.range[0].name).toBe('name26');
+                        expect(state.range[24].name).toBe('name50');
+                        break;
+                    case 3:
+                        // Should receive products from 51 to 65
+                        expect(state.count).toBe(65);
+                        expect(state.filteredCount).toBe(65);
+                        expect(state.range.length).toBe(15);
+                        expect(state.from).toBe(50);
+                        expect(state.to).toBe(65);
+                        expect(state.range[0].name).toBe('name51');
+                        expect(state.range[14].name).toBe('name65');
+                        break;
+                    case 4:
+                        // Should remove all filters
+                        expect(state.count).toBe(65);
+                        expect(state.filteredCount).toBe(65);
+                        expect(state.range.length).toBe(25);
+                        expect(state.from).toBe(0);
+                        expect(state.to).toBe(25);
+                        done();
+                        break;
+                    default:
+                        expect('Should not enter default case').toBeUndefined();
+                        done();
+                        break;
+                }
+            },
+            (error) => {
+                expect(error).toBeUndefined();
+                done();
+            },
+            () => {
+                expect('should not complete').toBeUndefined();
+                done();
+            }
+        );
+        repository.setRange(25, 50);
+        repository.setRange(50, 75);
+        repository.setRange(-5, 25);
+    });
+
+    it('Subclasses can access client', () => {
+        const cl = repository.theProtectedClient;
+        expect(cl).toBeDefined();
+        expect(cl.createEntity).toBeDefined();
+    });
+});
+
+describe('ValueRepository', () => {
+
+    const apiBasePath = 'audits2';
+    const appBasePath = 'org-history';
+    const appName = 'orgHistorySPA';
+    let appConfig: IAppConfig = {
+        apiBasePath: apiBasePath,
+        appBasePath: appBasePath,
+        gtmAppName: appName
+    };
+    let repository: SomeTypeValueRepository;
+    let client: ClientMock;
+
+    const initArray = (num: number): SomeType[] => {
+        let rs: SomeType[] = [];
+        for (let i = 1; i <= num; i += 1) {
+            rs.push(new SomeType(i));
+        }
+        return rs;
+    };
+
+    beforeEach(() => {
+        addProviders([
+            HTTP_PROVIDERS,
+            ContextService,
+            { provide: XHRBackend, useClass: MockBackend },
+            { provide: Location, useClass: SpyLocation },
+            { provide: WindowRef, useClass: WindowMock },
+            { provide: Client, useClass: ClientMock },
+            { provide: APP_CONFIG, useValue: appConfig }
+        ]);
+    });
+
+    beforeEach(inject([Client, Location, APP_CONFIG, ContextService], (c, l, a, s) => {
+        l.go(`/organizations/abc/${appBasePath}`);
+        let router = new ApiRoutes(s, a.apiBasePath);
+        const o = new SomeObservableClient(c, router);
+        repository = new SomeTypeValueRepository(o, a.apiBasePath, new SomeTypeValueStorage());
+        client = c;
+    }));
+
+    it('Subscription will emit latest data.', done => {
+        client.on(`/organizations/abc/${apiBasePath}`, { sometype: []});
+
+        let flag = 0;
+
+        const firstCall =  (state: IRangeSnapshot<SomeType>) => {
+            expect(state.count).toBe(0);
+            expect(state.filteredCount).toBe(0);
+            expect(state.from).toBe(-1);
+            expect(state.to).toBe(0);
+            expect(state.range).toBeDefined();
+            expect(state.range.length).toBe(0);
+            expect(state.error).toBeUndefined();
+            expect(state.allowCreate).toBe(true);
+            expect(state.allowRead).toBe(true);
+            flag++;
+        };
+
+        const secondCall =  (state: IRangeSnapshot<SomeType>) => {
+            expect(state.count).toBe(0);
+            expect(state.filteredCount).toBe(0);
+            expect(state.from).toBe(-1);
+            expect(state.to).toBe(0);
+            expect(state.range).toBeDefined();
+            expect(state.range.length).toBe(0);
+            expect(flag).toBe(1);
+            expect(state.error).toBeUndefined();
+            expect(state.allowCreate).toBe(true);
+            expect(state.allowRead).toBe(true);
+            done();
+        };
+
+        repository.subscribe(
+            (state: IRangeSnapshot<SomeType>) => {
+                if (flag === 0) {
+                    firstCall(state);
+                } else {
+                    secondCall(state);
+                }
+            },
+            (error) => {
+                expect(error).toBeUndefined();
+                done();
+            },
+            () => {
+                expect('should not complete').toBeUndefined();
+                done();
+            }
+        );
+    });
+
+    it('Service instance should not be initialized at beginning', () => {
+        expect(repository.status).toBe('empty');
+    });
+
+    it('Fetching should change status, and complete loading should be updated once it finishes', done => {
+        client.on(`/organizations/abc/${apiBasePath}`, { sometype: initArray(6) });
+        let counts = [6, 6];
+        let status = ['loading', 'loaded'];
+        repository.subscribe(
+            (state: IRangeSnapshot<SomeType>) => {
+                expect(state.error).toBeUndefined();
+                expect(counts.indexOf(state.count)).toBe(0);
+                expect(status.indexOf(repository.status)).toBe(0);
+                counts = counts.slice(1);
+                status = status.slice(1);
+                if (counts.length === 0) {
+                    done();
+                }
+            },
+            (error) => {
+                expect(error).toBeUndefined();
+                done();
+            },
+            () => {
+                expect('should not complete').toBeUndefined();
+                done();
+            }
+        );
+    });
+
+    it('Fetching should load entities', done => {
+        client.on(`/organizations/abc/${apiBasePath}`, { sometype: initArray(6) });
+
+        let counts = [6, 6];
+        let tos = [6, 6];
+        repository.subscribe(
+            (state: IRangeSnapshot<SomeType>) => {
+                expect(counts.indexOf(state.count)).toBe(0);
+                expect(state.error).toBeUndefined();
+                expect(tos.indexOf(state.to)).toBe(0);
+                expect(state.allowCreate).toBe(true);
+                expect(state.allowRead).toBe(true);
+                counts = counts.slice(1);
+                tos = tos.slice(1);
+                if (counts.length === 0) {
+                    done();
+                }
+            },
+            (error) => {
+                expect(error).toBeUndefined();
+                done();
+            },
+            () => {
+                expect('should not complete').toBeUndefined();
+                done();
+            }
+        );
+    });
+
+    it('Does not load entities and updates permissions if the user does not have permissions', (done) => {
+        const errorMessage = 'Forbidden. You don\'t have permissions to access this resource. Error code: 403';
+        client.on('/organizations/abc/userroles/orgadmin/permissions', {
+            resourcePermission: [ { organization: 'abc', path: '/', permissions: []} ]
+        });
+        client.on(`/organizations/abc/${apiBasePath}`, errorMessage, true);
+
+        repository.subscribe(
+            (state: IRangeSnapshot<SomeType>) => {
+                expect(state.error).toBe(errorMessage);
+                expect(state.allowCreate).toBe(false);
+                expect(state.allowRead).toBe(false);
+                expect(state.count).toBe(0);
+                expect(state.filteredCount).toBe(0);
+                expect(state.from).toBe(-1);
+                expect(state.to).toBe(0);
+                expect(state.range).toBeDefined();
+                expect(state.range.length).toBe(0);
+                done();
+            },
+            (error) => {
+                expect(error).toBeUndefined();
+                done();
+            },
+            () => {
+                expect('should not complete').toBeUndefined();
+                done();
+            }
+        );
+    });
+
+    it('Sorts entity', done => {
+        client.on(`/organizations/abc/${apiBasePath}`, { sometype: initArray(6) });
+        let counter = -1;
+        repository.subscribe(
+            (state: IRangeSnapshot<SomeType>) => {
+                counter += 1;
+                expect(state.error).toBeUndefined();
+                switch (counter) {
+                    case 0:
+                        // First emission.
+                        expect(repository.sortByField).toBe(undefined);
+                        expect(repository.sortByOrder).toBe('asc');
+                        break;
+                    case 1:
+                        // Should receive products unsorted, ascending order. Then order descending.
+                        expect(repository.sortByField).toBe(undefined);
+                        expect(repository.sortByOrder).toBe('asc');
+                        break;
+                    case 2:
+                        // Should receive products unsorted, descending order. Then sort by modified date.
+                        expect(repository.sortByField).toBeUndefined();
+                        expect(repository.sortByOrder).toBe('desc');
+                        break;
+                    case 3:
+                        // Should receive products sorted by modification date, ascending order
+                        expect(repository.sortByField).toBe('name');
+                        expect(repository.sortByOrder).toBe('asc');
+                        done();
+                        break;
+                    default:
+                        expect('Should not enter default case').toBeUndefined();
+                        done();
+                        break;
+                }
+
+            },
+            (error) => {
+                expect(error).toBeUndefined();
+                done();
+            },
+            () => {
+                expect('should not complete').toBeUndefined();
+                done();
+            }
+        );
+        repository.sortBy(undefined, 'desc');
+        repository.sortBy('name', undefined);
+    });
+
+    it('Filter values.', done => {
         const types: SomeType[] = [];
         types.push(new SomeType(1, 'name1'));
         types.push(new SomeType(2, 'name1'));
