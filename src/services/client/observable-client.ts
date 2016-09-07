@@ -21,7 +21,9 @@ export abstract class ObservableClient implements IClientObserver {
         this.spy = new ClientObserver();
     }
 
-    public abstract getList <T>():  Observable<T[]>;
+    // TODO: does this method need to be abstract? If a user is not using the repository, then this client can't be used
+    // without a getList method that might not be needed at all...
+    public abstract getList <T>(...callParams: any[]):  Observable<T[]>;
 
     private userInfo = (): Observable<IUserInfo> => this.get<IUserInfo>(this.router.userInfo());
 

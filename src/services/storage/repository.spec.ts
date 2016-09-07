@@ -125,8 +125,6 @@ describe('EntityRepository', () => {
         gtmAppName: appName
     };
     let repository: SomeTypeRepository;
-    let repository2: SomeTypeValueRepository;
-    let repositories: Repository<SomeType>[];
     let client: ClientMock;
 
     const initArray = (num: number): SomeType[] => {
