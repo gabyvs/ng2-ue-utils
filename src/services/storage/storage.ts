@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import { BaseStorage, IDictionary } from './base-storage';
-import { Dictionary } from "~lodash/index";
+import { Dictionary } from 'lodash';
 
 // `Dictionary<T>` tells the lodash method `_.some()` which kind of collection to expect, in this case an object, which 
 // is described by the lodash interface `Dictionary`
