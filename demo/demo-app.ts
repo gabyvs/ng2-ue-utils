@@ -14,6 +14,7 @@ import { ProgressService } from '../src/components/progress/progress-service';
 import { ToggleOnHover } from '../src/directives/toggle-on-hover/toggle-on-hover';
 import { FocusOnInit } from '../src/directives/focus-on-init/focus-on-init';
 import { ListHeaders } from '../src/components/list-headers/list-headers';
+import { DatePicker } from '../src/components/datepicker/datepicker';
 
 declare const require: any;
 const template: string = require('./demo.html');
@@ -21,7 +22,7 @@ const styles: any = require('!!css-loader!less-loader!./demo.less');
 
 @Component({
     directives: [LoadingDots, ToggleOnHover, FocusOnInit, Filtering, HintScroll, Modal, Pagination, ValueHandler, 
-        Notification, Progress, ListHeaders],
+        Notification, Progress, ListHeaders, DatePicker],
     pipes: [DateMoment, FromNow],
     providers: [NotificationService, ProgressService],
     selector: 'app',
@@ -35,6 +36,8 @@ export class AppComponent {
     public classForE2E: string = 'classForE2E';
     public paginationEvent: any;
     public listheaderEvent: any;
+    public datePickerEvent: any;
+    public datePickerUsage: string[];
     public vhEvent: ValueHandler.IEvent;
     public modalResult: string;
     public paginationState: Pagination.IRangeSnapshot = {
@@ -150,5 +153,15 @@ export class AppComponent {
 
     public sort(listheaderEvent): void {
         this.listheaderEvent = listheaderEvent;
+    }
+
+    public dateChange(event): void {
+        let start = new Date(event.beginDate);
+        let end = new Date(event.endDate);
+        this.datePickerEvent = event;
+        this.datePickerUsage = [];
+        this.datePickerUsage.push(start + ' ~ ' + end);
+
+        this.datePickerUsage.push(start.toISOString().slice(0, 10) + ' ~ ' + end.toISOString().slice(0, 10));
     }
 }

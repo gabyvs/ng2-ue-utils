@@ -1,0 +1,28 @@
+<div class="datepicker-container">
+	<div>
+		<button (click)="changeMonth(month - 1)">Prev</button>
+		<button (click)="changeMonth(now.getMonth() + 1)">Today</button>
+		<button (click)="changeMonth(month + 1)">Next</button>
+		<span style="display:inline" name="year">{{year}}</span>
+		<span style="display:inline" name="month">{{month}}</span>
+		<span style="display:inline" name="monthSpan">{{monthSpan}}</span>
+		<span style="display:inline" name="pickRange">{{pickRange}}</span>
+	</div>
+	<div class="cal-month" style="float:left; display:inline; margin-right: 20px;" *ngFor="let m of viewModel">
+		<h3>{{m.monthText}}</h3>
+		<table>
+			<colgroup>
+				<col><col><col><col><col><col><col>
+			</colgroup>
+			<thead>
+				<tr colspan="7">
+					<th *ngFor="let day of dayText">{{day}}</th>
+			</thead>
+			<tbody class="content" colspan="7">
+				<tr *ngFor="let row of m.days">
+					<td *ngFor="let d of row" class="{{d.style}}" (click)="chooseDate(m.month, d.day)">{{d.day}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
