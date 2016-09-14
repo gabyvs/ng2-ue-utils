@@ -57,6 +57,43 @@ describe('Component: Notification', () => {
         expect(notification.icon).toBe('glyphicon-ok');
     });
 
+    it('should auto-close if success', () => {
+        jasmine.clock().uninstall();
+        jasmine.clock().install();
+        notification.show(error, 'success');
+        expect(notification.hide).toBe(false);
+        jasmine.clock().tick(notification.fadeTime + 1);
+        expect(notification.hide).toBe(true);
+        jasmine.clock().tick(notification.hideTime + 1);
+        expect(notification.hide).toBe(false);
+        expect(notification.baseColor).toBe('empty');
+        expect(notification.notification).toBe(undefined);
+        jasmine.clock().uninstall();
+    });
+
+    it('should not auto-close if mouseover', () => {
+        jasmine.clock().uninstall();
+        jasmine.clock().install();
+        notification.show(error, 'success');
+        expect(notification.hide).toBe(false);
+        jasmine.clock().tick(notification.fadeTime / 2);
+        /*
+          Have not found a way to simulate actual mouseover/mouseevent in Jasmine,
+          so the reset timer and restart timer functions are called directly.
+        */
+        notification.resetTimer();
+        jasmine.clock().tick(notification.fadeTime + 1);
+        expect(notification.hide).toBe(false);
+        notification.restartTimer();
+        jasmine.clock().tick(notification.fadeTime + 1);
+        expect(notification.hide).toBe(true);
+        jasmine.clock().tick(notification.hideTime + 1);
+        expect(notification.hide).toBe(false);
+        expect(notification.baseColor).toBe('empty');
+        expect(notification.notification).toBe(undefined);
+        jasmine.clock().uninstall();
+    });
+
     it('should close notification', () => {
         jasmine.clock().uninstall();
         jasmine.clock().install();
@@ -64,7 +101,7 @@ describe('Component: Notification', () => {
         jasmine.clock().tick(1);
         notification.close();
         expect(notification.hide).toBe(true);
-        jasmine.clock().tick(1001);
+        jasmine.clock().tick(notification.hideTime + 1);
         expect(notification.hide).toBe(false);
         expect(notification.baseColor).toBe('empty');
         expect(notification.notification).toBe(undefined);

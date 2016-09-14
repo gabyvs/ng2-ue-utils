@@ -20,12 +20,12 @@ import { NotificationService } from './notification-service';
  *     `
  * })
  * ```
- * 
+ *
  * and in MyContent component:
  * ```
- * 
+ *
  * import { NotificationService } from 'ng2-ue-utils';
- * 
+ *
  * @Component({
  *     selector: 'my-content',
  *     template: template
@@ -56,7 +56,7 @@ const styles: any = require('!!css-loader!less-loader!./notification.less');
     styles: [styles.toString()],
     template: `
     <div class="notification-container" [ngClass]="baseColor" [class.show]="notification" [class.hide]="hide">
-        <div class="notification-content">
+        <div class="notification-content" (mouseover)="resetTimer()" (mouseout)="restartTimer()">
             <div aria-hidden="true" class="close" (click)="close()">x</div>
             <div><span class="glyphicon {{ icon }}"></span><span class="main-text">{{ notification }}</span></div>
             <div><span class="details-text">Click to see details and additional notifications (coming soon!)</span></div>
@@ -71,6 +71,9 @@ export class Notification implements OnDestroy, OnInit {
     private notification: string;
     private hide: boolean = false;
     private icon: string = 'glyphicon-alert';
+    private hideTime: number = 1000;
+    private fadeTime: number = 4000;
+    private fadeTimerHandle: any;
 
     constructor (private notificationService: NotificationService) {}
 
@@ -78,6 +81,7 @@ export class Notification implements OnDestroy, OnInit {
         this.notification = message;
         switch (type) {
             case 'success':
+                this.fadeTimerHandle = setTimeout(() => this.close(), this.fadeTime);
                 this.icon = 'glyphicon-ok';
                 this.baseColor = 'success';
                 break;
@@ -95,10 +99,23 @@ export class Notification implements OnDestroy, OnInit {
     public close () {
         this.hide = true;
         setTimeout(() => {
+            this.fadeTimerHandle = undefined;
             this.notification = undefined;
             this.baseColor = 'empty';
             this.hide = false;
-        }, 1000);
+        }, this.hideTime);
+    }
+
+    public resetTimer () {
+        if (this.fadeTimerHandle) {
+            clearTimeout(this.fadeTimerHandle);
+        }
+    }
+
+    public restartTimer () {
+        if (this.fadeTimerHandle) {
+            this.fadeTimerHandle = setTimeout(() => this.close(), this.fadeTime);
+        }
     }
 
     public ngOnInit () {
