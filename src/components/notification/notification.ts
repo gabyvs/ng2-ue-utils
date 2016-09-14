@@ -56,7 +56,7 @@ const styles: any = require('!!css-loader!less-loader!./notification.less');
     styles: [styles.toString()],
     template: `
     <div class="notification-container" [ngClass]="baseColor" [class.show]="notification" [class.hide]="hide">
-        <div class="notification-content">
+        <div class="notification-content" (mouseover)="resetTimer()" (mouseout)="restartTimer()">
             <div aria-hidden="true" class="close" (click)="close()">x</div>
             <div><span class="glyphicon {{ icon }}"></span><span class="main-text">{{ notification }}</span></div>
             <div><span class="details-text">Click to see details and additional notifications (coming soon!)</span></div>
@@ -72,6 +72,7 @@ export class Notification implements OnDestroy, OnInit {
     private hide: boolean = false;
     private icon: string = 'glyphicon-alert';
     private fadeTime: number = 4000;
+    private fadeTimerHandle: any;
 
     constructor (private notificationService: NotificationService) {}
 
@@ -92,17 +93,29 @@ export class Notification implements OnDestroy, OnInit {
                 break;
         }
         if(type === 'success'){
-            setTimeout(() => this.close(), this.fadeTime);
+            this.fadeTimerHandle = setTimeout(() => this.close(), this.fadeTime);
         }
     }
 
     public close () {
         this.hide = true;
         setTimeout(() => {
+            this.fadeTimerHandle = null;
             this.notification = undefined;
             this.baseColor = 'empty';
             this.hide = false;
         }, 1000);
+    }
+
+    public resetTimer(){
+        if(this.fadeTimerHandle !== null)
+            clearTimeout(this.fadeTimerHandle);
+    }
+
+    public restartTimer(){
+        if(this.fadeTimerHandle !== null){
+            this.fadeTimerHandle = setTimeout(()=> this.close(), this.fadeTime);
+        }
     }
 
     public ngOnInit () {
