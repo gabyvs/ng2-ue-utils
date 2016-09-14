@@ -58,7 +58,7 @@ const styles: any = require('!!css-loader!less-loader!./notification.less');
     <div class="notification-container" [ngClass]="baseColor" [class.show]="notification" [class.hide]="hide">
         <div class="notification-content">
             <div aria-hidden="true" class="close" (click)="close()">x</div>
-            <div><span class="glyphicon glyphicon-alert"></span><span class="main-text">{{ notification }}</span></div>
+            <div><span class="glyphicon {{ icon }}"></span><span class="main-text">{{ notification }}</span></div>
             <div><span class="details-text">Click to see details and additional notifications (coming soon!)</span></div>
         </div>
     </div>
@@ -70,16 +70,23 @@ export class Notification implements OnDestroy, OnInit {
     private baseColor: string = 'empty';
     private notification: string;
     private hide: boolean = false;
+    private icon: string = 'glyphicon-alert';
 
     constructor (private notificationService: NotificationService) {}
 
-    private show (error: string, type?: string) {
-        this.notification = error;
+    private show (message: string, type?: string) {
+        this.notification = message;
         switch (type) {
+            case 'success':
+                this.icon = 'glyphicon-ok';
+                this.baseColor = 'success';
+                break;
             case 'warning':
+                this.icon = 'glyphicon-alert';
                 this.baseColor = 'warning';
                 break;
-            default:
+            default: //must be an error
+                this.icon = 'glyphicon-alert';
                 this.baseColor = 'error';
                 break;
         }

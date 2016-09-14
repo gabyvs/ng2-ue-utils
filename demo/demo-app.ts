@@ -60,6 +60,10 @@ export class AppComponent {
         message: 'My error message',
         type: 'error' as NotificationService.NotificationType
     };
+    private success: NotificationService.INotification = {
+        message: 'My success message',
+        type: 'success' as NotificationService.NotificationType
+    }
     public vhValidation: ValueHandler.IValidationRule = {
         fn: (newVal: string) => {
             const re = /\S+@\S+\.\S+/;
@@ -120,6 +124,9 @@ export class AppComponent {
     }
     public emitError(): void {
         this.notificationService.notify(this.error);
+    }
+    public emitSuccess(): void {
+        this.notificationService.notify(this.success);
     }
     
     // Progress
