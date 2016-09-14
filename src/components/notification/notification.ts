@@ -71,6 +71,7 @@ export class Notification implements OnDestroy, OnInit {
     private notification: string;
     private hide: boolean = false;
     private icon: string = 'glyphicon-alert';
+    private fadeTime: number = 4000;
 
     constructor (private notificationService: NotificationService) {}
 
@@ -89,6 +90,9 @@ export class Notification implements OnDestroy, OnInit {
                 this.icon = 'glyphicon-alert';
                 this.baseColor = 'error';
                 break;
+        }
+        if(type === 'success'){
+            setTimeout(() => this.close(), this.fadeTime);
         }
     }
 
