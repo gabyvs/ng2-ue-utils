@@ -1,4 +1,4 @@
-import { addProviders, async, beforeEach, inject } from '@angular/core/testing';
+import { addProviders, async, inject } from '@angular/core/testing';
 import { ComponentFixture } from '@angular/core/testing/component_fixture';
 import { TestComponentBuilder } from '@angular/core/testing/test_component_builder';
 import { Notification } from './notification';
@@ -40,6 +40,21 @@ describe('Component: Notification', () => {
         notification.show(error);
         expect(notification.baseColor).toBe('error');
         expect(notification.notification).toBe(error);
+        expect(notification.icon).toBe('glyphicon-alert');
+    });
+
+    it('should show warning notification', () => {
+        notification.show(error, 'warning');
+        expect(notification.baseColor).toBe('warning');
+        expect(notification.notification).toBe(error);
+        expect(notification.icon).toBe('glyphicon-alert');
+    });
+
+    it('should show success notification', () => {
+        notification.show(error, 'success');
+        expect(notification.baseColor).toBe('success');
+        expect(notification.notification).toBe(error);
+        expect(notification.icon).toBe('glyphicon-ok');
     });
 
     it('should close notification', () => {
