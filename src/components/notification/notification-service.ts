@@ -21,6 +21,6 @@ export namespace NotificationService {
         type?: NotificationType;
     }
 
-    export type NotificationType = 'error' | 'warning';
+    export type NotificationType = 'error' | 'warning' | 'success';
     
 }
