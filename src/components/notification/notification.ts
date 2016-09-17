@@ -20,12 +20,12 @@ import { NotificationService } from './notification-service';
  *     `
  * })
  * ```
- * 
+ *
  * and in MyContent component:
  * ```
- * 
+ *
  * import { NotificationService } from 'ng2-ue-utils';
- * 
+ *
  * @Component({
  *     selector: 'my-content',
  *     template: template
@@ -92,7 +92,7 @@ export class Notification implements OnDestroy, OnInit {
                 this.baseColor = 'error';
                 break;
         }
-        if(type === 'success'){
+        if (type === 'success') {
             this.fadeTimerHandle = setTimeout(() => this.close(), this.fadeTime);
         }
     }
@@ -100,27 +100,28 @@ export class Notification implements OnDestroy, OnInit {
     public close () {
         this.hide = true;
         setTimeout(() => {
-            this.fadeTimerHandle = null;
+            this.fadeTimerHandle = undefined;
             this.notification = undefined;
             this.baseColor = 'empty';
             this.hide = false;
         }, 1000);
     }
 
-    public resetTimer(){
-        if(this.fadeTimerHandle !== null)
+    public resetTimer() {
+        if ( this.fadeTimerHandle !== undefined ) {
             clearTimeout(this.fadeTimerHandle);
+        }
     }
 
-    public restartTimer(){
-        if(this.fadeTimerHandle !== null){
-            this.fadeTimerHandle = setTimeout(()=> this.close(), this.fadeTime);
+    public restartTimer() {
+        if ( this.fadeTimerHandle !== undefined ) {
+            this.fadeTimerHandle = setTimeout( () => this.close(), this.fadeTime);
         }
     }
 
     public ngOnInit () {
         this.serviceSubscription = this.notificationService.observe$.subscribe((notification: NotificationService.INotification) => {
-            this.show(notification.message, notification.type);
+            this.show( notification.message, notification.type );
         });
     }
 
