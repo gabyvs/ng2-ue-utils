@@ -20,12 +20,12 @@ import { NotificationService } from './notification-service';
  *     `
  * })
  * ```
- * 
+ *
  * and in MyContent component:
  * ```
- * 
+ *
  * import { NotificationService } from 'ng2-ue-utils';
- * 
+ *
  * @Component({
  *     selector: 'my-content',
  *     template: template
@@ -56,9 +56,9 @@ const styles: any = require('!!css-loader!less-loader!./notification.less');
     styles: [styles.toString()],
     template: `
     <div class="notification-container" [ngClass]="baseColor" [class.show]="notification" [class.hide]="hide">
-        <div class="notification-content">
+        <div class="notification-content" (mouseover)="resetTimer()" (mouseout)="restartTimer()">
             <div aria-hidden="true" class="close" (click)="close()">x</div>
-            <div><span class="glyphicon glyphicon-alert"></span><span class="main-text">{{ notification }}</span></div>
+            <div><span class="glyphicon {{ icon }}"></span><span class="main-text">{{ notification }}</span></div>
             <div><span class="details-text">Click to see details and additional notifications (coming soon!)</span></div>
         </div>
     </div>
@@ -70,33 +70,58 @@ export class Notification implements OnDestroy, OnInit {
     private baseColor: string = 'empty';
     private notification: string;
     private hide: boolean = false;
+    private icon: string = 'glyphicon-alert';
+    private fadeTime: number = 4000;
+    private fadeTimerHandle: any;
 
     constructor (private notificationService: NotificationService) {}
 
-    private show (error: string, type?: string) {
-        this.notification = error;
+    private show (message: string, type?: string) {
+        this.notification = message;
         switch (type) {
+            case 'success':
+                this.icon = 'glyphicon-ok';
+                this.baseColor = 'success';
+                break;
             case 'warning':
+                this.icon = 'glyphicon-alert';
                 this.baseColor = 'warning';
                 break;
-            default:
+            default: //must be an error
+                this.icon = 'glyphicon-alert';
                 this.baseColor = 'error';
                 break;
+        }
+        if (type === 'success') {
+            this.fadeTimerHandle = setTimeout(() => this.close(), this.fadeTime);
         }
     }
 
     public close () {
         this.hide = true;
         setTimeout(() => {
+            this.fadeTimerHandle = undefined;
             this.notification = undefined;
             this.baseColor = 'empty';
             this.hide = false;
         }, 1000);
     }
 
+    public resetTimer() {
+        if ( this.fadeTimerHandle !== undefined ) {
+            clearTimeout(this.fadeTimerHandle);
+        }
+    }
+
+    public restartTimer() {
+        if ( this.fadeTimerHandle !== undefined ) {
+            this.fadeTimerHandle = setTimeout( () => this.close(), this.fadeTime);
+        }
+    }
+
     public ngOnInit () {
         this.serviceSubscription = this.notificationService.observe$.subscribe((notification: NotificationService.INotification) => {
-            this.show(notification.message, notification.type);
+            this.show( notification.message, notification.type );
         });
     }
 
