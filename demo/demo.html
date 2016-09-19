@@ -21,14 +21,12 @@
 <div class="component">
     <h2>Datepicker: Component</h2>
     <div class="explanation">Datepicker component.</div>
+    <input type="string" value="{{ dates }}"><button (click)="show($event)">Choose date</button>
     <div class="flex-container left">
-        <datepicker bindTarget="#datepicker" (emitDate)="dateChange($event)" [monthSpan]="3" [maxRange]="14"></datepicker>
+        <datepicker (emitDate)="dateChange($event)" [monthSpan]="2" [maxRange]="7" [beginRange]="1470121200000" [endRange]="1479974400000"></datepicker>
         <div *ngIf="datePickerEvent" class="resultBlock paginationResult">
             <span>`datePickerEvent` event payload was:</span>
             <div class="codeBlock">{{ datePickerEvent | json }}</div>
-            <div *ngFor="let usage of datePickerUsage" class="codeBlock">
-                {{ usage }}
-            </div>
         </div>
     </div>
 </div>

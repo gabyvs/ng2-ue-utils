@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import { BaseStorage } from './base-storage';
-import { List } from "~lodash/index";
+import { List } from 'lodash';
 
 // `List<T>` tells the lodash method `_.some()` which kind of collection to expect, in this case an array, which is
 // described by the lodash interface `List`

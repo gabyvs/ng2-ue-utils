@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { DateMoment } from '../src/pipes/date-moment/date-moment';
 import { FromNow } from '../src/pipes/from-now/from-now';
 import { LoadingDots } from '../src/components/loading-dots/loading-dots';
@@ -15,6 +15,7 @@ import { ToggleOnHover } from '../src/directives/toggle-on-hover/toggle-on-hover
 import { FocusOnInit } from '../src/directives/focus-on-init/focus-on-init';
 import { ListHeaders } from '../src/components/list-headers/list-headers';
 import { DatePicker } from '../src/components/datepicker/datepicker';
+import * as moment from 'moment';
 
 declare const require: any;
 const template: string = require('./demo.html');
@@ -30,6 +31,7 @@ const styles: any = require('!!css-loader!less-loader!./demo.less');
     template: template
 })
 export class AppComponent {
+    @ViewChild(DatePicker) private dp: DatePicker;
     public today = new Date().valueOf();
     public recent = this.today - (1000 * 60 * 10);
     public emitFilterCriteria: any;
@@ -37,7 +39,7 @@ export class AppComponent {
     public paginationEvent: any;
     public listheaderEvent: any;
     public datePickerEvent: any;
-    public datePickerUsage: string[];
+    public dates: string;
     public vhEvent: ValueHandler.IEvent;
     public modalResult: string;
     public paginationState: Pagination.IRangeSnapshot = {
@@ -156,12 +158,13 @@ export class AppComponent {
     }
 
     public dateChange(event): void {
-        let start = new Date(event.beginDate);
-        let end = new Date(event.endDate);
+        let start = moment(event.beginDate);
+        let end = moment(event.endDate);
         this.datePickerEvent = event;
-        this.datePickerUsage = [];
-        this.datePickerUsage.push(start + ' ~ ' + end);
+        this.dates = start.format('MM/DD/YYYY') + ' ~ ' + end.format('MM/DD/YYYY');
+    }
 
-        this.datePickerUsage.push(start.toISOString().slice(0, 10) + ' ~ ' + end.toISOString().slice(0, 10));
+    public show(event: MouseEvent): void {
+        this.dp.show(event); 
     }
 }

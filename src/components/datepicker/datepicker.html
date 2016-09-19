@@ -9,7 +9,7 @@
 		<span style="display:inline" name="pickRange">{{pickRange}}</span>
 	</div>
 	<div class="cal-month" style="float:left; display:inline; margin-right: 20px;" *ngFor="let m of viewModel">
-		<h3>{{m.monthText}}</h3>
+		<h3>{{m.monthText}} - {{m.year}}</h3>
 		<table>
 			<colgroup>
 				<col><col><col><col><col><col><col>
@@ -24,5 +24,9 @@
 				</tr>
 			</tbody>
 		</table>
+	</div>
+	<div class="cal-action">
+		<button (click)="close()">Cancel</button>
+		<button (click)="emit()">Apply</button>
 	</div>
 </div>
