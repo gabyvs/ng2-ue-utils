@@ -25,10 +25,6 @@ export const sortableValue = (d: string | number | {}): string | number => {
     return d.toString().toLowerCase();
 };
 
-export interface BaseStorage {
-    remove?(identifier: string): void;
-}
-
 export abstract class BaseStorage <T> {
 
     protected entities: IDictionary<T> | T[];
