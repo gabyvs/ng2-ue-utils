@@ -1,7 +1,9 @@
-import { addProviders, async, beforeEach, inject } from '@angular/core/testing';
+import { addProviders, async, inject } from '@angular/core/testing';
 import { ComponentFixture } from '@angular/core/testing/component_fixture';
 import { TestComponentBuilder } from '@angular/core/testing/test_component_builder';
 import { ValueHandler } from './value-handler';
+
+declare const beforeEach, describe, expect, it, jasmine, spyOn;
 
 describe('Component: ValueHandler', () => {
     let fixture: ComponentFixture<ValueHandler>;

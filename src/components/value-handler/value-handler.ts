@@ -59,6 +59,7 @@ const styles: any = require('!!css-loader!less-loader!./value-handler.less');
             (keyup)="validate(propertyInput.value)"
             (keyup.enter)="save(propertyInput.value)"
             (keydown.tab)="onTab(propertyInput.value, $event)"
+            (keyup.esc)="cancel()"
             (blur)="cancel()"
             [ngClass]="{ 'error': error }"
             [ngModel]="value"/>
