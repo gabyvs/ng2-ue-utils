@@ -40,21 +40,21 @@ describe('Component: Notification', () => {
         notification.show(error);
         expect(notification.baseColor).toBe('error');
         expect(notification.notification).toBe(error);
-        expect(notification.icon).toBe('glyphicon-alert');
+        expect(notification.icon).toBe('glyphicon glyphicon-alert');
     });
 
     it('should show warning notification', () => {
         notification.show(error, 'warning');
         expect(notification.baseColor).toBe('warning');
         expect(notification.notification).toBe(error);
-        expect(notification.icon).toBe('glyphicon-alert');
+        expect(notification.icon).toBe('glyphicon glyphicon-alert');
     });
 
     it('should show success notification', () => {
         notification.show(error, 'success');
         expect(notification.baseColor).toBe('success');
         expect(notification.notification).toBe(error);
-        expect(notification.icon).toBe('glyphicon-ok');
+        expect(notification.icon).toBe('glyphicon glyphicon-ok');
     });
 
     it('should auto-close if success', () => {

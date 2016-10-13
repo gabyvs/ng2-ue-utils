@@ -1,10 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { NotificationService } from './notification-service';
 
 /**
  * This component leverages the `NotificationService` to display dismissible notifications on the DOM.  In order to
  * register a notification to be displayed in your component app, make a call to the `notify` method on your instance
  * of `NotificationService` with the `NotificationService.INotification` signature.
+ *
+ * @input You can provide an Icon class prefix. By default it uses `glyphicon` but you can change it to `fa`
+ * if using Fontawesome or any other custom name.
  *
  * ### Simple Example
  *
@@ -15,7 +18,7 @@ import { NotificationService } from './notification-service';
  *     providers: [ NotificationService ],
  *     selector: 'app-main',
  *     template: `
- *         <notification></notification>
+ *         <notification iconCssPrefix="fa"></notification>
  *         <my-content></my-content>
  *     `
  * })
@@ -58,19 +61,20 @@ const styles: any = require('!!css-loader!less-loader!./notification.less');
     <div class="notification-container" [ngClass]="baseColor" [class.show]="notification" [class.hide]="hide">
         <div class="notification-content" (mouseover)="resetTimer()" (mouseout)="restartTimer()">
             <div aria-hidden="true" class="close" (click)="close()">x</div>
-            <div><span class="glyphicon {{ icon }}"></span><span class="main-text">{{ notification }}</span></div>
-            <div><span class="details-text">Click to see details and additional notifications (coming soon!)</span></div>
+            <div><span class="{{ icon }}"></span><span class="main-text">{{ notification }}</span></div>
         </div>
     </div>
     `
 })
 export class Notification implements OnDestroy, OnInit {
 
+    @Input() public iconCssPrefix: string = 'glyphicon';
+
     private serviceSubscription;
     private baseColor: string = 'empty';
     private notification: string;
     private hide: boolean = false;
-    private icon: string = 'glyphicon-alert';
+    private icon: string = `${this.iconCssPrefix} ${this.iconCssPrefix}-alert`;
     private hideTime: number = 1000;
     private fadeTime: number = 4000;
     private fadeTimerHandle: any;
@@ -82,18 +86,22 @@ export class Notification implements OnDestroy, OnInit {
         switch (type) {
             case 'success':
                 this.fadeTimerHandle = setTimeout(() => this.close(), this.fadeTime);
-                this.icon = 'glyphicon-ok';
+                this.setIconClass('ok');
                 this.baseColor = 'success';
                 break;
             case 'warning':
-                this.icon = 'glyphicon-alert';
+                this.setIconClass('alert');
                 this.baseColor = 'warning';
                 break;
             default: //must be an error
-                this.icon = 'glyphicon-alert';
+                this.setIconClass('alert');
                 this.baseColor = 'error';
                 break;
         }
+    }
+
+    private setIconClass (type: string) {
+        this.icon = `${this.iconCssPrefix} ${this.iconCssPrefix}-${type}`;
     }
 
     public close () {
