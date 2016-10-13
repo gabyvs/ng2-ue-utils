@@ -50,7 +50,13 @@
     <h2>On Hover Show: Directive</h2>
     <div class="explanation">Hides and shows elements on hover events</div>
     <div class="flex-container left">
+        <h3>Hover Show using inline style:</h3>
         <div toggleOnHover>
+            <div class="hide-on-hover">This will be hidden on hover</div>
+            <div class="show-on-hover">This will be shown on hover</div>
+        </div>
+        <h3>Hover Show using CSS class:</h3>
+        <div toggleOnHover [showToggle]="class">
             <div class="hide-on-hover">This will be hidden on hover</div>
             <div class="show-on-hover">This will be shown on hover</div>
         </div>

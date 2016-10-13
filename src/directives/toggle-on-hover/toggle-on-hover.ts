@@ -1,4 +1,6 @@
-import { Directive, ElementRef, HostListener, OnInit } from '@angular/core';
+import { Directive, ElementRef, HostListener, OnInit, Input } from '@angular/core';
+
+type ToggleElement = 'normal'|'hover';
 
 /**
  * This directive is meant to be used for cases where elements must be toggled between visible and hidden on hover events.
@@ -8,10 +10,12 @@ import { Directive, ElementRef, HostListener, OnInit } from '@angular/core';
  * Use class `show-on-hover` to identify an element that will be shown on hover
  * Use class `hide-on-hover` to identify an element that will be hidden on hover
  *
+ * @input You specify if the hide/show behavior is done using inline styles or class toggle: `showToggle = class|style`
+ *
  * ### Simple Example
  *
  * ```
- * <div toggleOnHover>
+ * <div toggleOnHover showToggle="class">
  *      <div class="show-on-hover">This has the class `show-on-hover`</div>
  *      <div class="hide-on-hover">This has the class `hide-on-hover`</div>
  * </div>
@@ -22,34 +26,49 @@ import { Directive, ElementRef, HostListener, OnInit } from '@angular/core';
 })
 export class ToggleOnHover implements OnInit {
 
+    @Input() public showToggle: string = 'style';
+
     private showOnHover: HTMLElement;
     private hideOnHover: HTMLElement;
 
     constructor(private el: ElementRef) {}
 
     @HostListener('mouseenter') public onMouseEnter() {
-        if (this.showOnHover) {
-            this.showOnHover.style.display = 'block';
-        }
-        if (this.hideOnHover) {
-            this.hideOnHover.style.display = 'none';
-        }
+        this.hideElement('normal');
+        this.showElement('hover');
     }
 
     @HostListener('mouseleave') public onMouseLeave() {
-        if (this.showOnHover) {
-            this.showOnHover.style.display = 'none';
+        this.hideElement('hover');
+        this.showElement('normal');
+    }
+
+    private showElement (element: ToggleElement) {
+        const e = element === 'normal' ? this.hideOnHover : this.showOnHover;
+        if (e) {
+            if (this.showToggle === 'style') {
+                e.style.display = 'block';
+            } else {
+                e.classList.remove('hidden');
+            }
         }
-        if (this.hideOnHover) {
-            this.hideOnHover.style.display = 'block';
+    }
+    private hideElement (element: ToggleElement) {
+        const e = element === 'normal' ? this.hideOnHover : this.showOnHover;
+        if (e) {
+            if (this.showToggle === 'style') {
+                e.style.display = 'none';
+            } else {
+                e.classList.add('hidden');
+            }
         }
     }
 
     public ngOnInit () {
         this.showOnHover = this.el.nativeElement.getElementsByClassName('show-on-hover')[0];
-        this.showOnHover.style.display = 'none';
+        this.hideElement('hover');
 
         this.hideOnHover = this.el.nativeElement.getElementsByClassName('hide-on-hover')[0];
-        this.hideOnHover.style.display = 'block';
+        this.showElement('normal');
     }
 }
