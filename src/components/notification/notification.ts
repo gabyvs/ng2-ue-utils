@@ -6,6 +6,11 @@ import { NotificationService } from './notification-service';
  * register a notification to be displayed in your component app, make a call to the `notify` method on your instance
  * of `NotificationService` with the `NotificationService.INotification` signature.
  *
+ * Previously this component included its position fixed in the window (top 56px).
+ * Starting on 1.9.0 the position must be provided by the consumer if it's different than the position of the parent element,
+ * otherwise it will take position top 0 from the parent element.
+ *
+ *
  * @input You can provide an Icon class prefix. By default it uses `glyphicon` but you can change it to `fa`
  * if using Fontawesome or any other custom name.
  *

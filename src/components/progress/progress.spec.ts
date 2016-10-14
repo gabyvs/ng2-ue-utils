@@ -1,9 +1,11 @@
 import { provide } from '@angular/core';
-import { addProviders, async, beforeEach, inject } from '@angular/core/testing';
+import { addProviders, async, inject } from '@angular/core/testing';
 import { ComponentFixture } from '@angular/core/testing/component_fixture';
 import { TestComponentBuilder } from '@angular/core/testing/test_component_builder';
 import { Progress } from './progress';
 import { ProgressService } from './progress-service';
+
+declare const beforeEach, describe, expect, it, jasmine, spyOn;
 
 describe('Component: Progress', () => {
     let fixture: ComponentFixture<Progress>;

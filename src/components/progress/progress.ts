@@ -5,6 +5,10 @@ import { ProgressService } from './progress-service';
  * This component displays a progress bar 56px from the top of the page.  You can interact with it via
  * ProgressService.notify.  This method takes an IEvent (defined in progress-service.ts) as its only argument.
  *
+ * Previously this component included its position fixed in the window (top 56px).
+ * Starting on 1.9.0 the position must be provided by the consumer if it's different than the position of the parent element,
+ * otherwise it will take position top 0 from the parent element.
+ *
  * ### Simple Example
  * 
  * in main app component:

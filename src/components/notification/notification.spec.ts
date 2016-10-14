@@ -4,6 +4,8 @@ import { TestComponentBuilder } from '@angular/core/testing/test_component_build
 import { Notification } from './notification';
 import { NotificationService } from './notification-service';
 
+declare const beforeEach, describe, expect, it, jasmine, spyOn;
+
 describe('Component: Notification', () => {
     let fixture: ComponentFixture<Notification>;
     let notification;
