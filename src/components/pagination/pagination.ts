@@ -26,7 +26,12 @@ const styles: any = require('!!css-loader!less-loader!./pagination.less');
     styles: [styles.toString()],
     template: `
     <div class="alm-pagination">
-        <span class="alm-pagination-text">{{ settings?.from + 1 }} - {{ settings?.to }} of {{ settings?.filteredCount }}</span>
+        <span class="alm-pagination-text alm-pagination-text-empty" *ngIf="emptyMessage && !settings?.filteredCount">
+            {{ emptyMessage }}
+        </span>
+        <span class="alm-pagination-text" *ngIf="settings?.filteredCount">
+        {{ settings?.from + 1 }} - {{ settings?.to }} of {{ settings?.filteredCount }}
+        </span>
         <span class="alm-pagination-text" *ngIf="settings?.filteredCount !== settings?.count">
             (filtered from a total of {{ settings.count }})</span>
         <div class="btn-group" role="group">
@@ -41,6 +46,9 @@ const styles: any = require('!!css-loader!less-loader!./pagination.less');
     `
 })
 export class Pagination {
+
+    @Input()
+    public emptyMessage: String;
 
     @Input()
     public settings: Pagination.IRangeSnapshot;

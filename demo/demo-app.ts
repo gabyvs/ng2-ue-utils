@@ -37,6 +37,12 @@ export class AppComponent {
     public listheaderEvent: any;
     public vhEvent: ValueHandler.IEvent;
     public modalResult: string;
+    public emptyPaginationState: Pagination.IRangeSnapshot = {
+        count: 0,
+        filteredCount: 0,
+        from: 0,
+        to: 0
+    };
     public paginationState: Pagination.IRangeSnapshot = {
         count: 234,
         filteredCount: 73,
