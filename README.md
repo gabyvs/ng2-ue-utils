@@ -1,4 +1,7 @@
-# ng2-ue-utils version 1.4.0
+[![Build Status](https://travis-ci.org/gabyvs/ng2-ue-utils.svg?branch=master)](https://travis-ci.org/gabyvs/ng2-ue-utils)
+[![npm version](https://badge.fury.io/js/ng2-ue-utils.svg)](https://badge.fury.io/js/ng2-ue-utils)
+
+# ng2-ue-utils
 Set of angular2 components, directives, pipes and services that will be shared among unified experience SPAs.
 
 ## Install from npm
@@ -117,7 +120,7 @@ npm install /path/to/ng2-ue-utils-someversion.tgz
 And you will be ready to use it locally!
 
 ## Contributing
-In `/src`, find the appropriate directory for your new component(or directive/pipe/service)
+Create a feature branch. In `/src`, find the appropriate directory for your new component(or directive/pipe/service)
 and create a new directory there.
 
 Include your source code and any applicable tests. Ensure tests pass.  Document usage instructions for your
@@ -128,3 +131,5 @@ Extend demo.html with implementation of your component.
 Extend `index.js` and `index.d.ts` in root with your component.
 
 Build this repo into a tarball and run it locally in your other project using the directions above to verify implementation.
+
+Generate a merge request from your branch to develop branch.

@@ -3,7 +3,7 @@
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var path = require('path');
-var buildPath = path.resolve(__dirname, '../build/');
+var buildPath = path.resolve(__dirname, '../docs/');
 var nodeModulesPath = path.resolve(__dirname, '../node_modules');
 
 var config = {
@@ -28,7 +28,7 @@ var config = {
     },
     output: {
         path: buildPath,
-        filename: 'ng2ueutils/bundles/bundle.js',
+        filename: 'bundles/bundle.js',
         sourceMapFilename: '[file].map',
         publicPath: '/'
     },
@@ -102,7 +102,7 @@ var config = {
             template: './demo/index.html'
         }),
         new webpack.optimize.CommonsChunkPlugin(
-            /* chunkName= */'vendor', /* filename= */'ng2ueutils/bundles/vendor.bundle.js'
+            /* chunkName= */'vendor', /* filename= */'bundles/vendor.bundle.js'
         )
     ]
 };
