@@ -75,8 +75,7 @@ describe('Context Service', () => {
     });
 
     it('Redirects to no-org page if organization was not in url nor in local storage', () => {
-        spyOn(loc, 'go').and.callThrough();
-        const theSpy = loc.go as any;
+        const theSpy = spyOn(window, 'location').and.callThrough();
         const context = service.getContext();
         expect(context.orgName).toBeUndefined();
         expect(theSpy).toHaveBeenCalled();

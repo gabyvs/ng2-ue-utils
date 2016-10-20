@@ -99,7 +99,7 @@ export class ContextService {
 
     constructor(
         private location: Location,
-        window: WindowRef,
+        private window: WindowRef,
         @Inject(APP_CONFIG) private appConfig: IAppConfig) {
         this.helper = new ContextHelper(window, this.appConfig.gtmAppName);
     }
@@ -130,7 +130,7 @@ export class ContextService {
         }
 
         // If no org in Local Storage, redirecto to no-org page (alm-static)
-        this.location.go('/no-org');
+        this.window.location('/no-org');
         return new EmptyContext();
     }
 

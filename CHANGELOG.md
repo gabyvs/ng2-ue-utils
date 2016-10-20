@@ -1,3 +1,10 @@
+<a name="1.10.1"></a>
+## [1.10.1](https://github.com/gabyvs/ng2-ue-utils/compare/1.10.1...1.10.0) (2016-10-20)
+
+### Bug Fixes
+
+* **Context Service:** Forcing redirection to no-org.
+ 
 <a name="1.10.0"></a>
 ## [1.10.0](https://github.com/gabyvs/ng2-ue-utils/compare/1.10.0...1.9.0) (2016-10-20)
 
