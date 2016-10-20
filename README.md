@@ -141,9 +141,10 @@ and create a new directory there.
 Include your source code and any applicable tests. Ensure tests pass.  Document usage instructions for your
 component in the source code.
 
-Extend demo.html with implementation of your component.
-
 Extend `index.js` and `index.d.ts` in root with your component.
+
+Extend demo.html with implementation of your component.
+Run `npm run build:ghp` if you want to update Github demo page when your commit reaches master branch.
 
 Build this repo into a tarball and run it locally in your other project using the directions above to verify implementation.
 
