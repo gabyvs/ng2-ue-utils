@@ -77,8 +77,19 @@ And you are ready to go! :)
 
 * Client
 * Context
+* Router
+* Repository
+* Storage
 
-## Running it locally
+Unfortunately, services are not yet documented.
+Client and Context are intended to help an SPA making client calls and getting the org and user context in which the SPA is being used.
+Router helps as a single point for routes being built according to the context. It includes some shared routes/route templates that all the ALM UE SPAs are using.
+Repository and Storage are intended to help a listing page to handle storage and manipulation of the objects. 
+
+For now the best way to see how they integrate is to take a look at one of the SPAs that are using them. 
+For example, alm-apps, alm-developers, alm-products or alm-orgHistory.  
+
+## Running demo page locally
 
 Clone the repository and run
 ```bash
@@ -91,6 +102,8 @@ npm start
 ```
 This will start webpack devserver and a node server too. Go to localhost:3000 to see the demo app running in your machine.
 
+## Running tests
+
 Run tests locally by running
 ```bash
 npm test
@@ -100,6 +113,8 @@ or for debugging tests
 ```bash
 npm run test:debug
 ```
+
+## Testing the components into another project locally
 
 For creating the distribution files
 ```bash
@@ -133,3 +148,4 @@ Extend `index.js` and `index.d.ts` in root with your component.
 Build this repo into a tarball and run it locally in your other project using the directions above to verify implementation.
 
 Generate a merge request from your branch to develop branch.
+After the merge request is accepted, the team will publish a new version of the library to npm.

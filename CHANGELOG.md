@@ -1,3 +1,13 @@
+<a name="1.10.0"></a>
+## [1.10.0](https://github.com/gabyvs/ng2-ue-utils/compare/1.10.0...1.9.0) (2016-10-20)
+
+### Changes
+
+* **Context Service:** This service has changed its redirection logic. 
+
+Previously context service looked for the organization in the URL, then in Local Storage, and finally in the organizations that the user had access to.
+Now if the organization is not in the URL nor in Local Storage, it will redirect to the new no-organization page `/no-org`. 
+
 <a name="1.9.0"></a>
 ## [1.9.0](https://github.com/gabyvs/ng2-ue-utils/compare/1.9.0...1.8.0) (2016-10-14)
 

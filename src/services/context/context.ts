@@ -3,9 +3,27 @@ import { Location } from '@angular/common';
 import 'rxjs/Rx';
 
 import { ContextHelper } from './context-helper';
-import { Client } from '../client/client';
 import { WindowRef } from '../window-ref';
 
+/**
+ * This interface is the one that your app should be implementing to configure main paths to your API and basepath for your app URL
+ * appBasePath will be used to build the main URL for your root component
+ * apiBasePath will be used to build API calls
+ * gtmAppName will be used to identify your google tag manager configuration
+ *
+ * ### Example: api products.
+ * You want your api calls going to /organizations/organizationname/apiproducts
+ * You want your SPA to have /products as your root URL
+ * You want gtm to identify your app as productsSPA
+ * You will need to create your appConfig in your app.component file (see example of that file below)
+ *
+ * const appConfig: IAppConfig = {
+ *   apiBasePath: 'apiproducts',
+ *   appBasePath: 'products',
+ *   gtmAppName: 'productsSPA'
+ * };
+ *
+ */
 export interface IAppConfig {
     appBasePath: string;
     apiBasePath: string;
@@ -27,6 +45,53 @@ class EmptyContext implements IContext {
     public get orgName (): string { return undefined; }
 }
 
+/**
+ * This service is used to get the organization and user context in which an SPA is being used.
+ * Ideally, it should be included as part of your providers in your app.component file so all the application has access to it.
+ * Its dependencies must be provided in app.component as well.
+ * So, your app.component.ts should look something like this
+ *
+ * ```
+ * import { Location } from '@angular/common';
+ * import { Component } from '@angular/core';
+ * import { HTTP_PROVIDERS } from '@angular/http';
+ * import { APP_CONFIG, ContextService, Client, IAppConfig, WindowRef } from 'ng2-ue-utils';
+ *
+ * import { MyMainComponent } from './route/to/myMainComponent';
+ *
+ * const appConfig: IAppConfig = {
+ *   apiBasePath: 'myapibasepath',
+ *   appBasePath: 'myappbasepath',
+ *   gtmAppName: 'nameforgoogletagmanager'
+ * };
+ *
+ * @Component({
+ *   directives: [
+ *       MyMainComponent
+ *   ],
+ *   providers: [
+ *       HTTP_PROVIDERS,
+ *       Location,
+ *       Client,
+ *       ContextService,
+ *       WindowRef,
+ *       { provide: APP_CONFIG, useValue: appConfig }
+ *   ],
+ *   selector: 'app',
+ *   template: '<myMainComponent-or-routerOutlet></myMainComponent-or-routerOutlet>'
+ * })
+ * export class AppComponent {}
+ * ```
+ *
+ * The most common usage for it is to get the organization name inside a component.
+ * To do that inject it in the component constructor and do
+ *
+ * ```
+ * const org: string = this.context.orgName;
+ * ```
+ *
+ */
+
 @Injectable()
 export class ContextService {
     private _orgName: string;
@@ -34,7 +99,6 @@ export class ContextService {
 
     constructor(
         private location: Location,
-        private client: Client,
         window: WindowRef,
         @Inject(APP_CONFIG) private appConfig: IAppConfig) {
         this.helper = new ContextHelper(window, this.appConfig.gtmAppName);
@@ -65,37 +129,8 @@ export class ContextService {
             return new Context(orgFromLocalStorage);
         }
 
-        if (userName) {
-            // do something to get the list of orgs
-            //this.http.get('/users/_me/userroles');
-            this.client.get<any>(`/users/${userName}/userroles`).subscribe(
-                roles => {
-                    if (roles && roles.role && roles.role[0] && roles.role[0].organization) {
-                        const oName = roles.role[0].organization;
-                        const newPath = `/organizations/${oName}/${this.appConfig.appBasePath}`;
-                        this.helper.updateGtmContext(oName);
-                        this.location.go(newPath);
-                        return;
-                    }
-                    // TODO: send this as an AX event instead of to the console once angulartics is here
-                    console.log('User has no organizations associated.', roles.role);
-                },
-                error => {
-                    // TODO: send this as an AX event instead of to the console once angulartics is here
-                    console.log('Error on loading user roles:', error);
-                }
-            );
-            // If no org can be used, redirect to NoOrg page.
-            return new EmptyContext();
-        }
-
-        // Was not possible to retrieve neither the user nor the org.
-        // Redirect to Login page. Use HTTP client to force redirection.
-        // add headers for SSO, seems not doing so is causing a redirection issue.
-        this.client.get('/userinfo').subscribe(() => {
-            console.log('Client call to force redirection.');
-        });
-
+        // If no org in Local Storage, redirecto to no-org page (alm-static)
+        this.location.go('/no-org');
         return new EmptyContext();
     }
 
