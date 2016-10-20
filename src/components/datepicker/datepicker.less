@@ -1,0 +1,178 @@
+@import '../../common/variables';
+
+.datepicker-container {
+	font-family:'Open Sans', Helvetica, arial, sans-serif;
+	background-color: #ffffff;
+	border: 1px solid #EAEBEC;
+	border-radius: 3px;
+	box-shadow: 0px 2px 6px 0px #F0F1F2;
+	position: fixed;
+	min-height: 356px;
+	top: 28%;
+	left: 30%;
+	z-index: 99999;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.pagination-container {
+	position: relative;
+	padding: 10px 20px 0px 20px;
+
+	button.date-pagination {
+		background-color: #ffffff;
+		border: none;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+
+		&:focus {
+			outline: none;
+		}
+
+		&.prev {
+			position: absolute;
+		}
+
+		&.next {
+			position: absolute;
+			right: 20px;
+			top: 10px;
+		}
+
+		&.today {
+			margin: 0 auto;
+			display: block;
+		}
+	}
+}
+
+.button-bar {
+	display: block;
+	text-align: right;
+	clear: both;
+	padding: 0 20px 20px 20px;
+
+	&.max-range-hint {
+		float: left;
+	}
+
+	p.max-range {
+		margin: 8px 0 0 0;
+		display: inline-block;
+		float: left;
+		font-size: 11px;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		color: #9b9c9d;
+
+		span.range-legend {
+			border-bottom: 1px dashed #38ade8;
+			padding-bottom: 3px;
+		}
+	}
+}
+
+button.cancel {
+	background-color: transparent;
+	font-size: 14px;
+	color: silver;
+	border: none;
+}
+
+button.default {
+	border-radius: 3px;
+	border: 1px solid #38ADE8;
+	font-size: 14px;
+	background-color: #fff;
+	color: #38ADE8;
+	padding: 6px 20px;
+}
+
+.cal-container {
+	padding: 5px 15px 15px 15px;
+	height: 275px;
+}
+.cal-month {
+	margin: 0 5px 20px 5px;
+	float:left;
+	display:inline;
+}
+
+table  {
+	font-size:14px;
+	border-collapse:collapse;
+	border-spacing:0;
+
+	th {
+		height: 30px;
+		width: 30px;
+		letter-spacing: 1px;
+		font-weight: 500;
+		text-align: center;
+		border-width:0px;
+		overflow:hidden;
+		word-break:normal;
+
+		&.month-year {
+			color: #808181;
+			background-color: #F5F6F7;
+		}
+
+		&.day-week {
+			font-weight: 600;
+		}
+	}
+
+	td {
+		text-align: center;
+		height: 30px;
+		width: 30px;
+		border-style:solid;
+		border-width:0px;
+		overflow:hidden;
+		word-break:normal;
+		position: relative;
+
+		&:hover {
+			cursor: pointer;
+			background-color: #fafafa;
+		}
+
+		&.today:before {
+			content: '';
+			position: absolute;
+			bottom: 0px;
+			right: 0px;
+			width: 30px;
+			height: 3px;
+			background: #FCCE0D;
+		}
+
+		&.startdate {
+			color: #38ADE8 ;
+			background-color: #dbf3fe;
+			font-weight: 700;
+		}
+
+		&.enddate {
+			color: #38ADE8;
+			background-color: #dbf3fe;
+			font-weight: 700;
+		}
+
+		&.between {
+			color: #38ADE8 ;
+			background-color: #dbf3fe;
+			cursor: pointer;
+			font-weight: 700;
+		}
+
+		&.availble-range {
+			border-bottom: 1px dashed #38ade8;
+		}
+
+		&.disabled {
+			color: #CDCECF;
+		}
+	}
+}

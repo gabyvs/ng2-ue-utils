@@ -1,0 +1,36 @@
+<div class="datepicker-container">
+	<div class="pagination-container">
+		<button class="date-pagination prev" (click)="changeMonth(month - 1)">Prev</button>
+		<button class="date-pagination today"(click)="changeMonth(now.getMonth() + 1)">Today</button>
+		<button class="date-pagination next" (click)="changeMonth(month + 1)">Next</button>
+	</div>
+	<div class="cal-container">
+		<div class="cal-month"  *ngFor="let m of viewModel">
+			<!-- <h3>{{m.monthText}} - {{m.year}}</h3> -->
+			<table>
+				<thead>
+					<tr colspan="7">
+						<th class="month-year" colspan="7">{{m.monthText}} {{m.year}}</th>
+					</tr>
+					<tr colspan="7">
+						<th class="day-week " *ngFor="let day of dayText">{{day}}</th>
+					</tr>
+				</thead>
+				<tbody class="content" colspan="7">
+					<tr *ngFor="let row of m.days">
+						<td *ngFor="let d of row" class="{{d.style}}" (click)="chooseDate(m.month, d.day)">{{d.day}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="button-bar">
+		<div class="max-range-hint" *ngIf="maxRange !== 1">
+			<p class="max-range">max  range: <span class="range-legend">{{maxRange}} days</span></p>
+		</div>
+		<div class="cal-action">
+			<button class="cancel" (click)="close()">Cancel</button>
+			<button class="default" (click)="emit()">Apply</button>
+		</div>
+	</div>
+</div>
