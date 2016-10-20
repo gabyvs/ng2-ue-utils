@@ -33,8 +33,8 @@ export class DatePicker implements OnInit, OnChanges {
 
     @Output() public emitDate = new EventEmitter();
 
-    public monthText: string[] = ['January', 'February', 'March', 'April', 
-    'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    public monthText: string[] = ['JAN', 'FEB', 'MAR', 'APR',
+    'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
     public dayText: string[] = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
     // component style
@@ -96,7 +96,7 @@ export class DatePicker implements OnInit, OnChanges {
         }
 
         // implementation of isNumeric()
-        if (!isNaN(parseFloat(<string> date)) && isFinite(<number> date) 
+        if (!isNaN(parseFloat(<string> date)) && isFinite(<number> date)
             && (parseInt(<string> date).toString().length === (<string> date).length)) {
             return +date;
         }
@@ -130,7 +130,7 @@ export class DatePicker implements OnInit, OnChanges {
 
     /**
      * Public method to trigger change or refresh calendar
-     * @param {number} [newMonth=currentMonth] New base month 
+     * @param {number} [newMonth=currentMonth] New base month
      * Side-effect: this.viewModel gets updated with new calendar data
      */
     public changeMonth(newMonth: number = (this.baseMonth + 1)) {
@@ -240,7 +240,7 @@ export class DatePicker implements OnInit, OnChanges {
      * Method that generates calendar HTML
      * @param {number} year Calendar display year.
      * @param {number} month Calendar display month. (zero-based)
-     * @return {string[][]} 
+     * @return {string[][]}
      */
     private generateCalendar(year: number, month: number): string[][] {
         let calendar: string[][] = [];
@@ -276,16 +276,17 @@ export class DatePicker implements OnInit, OnChanges {
                 dayObj.style += ' enddate';
             }
 
-            if (timeStamp > _this._beginDate && 
-                timeStamp < _this._endDate) {
+            if (timeStamp > _this._beginDate && timeStamp < _this._endDate  + 1) {
                 dayObj.style += ' between';
+            }  else if (timeStamp > _this._beginDate && timeStamp <  (new Date(_this._beginDate + ((_this.maxRange - 1) * 3600 * 24 * 1000))).getTime() ) {
+                dayObj.style += ' availble-range';
             }
 
             if (_this.maxRange > 1) {
                 if (timeStamp < _this._beginDate) {
-                    dayObj.style += ' disabled';
+                    //dayObj.style += ' disabled';
                 } else if (timeStamp > (new Date(_this._beginDate + ((_this.maxRange - 1) * 3600 * 24 * 1000))).getTime()) {
-                    dayObj.style += ' disabled';
+                    // dayObj.style += ' disabled';
                 }
             }
 
