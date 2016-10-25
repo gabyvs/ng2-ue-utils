@@ -18,6 +18,19 @@
         <button (click)="progress(true)">Start progress (errs)</button>
     </div>
 </div>
+
+<div class="component">
+    <h2>Datepicker: Component</h2>
+    <div class="explanation">Datepicker component.</div>
+    <input type="string" value="{{ dates }}"><button (click)="show()">Choose date</button>
+    <div class="flex-container left">
+        <datepicker (emitDate)="dateChange($event)" [monthSpan]="3" [maxRange]="15" [beginRange]="1470121200000" [endRange]="1479974400000"></datepicker>
+        <div *ngIf="datePickerEvent" class="resultBlock paginationResult">
+            <span>`datePickerEvent` event payload was:</span>
+            <div class="codeBlock">{{ datePickerEvent | json }}</div>
+        </div>
+    </div>
+</div>
 <div class="component">
     <h2>Focus On Init: Directive</h2>
     <div class="explanation">Gives focus to an element on init using the `ngOnInit` lifecycle hook</div>
@@ -64,7 +77,7 @@
 </div>
 <div class="component">
     <h2>Filtering: Component</h2>
-    <div class="explanation">Accepts filtering criteria as an input and emits `emitFilter` event as an output. 
+    <div class="explanation">Accepts filtering criteria as an input and emits `emitFilter` event as an output.
         User is provided with a filtering criteria dropdown and an input which emits `emitFilter` on keyup.</div>
     <div class="flex-container left filtering">
         <filtering (emitFilter)="onFilter($event)" [filterFields]="customFilterFields"></filtering>
@@ -178,7 +191,7 @@
     <h2>Value Handler: Component</h2>
     <div class="explanation">A span which converts to input on click, allows custom validators.</div>
     <div class="flex-container left">
-        <span style="background-color: lightgoldenrodyellow">BUG: This component improperly receives the class 
+        <span style="background-color: lightgoldenrodyellow">BUG: This component improperly receives the class
             `ng-invalid` on focus in this application environment, but not in the Developers application.  Use with
             caution.
         </span>
