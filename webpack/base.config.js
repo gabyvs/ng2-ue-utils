@@ -11,13 +11,13 @@ var config = {
     entry: {
         app: ['./demo/main.ts'],
         vendor: [
-            'reflect-metadata',
             'es6-shim',
+            'reflect-metadata',
             'zone.js',
             'rxjs',
             'lodash',
             'moment',
-            'ng2-bootstrap',
+            'ng2-bootstrap/ng2-bootstrap',
             '@angular/common',
             '@angular/compiler',
             '@angular/core',

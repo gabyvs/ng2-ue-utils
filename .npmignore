@@ -7,9 +7,8 @@
 /.idea/
 atlassian-ide-plugin.xml
 
-
 # typings
-typings/
+/typings
 typings.json
 
 # testing
@@ -17,6 +16,7 @@ karma.conf.js
 karma.debug.js
 karma.tests.js
 /coverage
+.travis.yml
 
 # demo
 /demo
@@ -24,8 +24,12 @@ devserver-config.json
 /webpack/
 tslint.json
 
+#Github page
+/docs
+
 #local
 *.tgz
+.npmignore
 
 #typescript sources
 *.ts

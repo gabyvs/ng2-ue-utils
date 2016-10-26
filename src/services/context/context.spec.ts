@@ -1,19 +1,18 @@
-import { Location } from '@angular/common';
-import { SpyLocation } from '@angular/common/testing';
-import { addProviders, inject } from '@angular/core/testing';
-import { HTTP_PROVIDERS, XHRBackend } from '@angular/http';
-import { MockBackend } from '@angular/http/testing';
+import { Location }                                 from '@angular/common';
+import { SpyLocation }                              from '@angular/common/testing';
+import { TestBed }                                  from '@angular/core/testing';
 
-import { Client } from '../client/client';
-import { ClientMock } from '../client/client.mock';
-import {ContextService, APP_CONFIG, IAppConfig} from './context';
-import { WindowMock, WindowRef } from '../window-ref';
+import { ContextService, APP_CONFIG, IAppConfig }   from './context';
+import { Client }                                   from '../client/client';
+import { ClientMock }                               from '../client/client.mock';
+import { WindowMock, WindowRef }                    from '../window-ref';
 
 declare const beforeEach, describe, expect, it, spyOn;
+
 const apiBasePath = 'apiproducts';
 const appBasePath = 'products';
 const appName = 'ProductsSPA';
-let appConfig: IAppConfig = {
+const appConfig: IAppConfig = {
     apiBasePath: apiBasePath,
     appBasePath: appBasePath,
     gtmAppName: appName
@@ -26,23 +25,21 @@ describe('Context Service', () => {
     let window;
 
     beforeEach(() => {
-        addProviders([
-            HTTP_PROVIDERS,
-            ContextService,
-            { provide: XHRBackend, useClass: MockBackend} ,
-            { provide: Location, useClass: SpyLocation} ,
-            { provide: WindowRef, useClass: WindowMock },
-            { provide: Client, useClass: ClientMock },
-            { provide: APP_CONFIG, useValue: appConfig }
-        ]);
-    });
+        TestBed.configureTestingModule({
+            providers:      [
+                ContextService,
+                { provide: Location, useClass: SpyLocation} ,
+                { provide: WindowRef, useClass: WindowMock },
+                { provide: Client, useClass: ClientMock },
+                { provide: APP_CONFIG, useValue: appConfig }
+            ]
+        });
 
-    beforeEach(inject([ContextService, Client, Location, WindowRef], (s, c, l, w) => {
-        service = s;
-        client = c;
-        loc = l;
-        window = w;
-    }));
+        service = TestBed.get(ContextService);
+        client = TestBed.get(Client);
+        loc = TestBed.get(Location);
+        window = TestBed.get(WindowRef);
+    });
 
     it('Populates the org name', () => {
         const orgName = 'fromPath';

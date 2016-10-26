@@ -1,7 +1,10 @@
-import { addProviders, async, inject } from '@angular/core/testing';
-import { ComponentFixture } from '@angular/core/testing/component_fixture';
-import { TestComponentBuilder } from '@angular/core/testing/test_component_builder';
-import { ValueHandler } from './value-handler';
+import {
+    ComponentFixture,
+    TestBed
+}                               from '@angular/core/testing';
+import { Ng2BootstrapModule }   from 'ng2-bootstrap/ng2-bootstrap';
+
+import { ValueHandler }         from './value-handler';
 
 declare const beforeEach, describe, expect, it, jasmine, spyOn;
 
@@ -10,28 +13,23 @@ describe('Component: ValueHandler', () => {
     let valueHandler;
     let element;
 
-    let initialize = () => {
+    const initialize = () => {
         valueHandler.original = 'Nikolai';
         valueHandler.property = 'firstName';
         fixture.detectChanges();
     };
 
     beforeEach(() => {
-        addProviders([
-            TestComponentBuilder
-        ]);
-    });
+        TestBed.configureTestingModule({
+            declarations:   [ ValueHandler ],
+            imports: [ Ng2BootstrapModule ]
+        });
 
-    beforeEach(async(inject([TestComponentBuilder], (tcb: TestComponentBuilder) => {
-        return tcb
-            .createAsync(ValueHandler)
-            .then((f: ComponentFixture<ValueHandler>) => {
-                fixture = f;
-                valueHandler = f.componentInstance;
-                element = f.nativeElement;
-                initialize();
-            });
-    })));
+        fixture = TestBed.createComponent(ValueHandler);
+        valueHandler = fixture.componentInstance;
+        element = fixture.nativeElement;
+        initialize();
+    });
 
     it('should initialize element', () => {
         expect(valueHandler.editing).toBe(false);
@@ -42,16 +40,19 @@ describe('Component: ValueHandler', () => {
         expect(input).toBeFalsy();
     });
 
-    it('should show input on click', () => {
+    it('should show input on click', (done) => {
         let span = fixture.nativeElement.querySelector('span');
         span.click();
-        expect(valueHandler.editing).toBe(true);
         fixture.detectChanges();
+        expect(valueHandler.editing).toBe(true);
         span = fixture.nativeElement.querySelector('span');
         const input = fixture.nativeElement.querySelector('input');
-        expect(span).toBeFalsy();
-        expect(input).toBeTruthy();
-        expect(input.value).toBe('Nikolai');
+        setTimeout(() => {
+            expect(span).toBeFalsy();
+            expect(input).toBeTruthy();
+            expect(input.value).toBe('Nikolai');
+            done();
+        });
     });
 
     it('should set invalid if field is required and value is not provided', function () {

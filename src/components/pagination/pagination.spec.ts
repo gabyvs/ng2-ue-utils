@@ -1,6 +1,9 @@
-import { addProviders, async, inject } from '@angular/core/testing';
-import { ComponentFixture, TestComponentBuilder } from '@angular/compiler/testing';
-import { Pagination } from './pagination';
+import {
+    ComponentFixture,
+    TestBed
+}                       from '@angular/core/testing';
+
+import { Pagination }   from './pagination';
 
 declare const beforeEach, describe, expect, it, spyOn;
 
@@ -10,20 +13,14 @@ describe('Component: Pagination', () => {
     let element;
 
     beforeEach(() => {
-        addProviders([
-            TestComponentBuilder
-        ]);
-    });
+        TestBed.configureTestingModule({
+            declarations:   [ Pagination ]
+        });
 
-    beforeEach(async(inject([TestComponentBuilder], (tcb: TestComponentBuilder) => {
-        return tcb
-            .createAsync(Pagination)
-            .then((f: ComponentFixture<Pagination>) => {
-                fixture = f;
-                pagination = f.componentInstance;
-                element = f.nativeElement;
-            });
-    })));
+        fixture = TestBed.createComponent(Pagination);
+        pagination = fixture.componentInstance;
+        element = fixture.nativeElement;
+    });
 
     it('should initialize element', () => {
         expect(pagination.pageSize).toBe(25);

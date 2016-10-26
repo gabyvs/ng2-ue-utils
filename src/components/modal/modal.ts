@@ -19,9 +19,8 @@ import {Component, Input, OnInit, Output, EventEmitter, ElementRef, ViewChild} f
  *      title="Do my thing?"
  *      submitLabel="submitMyModal"
  *      (emitSubmit)="resolveModal($event)">
- *      <modal-content>
- *          <p>Are you sure you want to do my thing?</p>
- *      </modal-content>
+ *        <!-- All elements between modal tags will be transcluded to the content of the modal -->
+ *        <p>Are you sure you want to do my thing?</p>
  *  </modal>
  *  <div class="elsewhereOnThePage">
  *      <button (click)="openModal(myModal)">Open modal</button>

@@ -1,5 +1,8 @@
-import { DateMoment } from './date-moment';
-import * as moment from 'moment';
+import * as moment      from 'moment';
+
+import { DateMoment }   from './date-moment';
+
+declare const beforeEach, describe, expect, it;
 
 describe('FromNowPipe', () => {
     let pipe: DateMoment;

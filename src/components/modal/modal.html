@@ -12,7 +12,7 @@
                 <h4 class="modal-title" *ngIf="title">{{ title }}</h4>
             </div>
             <div class="modal-body">
-                <ng-content select="modal-content"></ng-content>
+                <ng-content></ng-content>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" (click)="close(false)">Cancel</button>

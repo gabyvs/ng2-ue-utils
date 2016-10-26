@@ -1,17 +1,16 @@
-import { provide } from '@angular/core';
-import { addProviders, inject } from '@angular/core/testing';
+import { TestBed }                      from '@angular/core/testing';
 import {
-    HTTP_PROVIDERS,
     XHRBackend,
     Response,
     ResponseOptions,
     RequestMethod,
-    Headers
-} from '@angular/http';
-import { MockBackend, MockConnection } from '@angular/http/testing';
+    Headers,
+    HttpModule
+}                                       from '@angular/http';
+import { MockBackend, MockConnection }  from '@angular/http/testing';
 
-import { Client } from './client';
-import { WindowRef, WindowMock } from '../window-ref';
+import { Client }                       from './client';
+import { WindowRef, WindowMock }        from '../window-ref';
 
 declare const beforeEach, expect, it, describe;
 
@@ -39,18 +38,18 @@ describe('Client', () => {
     let backend: MockBackend;
 
     beforeEach(() => {
-        addProviders([
-            HTTP_PROVIDERS,
-            Client,
-            provide(XHRBackend, {useClass: MockBackend}),
-            provide(WindowRef, {useClass: WindowMock}),
-        ]);
-    });
+        TestBed.configureTestingModule({
+            imports: [ HttpModule ],
+            providers: [
+                Client,
+                { provide: XHRBackend, useClass: MockBackend },
+                { provide: WindowRef, useClass: WindowMock },
+            ]
+        });
 
-    beforeEach(inject([Client, XHRBackend], (c, b) => {
-        client = c;
-        backend = b;
-    }));
+        client = TestBed.get(Client);
+        backend = TestBed.get(XHRBackend);
+    });
 
     it('Injection with Angular', () => {
         expect(client).toBeDefined();

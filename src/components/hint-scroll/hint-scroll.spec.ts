@@ -1,34 +1,29 @@
-import { addProviders, async, beforeEach, inject } from '@angular/core/testing';
-import { ComponentFixture } from '@angular/core/testing/component_fixture';
-import { TestComponentBuilder } from '@angular/core/testing/test_component_builder';
+import {
+    ComponentFixture,
+    TestBed
+}                       from '@angular/core/testing';
 
-import { HintScroll } from './hint-scroll';
+import { HintScroll }   from './hint-scroll';
+
+declare const beforeEach, describe, expect, it;
 
 describe('Component: HintScroll', () => {
     let fixture: ComponentFixture<HintScroll>;
     let hintScroll;
-    let element;
 
-    let initialize = () => {
+    const initialize = () => {
         fixture.detectChanges();
     };
 
     beforeEach(() => {
-        addProviders([
-            TestComponentBuilder
-        ]);
-    });
+        TestBed.configureTestingModule({
+            declarations:   [ HintScroll ]
+        });
 
-    beforeEach(async(inject([TestComponentBuilder], (tcb: TestComponentBuilder) => {
-        return tcb
-            .createAsync(HintScroll)
-            .then((f: ComponentFixture<HintScroll>) => {
-                fixture = f;
-                hintScroll = f.componentInstance;
-                element = f.nativeElement;
-                initialize();
-            });
-    })));
+        fixture = TestBed.createComponent(HintScroll);
+        hintScroll = fixture.componentInstance;
+        initialize();
+    });
 
     it('should initialize element', () => {
         expect(hintScroll).toBeDefined();

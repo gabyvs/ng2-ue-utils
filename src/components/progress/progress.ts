@@ -58,8 +58,8 @@ const styles: any = require('!!css-loader!less-loader!./progress.less');
     selector: 'progress-bar',
     styles: [styles.toString()],
     template: `
-    <div class="progress-container" [ngClass]="baseColor">
-        <div class="progress-reporter" [ngClass]="progressColor" [style.width.%]="progress" [hidden]="!progress"></div>
+    <div class="progress-container ut-root" [ngClass]="baseColor">
+        <div class="progress-reporter ut-reporter" [ngClass]="progressColor" [style.width.%]="progress" [hidden]="!progress"></div>
     </div>
     `
 })
@@ -85,7 +85,7 @@ export class Progress implements OnDestroy, OnInit {
         }
     }
 
-    private setStatus (value: string, method: string) {
+    public setStatus (value: string, method: string) {
         switch (value) {
             case 'error':
                 this.status = value;

@@ -1,4 +1,3 @@
-<h1>Demo App for Angular2 Unified Experience Utilities</h1>
 <div class="component">
     <h2>Notification: Component + Service</h2>
     <div class="explanation">A component for displaying notifications whose api is exposed through Notification Service.</div>
@@ -9,6 +8,7 @@
         <button (click)="emitSuccess()">Emit a success</button>
     </div>
 </div>
+
 <div class="component">
     <h2>Progress: Component + Service</h2>
     <div class="explanation">A component for displaying a progress bar whose api is exposed through Notification Service.</div>
@@ -18,6 +18,7 @@
         <button (click)="progress(true)">Start progress (errs)</button>
     </div>
 </div>
+
 <div class="component">
     <h2>Focus On Init: Directive</h2>
     <div class="explanation">Gives focus to an element on init using the `ngOnInit` lifecycle hook</div>
@@ -25,6 +26,7 @@
         <input type="text" focusOnInit>
     </div>
 </div>
+
 <div class="component">
     <h2>Loading Dots</h2>
     <div class="explanation">A directive which animates an ellipsis to indicate that a section of your page is still being loaded</div>
@@ -32,6 +34,7 @@
         <loading-dots></loading-dots>
     </div>
 </div>
+
 <div class="component">
     <h2>Date Moment Pipe: Pipe</h2>
     <div class="explanation">Converts timestamps into formatted dates - angular2 native date pipe was broken for some browsers on RC2</div>
@@ -39,6 +42,7 @@
         <span>{{ today | dateMoment }}</span>
     </div>
 </div>
+
 <div class="component">
     <h2>From Now Pipe: Pipe</h2>
     <div class="explanation">Converts timestamps into relative time strings</div>
@@ -46,6 +50,7 @@
         <span>{{ recent | fromNow }}</span>
     </div>
 </div>
+
 <div class="component">
     <h2>On Hover Show: Directive</h2>
     <div class="explanation">Hides and shows elements on hover events</div>
@@ -62,9 +67,10 @@
         </div>
     </div>
 </div>
+
 <div class="component">
     <h2>Filtering: Component</h2>
-    <div class="explanation">Accepts filtering criteria as an input and emits `emitFilter` event as an output. 
+    <div class="explanation">Accepts filtering criteria as an input and emits `emitFilter` event as an output.
         User is provided with a filtering criteria dropdown and an input which emits `emitFilter` on keyup.</div>
     <div class="flex-container left filtering">
         <filtering (emitFilter)="onFilter($event)" [filterFields]="customFilterFields"></filtering>
@@ -74,6 +80,7 @@
         </div>
     </div>
 </div>
+
 <div class="component">
     <h2>HintScroll: Component</h2>
     <div class="explanation">Appends elements to the top or bottom of a container to indicate the presence
@@ -82,61 +89,64 @@
         <scrollable-container #scrollableComponent>
             <table>
                 <thead #scrollableTop>
-                    <tr>
-                        <th>col1</th>
-                        <th>col2</th>
-                        <th>col3</th>
-                    </tr>
+                <tr>
+                    <th>col1</th>
+                    <th>col2</th>
+                    <th>col3</th>
+                </tr>
                 </thead>
                 <tbody #scrollableContent (scroll)="scrollableComponent.onScroll()">
-                    <tr>
-                        <td>1</td>
-                        <td>...</td>
-                        <td>...</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>...</td>
-                        <td>...</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>...</td>
-                        <td>...</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>...</td>
-                        <td>...</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>...</td>
-                        <td>...</td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>...</td>
-                        <td>...</td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td>...</td>
-                        <td>...</td>
-                    </tr>
-                    <tr>
-                        <td>8</td>
-                        <td>...</td>
-                        <td>...</td>
-                    </tr>
+                <tr>
+                    <td>1</td>
+                    <td>...</td>
+                    <td>...</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>...</td>
+                    <td>...</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>...</td>
+                    <td>...</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>...</td>
+                    <td>...</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>...</td>
+                    <td>...</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>...</td>
+                    <td>...</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>...</td>
+                    <td>...</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>...</td>
+                    <td>...</td>
+                </tr>
                 </tbody>
             </table>
         </scrollable-container>
+
+
         <scrollable-container class="scrollableDivs">
             <div class="scrollableDiv" *ngFor="let content of scrollableDivs">My Content</div>
         </scrollable-container>
     </div>
 </div>
+
 <div class="component">
     <h2>Modal: Component</h2>
     <div class="explanation">Appends elements to the top or bottom of a container to indicate the presence
@@ -147,9 +157,7 @@
                submitLabel="submitMyModal"
                [modalClass]="classForE2E"
                (emitSubmit)="resolveModal($event)">
-            <modal-content>
-                <p>Are you sure you want to do my thing?</p>
-            </modal-content>
+            <p>Are you sure you want to do my thing?</p>
         </modal>
         <div class="elsewhereOnThePage">
             <button (click)="openModal(myModal)">Open modal</button>
@@ -159,6 +167,7 @@
         </div>
     </div>
 </div>
+
 <div class="component">
     <h2>Pagination: Component</h2>
     <div class="explanation">Empty pagination controls. Message is configurable.</div>
@@ -174,14 +183,11 @@
         </div>
     </div>
 </div>
+
 <div class="component">
     <h2>Value Handler: Component</h2>
     <div class="explanation">A span which converts to input on click, allows custom validators.</div>
     <div class="flex-container left">
-        <span style="background-color: lightgoldenrodyellow">BUG: This component improperly receives the class 
-            `ng-invalid` on focus in this application environment, but not in the Developers application.  Use with
-            caution.
-        </span>
         <span class="vhComponent">{{vhAttribute.name}}:
             <value-handler style="position: relative" [property]="vhAttribute.name" [original]="vhAttribute.value" [validation]="vhValidation"
                            place="bottom" (emitChange)="vhEditAttribute($event)">
@@ -193,6 +199,7 @@
         </div>
     </div>
 </div>
+
 <div class="component">
     <h2>Table Header</h2>
     <div class="explanation">Table header controls for data rows</div>

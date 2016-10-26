@@ -1,7 +1,8 @@
-import { beforeEach } from '@angular/core/testing';
+import * as moment from 'moment';
 
 import { FromNow } from './from-now';
-import * as moment from 'moment';
+
+declare const beforeEach, describe, expect, it;
 
 describe('FromNowPipe', () => {
     let pipe: FromNow;

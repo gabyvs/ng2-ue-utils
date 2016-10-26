@@ -14,38 +14,76 @@ npm install ng2-ue-utils --save
 
 This package is intended to be used only in Angular2/Webpack projects. The following tools are set as peer dependencies:
 
-* @angular/common: 2.0.0-rc.4
-* @angular/compiler: 2.0.0-rc.4
-* @angular/core: 2.0.0-rc.4
-* @angular/forms: 0.2.0
-* bootstrap: ^3.3.6
-* es6-shim: ^0.35.0
-* lodash: 4.13.1
-* moment: ^2.13.0
-* ng2-bootstrap: ^1.0.17
-* reflect-metadata: ^0.1.3
-* rxjs: 5.0.0-beta.10
-* zone.js: ^0.6.12
+* @angular/common: 2.1.2
+* @angular/compiler: 2.1.2
+* @angular/core: 2.1.2
+* @angular/forms: 2.1.2
+* @angular/http: 2.1.2
+* @angular/platform-browser: 2.1.2
+* @angular/platform-browser-dynamic: 2.1.2
+* @angular/router: 3.1.2
+* bootstrap: ^3.3.7
+* es6-shim: ^0.35.1
+* lodash: 4.16.4
+* moment: ^2.15.2
+* ng2-bootstrap: ^1.1.16
+* reflect-metadata: ^0.1.8
+* rxjs: ^5.0.0-beta.12
+* zone.js: ^0.6.26
 
 ## Usage
 
-Update your component definition to have following content:
+In your app.module or feature.module import Ng2UEUtilsModule and make all relevant services available for injection
 
-```ts
-import { DateMomentPipe, LoadingDots } from 'ng2-ue-utils';
+```
+import { 
+    ContextService,
+    Ng2UEUtilsModule } from 'ng2-ue-utils';
+    
+@NgModule({
+    bootstrap:    [ AppComponent ],
+    declarations: [
+        AppComponent,
+        OtherComponent
+    ],
+    imports:      [
+        BrowserModule,
+        HttpModule,
+        Ng2UEUtilsModule,
+        RouterModule.forRoot(appLocalRoutes)
+    ],
+    providers: [
+       Client,
+       ContextService,
+       NotificationService,
+       ProductClient,
+       ProductRepository,
+       ProductStorage,
+       ProductsApiRoutes,
+       ProgressService,
+       Location,
+       WindowRef,
+       { provide: APP_CONFIG, useValue: appConfig }
+    ]
+})
+export class AppModule {}
 ```
 
-And use the library components, directives, pipes and services as you regularly do
+Use the library components, directives and pipes as you regularly do
 
 ``` ts
 @Component({
   selector: 'my-component',
-  directives: [LoadingDots],
-  pipes: [DateMomentPipe],
   template: `<span>{{ timestamp | dateMoment }}</span><loading-dots></loading-dots>`
 })
 export class MyComponent {
 }
+```
+
+Update your component definition file to have service or interface types available
+
+```ts
+import { ContextService, IAppConfig } from 'ng2-ue-utils';
 ```
 
 And you are ready to go! :)
@@ -141,7 +179,9 @@ and create a new directory there.
 Include your source code and any applicable tests. Ensure tests pass.  Document usage instructions for your
 component in the source code.
 
-Extend `index.js` and `index.d.ts` in root with your component.
+If you are adding a component, directive or pipe, declare and export it in ng2-ue-utils.module.ts
+
+Extend `index.ts` in root with your new types.
 
 Extend demo.html with implementation of your component.
 Run `npm run build:ghp` if you want to update Github demo page when your commit reaches master branch.

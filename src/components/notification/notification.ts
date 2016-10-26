@@ -63,10 +63,10 @@ const styles: any = require('!!css-loader!less-loader!./notification.less');
     selector: 'notification',
     styles: [styles.toString()],
     template: `
-    <div class="notification-container" [ngClass]="baseColor" [class.show]="notification" [class.hide]="hide">
+    <div class="notification-container ut-root-element" [ngClass]="baseColor" [class.show]="notification" [class.hide]="hide">
         <div class="notification-content" (mouseover)="resetTimer()" (mouseout)="restartTimer()">
             <div aria-hidden="true" class="close" (click)="close()">x</div>
-            <div><span class="{{ icon }}"></span><span class="main-text">{{ notification }}</span></div>
+            <div><span class="ut-icon" [ngClass]="icon"></span><span class="main-text ut-main-text">{{ notification }}</span></div>
         </div>
     </div>
     `
@@ -86,7 +86,7 @@ export class Notification implements OnDestroy, OnInit {
 
     constructor (private notificationService: NotificationService) {}
 
-    private show (message: string, type?: string) {
+    public show (message: string, type?: string) {
         this.notification = message;
         switch (type) {
             case 'success':

@@ -1,18 +1,14 @@
-import {Component} from '@angular/core';
+import { Component }    from '@angular/core';
 import {
-    beforeEach,
-    beforeEachProviders,
-    describe,
-    expect,
-    it,
-    inject,
-    async
-} from '@angular/core/testing';
-import {ComponentFixture, TestComponentBuilder} from '@angular/compiler/testing';
-import {FocusOnInit} from './focus-on-init';
+    ComponentFixture,
+    TestBed
+}                       from '@angular/core/testing';
+
+import { FocusOnInit }  from './focus-on-init';
+
+declare const beforeEach, describe, expect, it, jasmine, spyOn;
 
 @Component({
-    directives: [FocusOnInit],
     selector: 'container',
     template: `<input #input focusOnInit />`
 })
@@ -22,23 +18,20 @@ describe('Directive: focus on init', () => {
     let fixture: ComponentFixture<Container>;
     let container;
     let element;
+    let input;
 
-    beforeEachProviders(() => [
-        TestComponentBuilder
-    ]);
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            declarations:   [ Container, FocusOnInit ]
+        }).compileComponents();
 
-    beforeEach(async(inject([TestComponentBuilder], (tcb: TestComponentBuilder) => {
-        return tcb
-            .createAsync(Container)
-            .then((f: ComponentFixture<Container>) => {
-                fixture = f;
-                container = f.componentInstance;
-                element = f.nativeElement;
-            });
-    })));
+        fixture = TestBed.createComponent(Container);
+        container = fixture.componentInstance;
+        element = fixture.nativeElement;
+    });
 
     it('Should focus element', () => {
-        let input = fixture.nativeElement.querySelector('input');
+        input = fixture.nativeElement.querySelector('input');
         spyOn(input, 'focus');
         expect(input.focus).not.toHaveBeenCalled();
         fixture.detectChanges();

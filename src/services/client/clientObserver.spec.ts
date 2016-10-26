@@ -1,7 +1,9 @@
 import { ClientObserver } from './clientObserver';
 
+declare const expect, it, describe;
+
 describe('Client Observer', () => {
-    
+
     it('Starts increment stack', (done) => {
         const spy = new ClientObserver();
         const s = spy.observe().subscribe(event => {
@@ -76,5 +78,5 @@ describe('Client Observer', () => {
         spy.emitChange('error', 'get');
         spy.emitChange('complete', 'get');
     });
-    
+
 });

@@ -1,17 +1,15 @@
-import { SpyLocation } from '@angular/common/testing';
-import { Location } from '@angular/common';
-import { addProviders, inject } from '@angular/core/testing';
-import { HTTP_PROVIDERS, XHRBackend } from '@angular/http';
-import { MockBackend } from '@angular/http/testing';
-import * as _ from 'lodash';
-import { Observable } from 'rxjs/Rx';
+import { Location }                                 from '@angular/common';
+import { SpyLocation }                              from '@angular/common/testing';
+import { TestBed }                                  from '@angular/core/testing';
+import * as _                                       from 'lodash';
+import { Observable }                               from 'rxjs/Rx';
 
-import { ObservableClient } from './observable-client';
-import { ClientMock } from './client.mock';
-import { ApiRoutes } from '../router/api-routes';
-import { APP_CONFIG, ContextService, IAppConfig } from '../context/context';
-import { WindowMock, WindowRef } from '../window-ref';
-import { Client } from './client';
+import { Client }                                   from './client';
+import { ClientMock }                               from './client.mock';
+import { ObservableClient }                         from './observable-client';
+import { APP_CONFIG, ContextService, IAppConfig }   from '../context/context';
+import { ApiRoutes }                                from '../router/api-routes';
+import { WindowMock, WindowRef }                    from '../window-ref';
 
 declare const beforeEach, describe, expect, it;
 
@@ -55,26 +53,28 @@ describe('Generic Client', () => {
         gtmAppName: appName
     };
     let someObservableClient: SomeObservableClient;
-    let client: ClientMock;
+    let client;
 
     beforeEach(() => {
-        addProviders([
-            HTTP_PROVIDERS,
-            ContextService,
-            { provide: XHRBackend, useClass: MockBackend },
-            { provide: Location, useClass: SpyLocation },
-            { provide: WindowRef, useClass: WindowMock },
-            { provide: Client, useClass: ClientMock },
-            { provide: APP_CONFIG, useValue: appConfig }
-        ]);
-    });
+        TestBed.configureTestingModule({
+            providers:      [
+                ContextService,
+                { provide: Location, useClass: SpyLocation} ,
+                { provide: WindowRef, useClass: WindowMock },
+                { provide: Client, useClass: ClientMock },
+                { provide: APP_CONFIG, useValue: appConfig }
+            ]
+        });
 
-    beforeEach(inject([Client, Location, ContextService, APP_CONFIG], (c, l, s, a) => {
-        l.go('/organizations/abc/products'); // set the org on the URL
-        const router = new ApiRoutes(s, a.apiBasePath);
-        someObservableClient = new SomeObservableClient(c, router);
-        client = c;
-    }));
+        const service = TestBed.get(ContextService);
+        const a = TestBed.get(APP_CONFIG);
+        const loc = TestBed.get(Location);
+        const router = new ApiRoutes(service, a.apiBasePath);
+        client = TestBed.get(Client);
+
+        loc.go(`/organizations/abc/${appBasePath}`);
+        someObservableClient = new SomeObservableClient(client, router);
+    });
 
     it('Loading Permissions for current user', done => {
         const rawRoles = {

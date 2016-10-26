@@ -1,39 +1,36 @@
-import { ComponentFixture, TestComponentBuilder } from '@angular/compiler/testing';
-import { addProviders, async, inject } from '@angular/core/testing';
+import {
+    ComponentFixture,
+    TestBed
+}                       from '@angular/core/testing';
 
-import { ListHeaders } from './list-headers';
+import { ListHeaders }  from './list-headers';
+
+declare const beforeEach, describe, expect, it;
 
 describe('Component: ListHeaders', () => {
     let fixture: ComponentFixture<ListHeaders>;
     let listHeaders;
     let element;
 
-    let initialize = () => {
+    const initialize = () => {
         listHeaders.headers = [
             { label: 'display name',    property: 'displayName',    styles: { width: '23%' } },
             { label: 'description',     property: 'description',    sortOnInit: 'desc',    styles: { width: '54%' } },
             { label: 'modified',        property: 'lastModifiedAt', styles: { width: '23%' } }
         ];
-        listHeaders.ngOnInit();
         fixture.detectChanges();
     };
 
     beforeEach(() => {
-        addProviders([
-            TestComponentBuilder
-        ]);
-    });
+        TestBed.configureTestingModule({
+            declarations:   [ ListHeaders ]
+        });
 
-    beforeEach(async(inject([TestComponentBuilder], (tcb: TestComponentBuilder) => {
-        return tcb
-            .createAsync(ListHeaders)
-            .then((f: ComponentFixture<ListHeaders>) => {
-                fixture = f;
-                listHeaders = f.componentInstance;
-                element = f.nativeElement;
-                initialize();
-            });
-    })));
+        fixture = TestBed.createComponent(ListHeaders);
+        listHeaders = fixture.componentInstance;
+        element = fixture.nativeElement;
+        initialize();
+    });
 
     it('should render headers', () => {
         expect(element.querySelectorAll('div').length).toBe(3);
@@ -49,7 +46,7 @@ describe('Component: ListHeaders', () => {
         });
         listHeaders.sort('description');
     });
-    
+
     it('should sort descending if same category is chosen', (done) => {
         let subscription1: any = listHeaders.emitSort.subscribe((x) => {
             expect(x.order).toBe('asc');

@@ -1,3 +1,10 @@
+<a name="2.0.0"></a>
+## [2.0.0](https://github.com/gabyvs/ng2-ue-utils/compare/2.0.0...1.10.1) (2016-10-31)
+
+### Breaking Changes
+
+* **All:** Now components library only works with Angular 2.1.2
+ 
 <a name="1.10.1"></a>
 ## [1.10.1](https://github.com/gabyvs/ng2-ue-utils/compare/1.10.1...1.10.0) (2016-10-20)
 

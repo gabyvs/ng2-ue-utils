@@ -1,39 +1,34 @@
 import {
-    async,
-    beforeEach,
-    beforeEachProviders,
-    inject
-} from '@angular/core/testing';
-import {ComponentFixture, TestComponentBuilder} from '@angular/compiler/testing';
-import {Modal} from './modal';
+    ComponentFixture,
+    TestBed
+}                   from '@angular/core/testing';
+
+import { Modal }    from './modal';
+
+declare const beforeEach, describe, expect, it, jasmine, spyOn;
 
 describe('Component: Modal', () => {
     let fixture: ComponentFixture<Modal>;
     let modal;
     let element;
 
-    let initialize = () => {
+    const initialize = () => {
         modal.title = 'Delete Developer';
         modal.submitLabel = 'Delete';
         modal.modalClass = 'myClass';
-        modal.ngOnInit();
         fixture.detectChanges();
     };
 
-    beforeEachProviders(() => [
-        TestComponentBuilder
-    ]);
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            declarations:   [ Modal ]
+        });
 
-    beforeEach(async(inject([TestComponentBuilder], (tcb: TestComponentBuilder) => {
-        return tcb
-            .createAsync(Modal)
-            .then((f: ComponentFixture<Modal>) => {
-                fixture = f;
-                modal = f.componentInstance;
-                element = f.nativeElement;
-                initialize();
-            });
-    })));
+        fixture = TestBed.createComponent(Modal);
+        modal = fixture.componentInstance;
+        element = fixture.nativeElement;
+        initialize();
+    });
 
     it('should initialize element', () => {
         expect(modal).toBeDefined();

@@ -1,21 +1,19 @@
-import { Location } from '@angular/common';
-import { SpyLocation } from '@angular/common/testing';
-import { addProviders, inject } from '@angular/core/testing';
-import { HTTP_PROVIDERS, XHRBackend } from '@angular/http';
-import { MockBackend } from '@angular/http/testing';
-import * as _ from 'lodash';
-import { RolePermissions } from 'rbac-abacus';
-import { Observable } from 'rxjs/Rx';
+import { Location }                                 from '@angular/common';
+import { SpyLocation }                              from '@angular/common/testing';
+import { TestBed }                                  from '@angular/core/testing';
+import * as _                                       from 'lodash';
+import { RolePermissions }                          from 'rbac-abacus';
+import { Observable }                               from 'rxjs/Rx';
 
-import { IRangeSnapshot, Repository } from './repository';
-import { ClientMock } from '../client/client.mock';
-import { ApiRoutes } from '../router/api-routes';
-import { ContextService, APP_CONFIG, IAppConfig } from '../context/context';
-import { ObservableClient } from '../client/observable-client';
-import { WindowRef, WindowMock } from '../window-ref';
-import { Client } from '../client/client';
-import { Storage } from './storage';
-import { ValueStorage } from './value-storage';
+import { IRangeSnapshot, Repository }               from './repository';
+import { Storage }                                  from './storage';
+import { ValueStorage }                             from './value-storage';
+import { Client }                                   from '../client/client';
+import { ClientMock }                               from '../client/client.mock';
+import { ObservableClient }                         from '../client/observable-client';
+import { ContextService, APP_CONFIG, IAppConfig }   from '../context/context';
+import { ApiRoutes }                                from '../router/api-routes';
+import { WindowRef, WindowMock }                    from '../window-ref';
 
 declare const beforeEach, describe, expect, it;
 
@@ -112,7 +110,7 @@ describe('EntityRepository', () => {
         gtmAppName: appName
     };
     let repository: SomeTypeRepository;
-    let client: ClientMock;
+    let client;
 
     const initArray = (num: number): SomeType[] => {
         let rs: SomeType[] = [];
@@ -123,24 +121,26 @@ describe('EntityRepository', () => {
     };
 
     beforeEach(() => {
-        addProviders([
-            HTTP_PROVIDERS,
-            ContextService,
-            { provide: XHRBackend, useClass: MockBackend },
-            { provide: Location, useClass: SpyLocation },
-            { provide: WindowRef, useClass: WindowMock },
-            { provide: Client, useClass: ClientMock },
-            { provide: APP_CONFIG, useValue: appConfig }
-        ]);
-    });
+        TestBed.configureTestingModule({
+            providers:      [
+                ContextService,
+                { provide: Location, useClass: SpyLocation} ,
+                { provide: WindowRef, useClass: WindowMock },
+                { provide: Client, useClass: ClientMock },
+                { provide: APP_CONFIG, useValue: appConfig }
+            ]
+        });
 
-    beforeEach(inject([Client, Location, APP_CONFIG, ContextService], (c, l, a, s) => {
-        l.go(`/organizations/abc/${appBasePath}`);
-        let router = new ApiRoutes(s, a.apiBasePath);
-        const o = new SomeObservableClient(c, router);
+        const service = TestBed.get(ContextService);
+        const a = TestBed.get(APP_CONFIG);
+        const loc = TestBed.get(Location);
+        const router = new ApiRoutes(service, a.apiBasePath);
+        client = TestBed.get(Client);
+
+        loc.go(`/organizations/abc/${appBasePath}`);
+        const o = new SomeObservableClient(client, router);
         repository = new SomeTypeRepository(o, a.apiBasePath, new SomeTypeStorage());
-        client = c;
-    }));
+    });
 
     it('Subscription will emit latest data.', done => {
         client.on(`/organizations/abc/${apiBasePath}`, { sometype: []});
@@ -173,7 +173,7 @@ describe('EntityRepository', () => {
             expect(state.allowRead).toBe(true);
             done();
         };
-        
+
         repository.subscribe(
                     (state: IRangeSnapshot<SomeType>) => {
                         if (flag === 0) {

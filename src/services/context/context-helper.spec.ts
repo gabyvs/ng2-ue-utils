@@ -1,7 +1,7 @@
-import { addProviders, inject } from '@angular/core/testing';
+import { TestBed }                  from '@angular/core/testing';
 
-import { ContextHelper } from './context-helper';
-import { WindowMock, WindowRef } from '../window-ref';
+import { ContextHelper }            from './context-helper';
+import { WindowMock, WindowRef }    from '../window-ref';
 
 declare const beforeEach, describe, expect, it;
 
@@ -12,15 +12,13 @@ describe('Context Helper', () => {
     let window: WindowMock;
 
     beforeEach(() => {
-        addProviders([
-            { provide: WindowRef, useClass: WindowMock }
-        ]);
-    });
+        TestBed.configureTestingModule({
+            providers:      [ { provide: WindowRef, useClass: WindowMock } ]
+        });
 
-    beforeEach(inject([WindowRef], (w) => {
-        window = w;
-        helper = new ContextHelper(w, appName);
-    }));
+        window = TestBed.get(WindowRef);
+        helper = new ContextHelper(window, appName);
+    });
 
     it('Extract org name from path', () => {
         expect(helper.orgNameFromPath('/organizations/abc/some/thing')).toBe('abc');

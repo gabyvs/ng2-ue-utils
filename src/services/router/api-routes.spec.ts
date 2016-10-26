@@ -1,12 +1,12 @@
-import { SpyLocation } from '@angular/common/testing';
-import { Location } from '@angular/common';
-import { addProviders, inject } from '@angular/core/testing';
+import { Location }                                 from '@angular/common';
+import { SpyLocation }                              from '@angular/common/testing';
+import { TestBed }                                  from '@angular/core/testing';
 
-import { ApiRoutes } from './api-routes';
-import { WindowRef, WindowMock } from '../window-ref';
-import { Client } from '../client/client';
-import { ClientMock } from '../client/client.mock';
-import { ContextService, APP_CONFIG, IAppConfig } from '../context/context';
+import { ApiRoutes }                                from './api-routes';
+import { Client }                                   from '../client/client';
+import { ClientMock }                               from '../client/client.mock';
+import { ContextService, APP_CONFIG, IAppConfig }   from '../context/context';
+import { WindowMock, WindowRef }                    from '../window-ref';
 
 declare const beforeEach, describe, expect, it;
 
@@ -16,7 +16,7 @@ describe('Generated URLs', () => {
     const apiBasePath = 'apiproducts';
     const appBasePath = 'products';
     const appName = 'ProductsSPA';
-    let appConfig: IAppConfig = {
+    const appConfig: IAppConfig = {
         apiBasePath: apiBasePath,
         appBasePath: appBasePath,
         gtmAppName: appName
@@ -24,19 +24,22 @@ describe('Generated URLs', () => {
     let router;
 
     beforeEach(() => {
-        addProviders([
-            ContextService,
-            { provide: Location, useClass: SpyLocation },
-            { provide: WindowRef, useClass: WindowMock },
-            { provide: Client, useClass: ClientMock },
-            { provide: APP_CONFIG, useValue: appConfig },
-        ]);
-    });
+        TestBed.configureTestingModule({
+            providers:      [
+                ContextService,
+                { provide: Location, useClass: SpyLocation} ,
+                { provide: WindowRef, useClass: WindowMock },
+                { provide: Client, useClass: ClientMock },
+                { provide: APP_CONFIG, useValue: appConfig }
+            ]
+        });
 
-    beforeEach(inject([Location, ContextService, APP_CONFIG], (l, c, a) => {
-        l.go(`/organizations/${orgName}/${appBasePath}`);
-        router = new ApiRoutes(c, a.apiBasePath);
-    }));
+        const service = TestBed.get(ContextService);
+        const a = TestBed.get(APP_CONFIG);
+        const loc = TestBed.get(Location);
+        loc.go(`/organizations/${orgName}/${appBasePath}`);
+        router = new ApiRoutes(service, a.apiBasePath);
+    });
 
     it('Gets org name', () => {
        expect(router.orgName).toBe(orgName);

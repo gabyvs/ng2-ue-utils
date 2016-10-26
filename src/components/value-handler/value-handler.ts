@@ -1,33 +1,30 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { Subject }    from 'rxjs/Subject';
 
-import { TOOLTIP_DIRECTIVES } from 'ng2-bootstrap/ng2-bootstrap';
-import { FocusOnInit } from '../../directives/focus-on-init/focus-on-init';
-
 /**
  * This component transitions from a span to an input on click events, allowing the user to adjust it's value.  Once in
  * edit mode, a new value can be saved by pressing `enter` or `tab`, or the update can be cancelled on 'blur'. You
  * can optionally pass in validation logic.
  *
- * @input value: string                             
+ * @input value: string
  * do we need this as an input?
- * 
- * @input property: string                          
+ *
+ * @input property: string
  * the label/name of the value represented by this component.
- * 
- * @input optional: boolean                         
+ *
+ * @input optional: boolean
  * determines whether or not `value` is required when user attempts to update.
- * 
- * @input original: string                          
+ *
+ * @input original: string
  * original value of the component. `value` will reset to this on cancel (blur).
- * 
- * @input validation: ValueHandler.ValidationRule   
+ *
+ * @input validation: ValueHandler.ValidationRule
  * an object containing an input validator function and an invalid input message.
- * 
+ *
  * @input place: string
  * specifies placement of the component tooltip, defaults to 'top'.
  *
- * @output emitChange: 
+ * @output emitChange:
  * emits event `emitChange` with payload: `{ property: this.property, subject: observer, value: value }`.  After
  * performing whatever write operation you need to make in your higher component, call `subject.next()` on success or
  * `subject.error()` on failure to set proper state on this component.
@@ -35,7 +32,7 @@ import { FocusOnInit } from '../../directives/focus-on-init/focus-on-init';
  * ### Simple Example
  *
  * ```
- * <value-handler [property]="vhAttribute.name" [original]="vhAttribute.value" 
+ * <value-handler [property]="vhAttribute.name" [original]="vhAttribute.value"
  * (emitChange)="vhEditAttribute($event)"></value-handler>
  * ```
  */
@@ -44,7 +41,6 @@ declare const require: any;
 const styles: any = require('!!css-loader!less-loader!./value-handler.less');
 
 @Component({
-    directives: [TOOLTIP_DIRECTIVES, FocusOnInit],
     selector: 'value-handler',
     styles: [styles.toString()],
     template: `
@@ -69,11 +65,11 @@ const styles: any = require('!!css-loader!less-loader!./value-handler.less');
 export class ValueHandler implements AfterViewInit {
     private _original: string;
     private _validateFn: Function;
-    
+
     private required: boolean = true;
 
     private enableTooltip: boolean = true;
-    
+
     private invalidMessage: string = 'This value is required';
 
     private inputValueStream = new Subject<string>();
@@ -119,7 +115,7 @@ export class ValueHandler implements AfterViewInit {
     public validate (value: string) {
         this.inputValueStream.next(value);
     }
-    
+
     public startEditing (): void {
         this.editing = true;
     }
@@ -213,7 +209,7 @@ export class ValueHandler implements AfterViewInit {
 
 export namespace ValueHandler {
     'use strict';
-    
+
     export interface IValidationRule { fn: Function; message: string;  }
     export interface IEvent {
         property: string;
