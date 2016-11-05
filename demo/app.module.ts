@@ -31,6 +31,7 @@ const appConfig: IAppConfig = {
     imports:      [
         BrowserModule,
         RouterModule.forRoot([
+            { component: Demo, path: 'ng2-ue-utils' },
             { component: Demo, path: '' }
         ]),
         Ng2BootstrapModule,
