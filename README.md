@@ -102,6 +102,7 @@ And you are ready to go! :)
 * Pagination
 * Progress bar
 * Value handler
+* Date Picker
 
 ####Directives
 

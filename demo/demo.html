@@ -18,7 +18,17 @@
         <button (click)="progress(true)">Start progress (errs)</button>
     </div>
 </div>
-
+<div class="component">
+    <h2>Datepicker: Component</h2>
+    <div class="explanation">Datepicker component.</div>
+    <datepicker-input (emitDate)="dateChange($event)" [monthSpan]="3" [maxRange]="14" [beginRange]="1460121200000" [endRange]="1489974400000" alignCal="left"></datepicker-input>
+    <div class="flex-container left">
+        <div *ngIf="datePickerEvent" class="resultBlock paginationResult">
+            <span>`datePickerEvent` event payload was:</span>
+            <div class="codeBlock">{{ datePickerEvent | json }}</div>
+        </div>
+    </div>
+</div>
 <div class="component">
     <h2>Focus On Init: Directive</h2>
     <div class="explanation">Gives focus to an element on init using the `ngOnInit` lifecycle hook</div>

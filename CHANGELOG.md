@@ -1,3 +1,10 @@
+<a name="2.1.0"></a>
+## [2.1.0](https://github.com/gabyvs/ng2-ue-utils/compare/2.1.0...2.1.0) (2016-12-05)
+
+### Improvements
+
+* **datepicker:** Now contains new date/range picker component.
+ 
 <a name="2.0.0"></a>
 ## [2.0.0](https://github.com/gabyvs/ng2-ue-utils/compare/2.0.0...1.10.1) (2016-10-31)
 

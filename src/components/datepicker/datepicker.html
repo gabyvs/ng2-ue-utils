@@ -1,0 +1,58 @@
+<div class="datepicker-container" [hidden]="hideComponent">
+<div class="datepicker-positioning {{ alignClass }}">
+    <div class="pagination-container">
+        <button (click)="nextMonth(-1)" class="date-pagination prev {{ paginationLeft }}">
+            Prev
+        </button>
+        <button (click)="nextMonth()" class="date-pagination today">
+            Today
+        </button>
+        <button (click)="nextMonth(1)" class="date-pagination next {{ paginationRight }}">
+            Next
+        </button>
+    </div>
+    <div class="cal-container">
+        <div *ngFor="let m of viewModel" class="cal-month">
+            <table>
+                <thead>
+                    <tr colspan="7">
+                        <th class="month-year" colspan="7">
+                            {{m.monthText}} {{m.year}}
+                        </th>
+                    </tr>
+                    <tr colspan="7">
+                        <th *ngFor="let day of dayText" class="day-week">
+                            {{day}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="content" colspan="7">
+                    <tr *ngFor="let row of m.days">
+                        <td (click)="chooseDate(m.year, m.month, d.day)" *ngFor="let d of row" class="{{d.style}}">
+                            {{d.day}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="button-bar">
+        <div *ngIf="maxRange !== 1" class="max-range-hint">
+            <p class="max-range">
+                max range:
+                <span class="range-legend">
+                    {{_maxRange}} days
+                </span>
+            </p>
+        </div>
+        <div class="cal-action">
+            <button (click)="close()" class="cancel">
+                Cancel
+            </button>
+            <button (click)="emit()" class="default">
+                Apply
+            </button>
+        </div>
+    </div>
+    </div>
+</div>

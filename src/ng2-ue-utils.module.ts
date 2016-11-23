@@ -15,6 +15,8 @@ import { FocusOnInit }          from './directives/focus-on-init/focus-on-init';
 import { ToggleOnHover }        from './directives/toggle-on-hover/toggle-on-hover';
 import { DateMoment }           from './pipes/date-moment/date-moment';
 import { FromNow }              from './pipes/from-now/from-now';
+import { DatePicker }           from './components/datepicker/datepicker';
+import { DatePickerInput }      from './components/datepicker-input/datepicker-input';
 
 @NgModule({
     declarations: [
@@ -30,7 +32,9 @@ import { FromNow }              from './pipes/from-now/from-now';
         FocusOnInit,
         ToggleOnHover,
         DateMoment,
-        FromNow
+        FromNow,
+        DatePicker,
+        DatePickerInput
     ],
     exports: [
         Filtering,
@@ -45,7 +49,9 @@ import { FromNow }              from './pipes/from-now/from-now';
         FocusOnInit,
         ToggleOnHover,
         DateMoment,
-        FromNow
+        FromNow,
+        DatePicker,
+        DatePickerInput
     ],
     imports: [
         CommonModule,
