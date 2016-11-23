@@ -9,6 +9,8 @@ export * from './components/pagination/pagination';
 export * from './components/progress/progress';
 export * from './components/progress/progress-service';
 export * from './components/value-handler/value-handler';
+export * from './components/datepicker/datepicker';
+export * from './components/datepicker-input/datepicker-input';
 
 export * from './directives/focus-on-init/focus-on-init';
 export * from './directives/toggle-on-hover/toggle-on-hover';

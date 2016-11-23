@@ -1,0 +1,7 @@
+<div>
+    <span (click)="show($event)">
+    		{{ dates }}
+    </span>
+		<datepicker (emitDate)="dateChange($event)" [beginRange]="beginRange" [endRange]="endRange" [maxRange]="maxRange" [monthSpan]="monthSpan" [beginDate]="beginDate" [endDate]="endDate" [year]="year" [alignCal]="alignCal">
+		</datepicker>
+</div>

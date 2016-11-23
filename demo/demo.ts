@@ -72,11 +72,14 @@ export class Demo {
 
     // List Headers
     public listheaderEvent: any;
-        public headers = [
+    public headers = [
         { label: 'display name',    property: 'displayName',    styles: { width: '23%' } },
         { label: 'description',     property: 'description',    sortOnInit: 'desc',     styles: { width: '54%' } },
         { label: 'modified',        property: 'lastModifiedAt', styles: { width: '23%' } }
     ];
+
+    // Date change
+    public datePickerEvent: any;
 
     // Filtering
     public emitFilterCriteria: any;
@@ -178,4 +181,7 @@ export class Demo {
         event.subject.next();
     }
 
+    public dateChange(event): void {
+        this.datePickerEvent = event;
+    }
 }
