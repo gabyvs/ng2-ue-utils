@@ -4,13 +4,15 @@
 # ng2-ue-utils
 Set of angular2 components, directives, pipes and services that will be shared among unified experience SPAs.
 
-## Install from npm
+## To use it as a dependency
+
+### Install from npm
 
 ```bash
 npm install ng2-ue-utils --save
 ```
 
-## Prerequisites
+### Prerequisites
 
 This package is intended to be used only in Angular2/Webpack projects. The following tools are set as peer dependencies:
 
@@ -31,7 +33,7 @@ This package is intended to be used only in Angular2/Webpack projects. The follo
 * rxjs: ^5.0.0-beta.12
 * zone.js: ^0.6.26
 
-## Usage
+### Usage
 
 In your app.module or feature.module import Ng2UEUtilsModule and make all relevant services available for injection
 
@@ -88,9 +90,9 @@ import { ContextService, IAppConfig } from 'ng2-ue-utils';
 
 And you are ready to go! :)
 
-## What's included
+### What's included
 
-### Components
+#### Components
 
 * Filtering
 * Hint scroll
@@ -101,17 +103,17 @@ And you are ready to go! :)
 * Progress bar
 * Value handler
 
-### Directives
+####Directives
 
 * Toggle on hover
 * Focus on init
 
-### Pipes
+#### Pipes
 
 * Date moment
 * From now
 
-### Services
+#### Services
 
 * Client
 * Context
@@ -127,11 +129,20 @@ Repository and Storage are intended to help a listing page to handle storage and
 For now the best way to see how they integrate is to take a look at one of the SPAs that are using them. 
 For example, alm-apps, alm-developers, alm-products or alm-orgHistory.  
 
-## Running demo page locally
+## To run in development mode
 
-Clone the repository and run
+This is a TypeScript/Angular2 project and its NPM root will be the directory were you cloned the repo and
+where this README file is located. All `npm` commands are expected to be used at this _root_ directory.
+
+### Setting up your environment
+
+* If you don't have it, install or update NodeJS 6.x
+* Install Typings (npm -g install typings)
+* Clone this repository and run
+
 ```bash
 npm install
+typings install
 ```
 
 Start the demo app by running (will use ports 8080 and 3000 by default)
@@ -140,7 +151,7 @@ npm start
 ```
 This will start webpack devserver and a node server too. Go to localhost:3000 to see the demo app running in your machine.
 
-## Running tests
+### Running tests
 
 Run tests locally by running
 ```bash
@@ -152,7 +163,7 @@ or for debugging tests
 npm run test:debug
 ```
 
-## Testing the components into another project locally
+### Testing the components into another project locally
 
 For creating the distribution files
 ```bash
@@ -172,7 +183,7 @@ npm install /path/to/ng2-ue-utils-someversion.tgz
 ```
 And you will be ready to use it locally!
 
-## Contributing
+### Contributing
 Create a feature branch. In `/src`, find the appropriate directory for your new component(or directive/pipe/service)
 and create a new directory there.
 
