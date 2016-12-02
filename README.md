@@ -196,8 +196,16 @@ Extend `index.ts` in root with your new types.
 
 Extend demo.html with implementation of your component.
 Run `npm run build:ghp` if you want to update Github demo page when your commit reaches master branch.
+Add your changes in the `CHANGELOG.md` file in the root of this project categorized as Features, bug fixes, breaking changes, dependency changes.
 
 Build this repo into a tarball and run it locally in your other project using the directions above to verify implementation.
 
 Generate a merge request from your branch to develop branch.
 After the merge request is accepted, the team will publish a new version of the library to npm.
+
+## For pushing to NPM (to be done by contributors to NPM project only) 
+
+Once a new version is ready in master branch with a version number bumped from previous version and changes included in the changelog file:
+- Create a new release with the same version number included in the package.json file. You can add the same content added to the changelog in the description of the release
+- Run `npm run build`. This will generate distribution files inside `build` folder
+- Run `npm publish`. This will push the distribution file to npm project

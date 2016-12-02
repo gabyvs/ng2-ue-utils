@@ -25,7 +25,7 @@ Now if the organization is not in the URL nor in Local Storage, it will redirect
 <a name="1.9.0"></a>
 ## [1.9.0](https://github.com/gabyvs/ng2-ue-utils/compare/1.9.0...1.8.0) (2016-10-14)
 
-### Improvements
+### Features
 
 * **pagination:** directive now does not show semi empty string when there are no elements to paginate over. It also accepts parameter `emptyMessage` that let users configure a message for empty collection.
 
@@ -41,7 +41,7 @@ otherwise it will take position top 0 from the parent element.
 <a name="1.8.0"></a>
 ## [1.8.0](https://github.com/gabyvs/ng2-ue-utils/compare/1.8.0...1.7.1) (2016-10-13)
 
-### Improvements
+### Features
 
 * **toogle-on-hover:** directive now accepts parameter `showToggle` with values `style` or `class` that let users select how the directive will hide/show sub elements.
 
