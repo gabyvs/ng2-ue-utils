@@ -23,7 +23,8 @@ const template: string = require('./datepicker-input.html');
 
 @Component({
     selector: 'datepicker-input',
-    styles: [ `span { width: 400px; cursor: pointer; font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica' }` ],
+    styles: [ `span { cursor: pointer; font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica'; border: 1px solid #ccc; 
+        padding: 4px 10px; display: inline-block; text-align: center; background-color: white; }` ],
     template: template
 })
 export class DatePickerInput implements OnInit {
@@ -50,7 +51,7 @@ export class DatePickerInput implements OnInit {
             let end: moment.Moment = moment(this.endDate);
 
             if (start.isValid() && end.isValid()) {
-                this.dates = start.format('MM/DD/YYYY') + ' ~ ' + end.format('MM/DD/YYYY');   
+        this.dates = start.format('MMM DD, YYYY') + ' - ' + end.format('MMM DD, YYYY');  
             }
         }
     }
@@ -63,7 +64,7 @@ export class DatePickerInput implements OnInit {
     public dateChange(event): void {
         let start = moment(event.beginDate);
         let end = moment(event.endDate);
-        this.dates = start.format('MM/DD/YYYY') + ' ~ ' + end.format('MM/DD/YYYY');
+        this.dates = start.format('MMM DD, YYYY') + ' - ' + end.format('MMM DD, YYYY');
         this.emitDate.emit(event);
     }
 };

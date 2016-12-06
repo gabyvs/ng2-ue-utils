@@ -1,3 +1,10 @@
+<a name="2.1.1"></a>
+## [2.1.1](https://github.com/gabyvs/ng2-ue-utils/compare/2.1.1...2.1.0) (2016-12-06)
+
+### Improvements
+
+* **datepicker:** Improves accessibility by adding new styles to datepicker and datepicker wrapper.
+
 <a name="2.1.0"></a>
 ## [2.1.0](https://github.com/gabyvs/ng2-ue-utils/compare/2.1.0...2.1.0) (2016-12-05)
 

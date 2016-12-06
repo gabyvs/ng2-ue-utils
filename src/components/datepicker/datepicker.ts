@@ -372,14 +372,14 @@ export class DatePicker implements OnInit {
             return false;
         }
 
-        // reject if _endDate comes before _beginDate
-        if (this._endDate.isBefore(this._beginDate)) {
-            return doSanitize(this._endDate, undefined);
-        }
-
         // reject if _endDate goes beyond endRange
         if (!isInRange(this._endDate)) {
             return doSanitize(this._beginDate, undefined);
+        }
+
+        // reject if _endDate comes before _beginDate
+        if (this._endDate.isBefore(this._beginDate)) {
+            return doSanitize(this._endDate, undefined);
         }
 
         // reject if _endDate goes beyond max range length limit

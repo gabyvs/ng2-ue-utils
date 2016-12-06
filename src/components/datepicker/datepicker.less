@@ -7,7 +7,7 @@
 	position: absolute;
 	display: inline-block;
 	background-color: #ffffff;
-	border: 1px solid #EAEBEC;
+	border: 1px solid #ccc;
 	border-radius: 3px;
 	z-index: 99999;
   box-shadow: 5px 5px 10px #888888;
@@ -48,8 +48,7 @@
 		}
 
 		&.disabled {
-			color: #aaa;
-			cursor: auto;
+			display: none;
 		}
 	}
 }
@@ -87,6 +86,10 @@ button.cancel {
 	border: none;
 }
 
+button.cancel:hover {
+	color: #636363;
+}
+
 button.default {
 	border-radius: 3px;
 	border: 1px solid #38ADE8;
@@ -96,12 +99,21 @@ button.default {
 	padding: 6px 20px;
 }
 
+button.default:hover {
+	border-radius: 3px;
+	border: 1px solid #38ADE8;
+	font-size: 14px;
+	background-color: #38ADE8;
+	color: #fff;
+	padding: 6px 20px;
+}
+
 .cal-container {
 	padding: 5px 15px 15px 15px;
 	height: 275px;
 }
 .cal-month {
-	margin: 0 5px 20px 5px;
+	margin: 0 5px 19px 5px;
 	float:left;
 	display:inline;
 }

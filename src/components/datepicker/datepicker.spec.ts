@@ -219,6 +219,13 @@ describe('Component: DatePicker', () => {
         dateCheck(day2, day10);
         expect(dp.sanityCheck(true)).toBeFalsy();
         dateCheck(day2, undefined);
+
+        // valid startdate, enddate out of range
+        dateReset(day3, day1, day2, day5, 3);
+        expect(dp.sanityCheck(false)).toBeFalsy();
+        dateCheck(day3, day1);
+        expect(dp.sanityCheck(true)).toBeFalsy();
+        dateCheck(day3, undefined);
     });
 
     it('updateViewModel() handle all requests including illegal requests', () => {
