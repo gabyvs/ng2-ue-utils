@@ -16,6 +16,17 @@ declare const beforeEach, expect, it, describe;
 
 const someUrl = '/organziations/abc/proxies';
 
+const emptyResponse: Response = new Response(
+    new ResponseOptions({
+        body: '',
+        headers: new Headers(),
+        status: 200,
+        statusText: '',
+        type: 3,
+        url: someUrl
+    })
+);
+
 const newResponse = (): Response =>
     new Response(
         new ResponseOptions()
@@ -66,6 +77,20 @@ describe('Client', () => {
             }
         );
         connection.mockRespond(newResponse());
+    });
+    
+    it('Empty string response bodies do not break the client', (done) => {
+        let connection: MockConnection;
+        backend.connections.subscribe((cn: MockConnection) => connection = cn);
+        client.get(someUrl).subscribe(
+            response => {
+                expect(connection.request.url).toBe(someUrl);
+                expect(connection.request.method).toBe(RequestMethod.Get);
+                expect(response).toBeUndefined();
+                done();
+            }
+        );
+        connection.mockRespond(emptyResponse);
     });
 
     it('PUT translates URL correctly', (done) => {

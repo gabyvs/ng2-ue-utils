@@ -22,6 +22,7 @@ export * from './services/client/client';
 export * from './services/client/client.mock';
 export * from './services/client/clientObserver';
 export * from './services/client/observable-client';
+export * from './services/client/observable-client-base';
 export * from './services/client/observable-client.mock';
 export * from './services/context/context';
 export * from './services/router/api-routes';

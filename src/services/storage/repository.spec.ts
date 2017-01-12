@@ -310,21 +310,25 @@ describe('EntityRepository', () => {
                         // All developers are loaded
                         expect(state.count).toBe(6);
                         expect(state.filteredCount).toBe(6);
+                        repository.delete('1');
                         break;
                     case 2:
                         // Expecting that the developer with regular name is deleted
                         expect(state.count).toBe(5);
                         expect(state.filteredCount).toBe(5);
+                        repository.delete('2');
                         break;
                     case 3:
                         // Expecting that the developer with spaces in the name is deleted
                         expect(state.count).toBe(4);
                         expect(state.filteredCount).toBe(4);
+                        repository.delete('3');
                         break;
                     case 4:
                         // Expecting that the developer with percentage in the name is deleted
                         expect(state.count).toBe(3);
                         expect(state.filteredCount).toBe(3);
+                        repository.filterBy('name');
                         break;
                     case 5:
                         // Expecting that any of the deleted devs are there anymore
@@ -347,10 +351,6 @@ describe('EntityRepository', () => {
                 done();
             }
         );
-        repository.delete('1');
-        repository.delete('2');
-        repository.delete('3');
-        repository.filterBy('name');
     });
 
     it('Sorts entity', done => {
@@ -370,11 +370,13 @@ describe('EntityRepository', () => {
                         // Should receive products unsorted, ascending order. Then order descending.
                         expect(repository.sortByField).toBe(undefined);
                         expect(repository.sortByOrder).toBe('asc');
+                        repository.sortBy(undefined, 'desc');
                         break;
                     case 2:
                         // Should receive products unsorted, descending order. Then sort by modified date.
                         expect(repository.sortByField).toBeUndefined();
                         expect(repository.sortByOrder).toBe('desc');
+                        repository.sortBy('name', undefined);
                         break;
                     case 3:
                         // Should receive products sorted by modification date, ascending order
@@ -398,8 +400,6 @@ describe('EntityRepository', () => {
                 done();
             }
         );
-        repository.sortBy(undefined, 'desc');
-        repository.sortBy('name', undefined);
     });
 
     it('Filter entities.', done => {
@@ -430,6 +430,7 @@ describe('EntityRepository', () => {
                         expect(repository.filterString).toBe('');
                         expect(state.count).toBe(6);
                         expect(state.filteredCount).toBe(6);
+                        repository.filterBy('name');
                         break;
                     case 2:
                         // Should receive entities filtered by 'name' string on all fields.
@@ -437,6 +438,7 @@ describe('EntityRepository', () => {
                         expect(repository.filterString).toBe('name');
                         expect(state.count).toBe(6);
                         expect(state.filteredCount).toBe(5);
+                        repository.filterBy('name2', 'name');
                         break;
                     case 3:
                         // Should receive entities filtered by 'name2' string only on name field
@@ -444,6 +446,7 @@ describe('EntityRepository', () => {
                         expect(repository.filterString).toBe('name2');
                         expect(state.count).toBe(6);
                         expect(state.filteredCount).toBe(2);
+                        repository.filterBy();
                         break;
                     case 4:
                         // Should remove all filters
@@ -468,9 +471,6 @@ describe('EntityRepository', () => {
                 done();
             }
         );
-        repository.filterBy('name');
-        repository.filterBy('name2', 'name');
-        repository.filterBy();
     });
 
     it('Getting a range of entities.', done => {
@@ -501,6 +501,7 @@ describe('EntityRepository', () => {
                         expect(state.to).toBe(25);
                         expect(state.range[0].name).toBe('name1');
                         expect(state.range[24].name).toBe('name25');
+                        repository.setRange(25, 50);
                         break;
                     case 2:
                         // Should receive products from 25 to 50
@@ -511,6 +512,7 @@ describe('EntityRepository', () => {
                         expect(state.to).toBe(50);
                         expect(state.range[0].name).toBe('name26');
                         expect(state.range[24].name).toBe('name50');
+                        repository.setRange(50, 75);
                         break;
                     case 3:
                         // Should receive products from 51 to 65
@@ -521,6 +523,7 @@ describe('EntityRepository', () => {
                         expect(state.to).toBe(65);
                         expect(state.range[0].name).toBe('name51');
                         expect(state.range[14].name).toBe('name65');
+                        repository.setRange(-5, 25);
                         break;
                     case 4:
                         // Should remove all filters
@@ -546,9 +549,6 @@ describe('EntityRepository', () => {
                 done();
             }
         );
-        repository.setRange(25, 50);
-        repository.setRange(50, 75);
-        repository.setRange(-5, 25);
     });
 
     it('Subclasses can access client', () => {

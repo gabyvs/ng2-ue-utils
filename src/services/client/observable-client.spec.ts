@@ -43,7 +43,7 @@ class SomeObservableClient extends ObservableClient {
     };
 }
 
-describe('Generic Client', () => {
+describe('Observable Client', () => {
 
     const appBasePath = 'products';
     const appName = 'ProductsSPA';

@@ -1,3 +1,22 @@
+<a name="3.0.0"></a>
+## [3.0.0](https://github.com/gabyvs/ng2-ue-utils/compare/2.1.2...3.0.0) (2016-12-05)
+
+### Breaking Changes
+* **ClientObserver** Removed `observe()` method and made this class injectable so components can directly access its new `clientEvents` stream. Checkout the example in the comments of the file clientObserver.ts
+* **Repository** Removed `observe()` method. Since`ClientObserver` is now injectable, users should inject it and access its publicly exposed `clientEvents` stream.
+* **ObservableClient** Removed `observe()` method. Since`ClientObserver` is now injectable, users should inject it and access its publicly exposed `clientEvents` stream.
+* **ClientMock** Now get/post/put/delete methods run asynchronously. If you had tests that used the mock and were relying on it being synchronous, they will break.
+
+### Features
+* **ObservableClient** Dependency on `ClientObserver` now optional.  If provided, will provide event stream to spy on network calls
+* **ObservableClientBase** Split base functionality of `ObservableClient` into a base class which has no dependency on `ContextService` (via `ApiRoutes`).  This is useful if you want to use the `ClientObserver`, but will not be using `Repository` (it requires `ObservableClient`) or `ApiRoutes`.
+* **Progress/ProgressService** By default, progress bar does not restart on each ajax call.  
+* **Progress/ProgressService** Added optional `restartOnAjax` attribute which, when passed, restarts the progress bar on each spied call.  This affords you complete control over the progress bar by filtering the client events which are sent to the `ProgressService` in your app.
+* **ContextService** Added public `userEmail` getter. 
+
+### Bug Fixes
+* **Client** Fix bug where an empty string as response body would cause JS error.
+
 <a name="2.1.2"></a>
 ## [2.1.2](https://github.com/gabyvs/ng2-ue-utils/compare/2.1.1...2.1.2) (2017-01-26)
 
@@ -6,35 +25,35 @@
 * **HintScroll:** Some browsers where showing scrolls even when they were not needed. 
 
 <a name="2.1.1"></a>
-## [2.1.1](https://github.com/gabyvs/ng2-ue-utils/compare/2.1.1...2.1.0) (2016-12-06)
+## [2.1.1](https://github.com/gabyvs/ng2-ue-utils/compare/2.1.0...2.1.1) (2016-12-06)
 
 ### Improvements
 
 * **datepicker:** Improves accessibility by adding new styles to datepicker and datepicker wrapper.
 
 <a name="2.1.0"></a>
-## [2.1.0](https://github.com/gabyvs/ng2-ue-utils/compare/2.1.0...2.1.0) (2016-12-05)
+## [2.1.0](https://github.com/gabyvs/ng2-ue-utils/compare/2.0.0...2.1.0) (2016-12-05)
 
 ### Improvements
 
 * **datepicker:** Now contains new date/range picker component.
  
 <a name="2.0.0"></a>
-## [2.0.0](https://github.com/gabyvs/ng2-ue-utils/compare/2.0.0...1.10.1) (2016-10-31)
+## [2.0.0](https://github.com/gabyvs/ng2-ue-utils/compare/1.10.1...2.0.0) (2016-10-31)
 
 ### Breaking Changes
 
 * **All:** Now components library only works with Angular 2.1.2
  
 <a name="1.10.1"></a>
-## [1.10.1](https://github.com/gabyvs/ng2-ue-utils/compare/1.10.1...1.10.0) (2016-10-20)
+## [1.10.1](https://github.com/gabyvs/ng2-ue-utils/compare/1.10.0...1.10.1) (2016-10-20)
 
 ### Bug Fixes
 
 * **Context Service:** Forcing redirection to no-org.
  
 <a name="1.10.0"></a>
-## [1.10.0](https://github.com/gabyvs/ng2-ue-utils/compare/1.10.0...1.9.0) (2016-10-20)
+## [1.10.0](https://github.com/gabyvs/ng2-ue-utils/compare/1.9.0...1.10.0) (2016-10-20)
 
 ### Changes
 
@@ -44,7 +63,7 @@ Previously context service looked for the organization in the URL, then in Local
 Now if the organization is not in the URL nor in Local Storage, it will redirect to the new no-organization page `/no-org`. 
 
 <a name="1.9.0"></a>
-## [1.9.0](https://github.com/gabyvs/ng2-ue-utils/compare/1.9.0...1.8.0) (2016-10-14)
+## [1.9.0](https://github.com/gabyvs/ng2-ue-utils/compare/1.8.0...1.9.0) (2016-10-14)
 
 ### Features
 
@@ -60,7 +79,7 @@ Now the position must be provided by the consumer if it's different than the pos
 otherwise it will take position top 0 from the parent element.
 
 <a name="1.8.0"></a>
-## [1.8.0](https://github.com/gabyvs/ng2-ue-utils/compare/1.8.0...1.7.1) (2016-10-13)
+## [1.8.0](https://github.com/gabyvs/ng2-ue-utils/compare/1.7.1...1.8.0) (2016-10-13)
 
 ### Features
 

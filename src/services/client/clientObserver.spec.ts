@@ -6,7 +6,7 @@ describe('Client Observer', () => {
 
     it('Starts increment stack', (done) => {
         const spy = new ClientObserver();
-        const s = spy.observe().subscribe(event => {
+        const s = spy.clientEvents.subscribe(event => {
             expect(event.method).toBe('get');
             expect(event.event).toBe('start');
             expect(event.stackCount).toBe(1);
@@ -18,7 +18,7 @@ describe('Client Observer', () => {
 
     it('Next doesnt increment stack', (done) => {
         const spy = new ClientObserver();
-        const s = spy.observe().subscribe(event => {
+        const s = spy.clientEvents.subscribe(event => {
             expect(event.method).toBe('get');
             expect(event.event).toBe('start');
             expect(event.stackCount).toBe(1);
@@ -30,7 +30,7 @@ describe('Client Observer', () => {
 
     it('Error don\'t decrements stack if it is empty', (done) => {
         const spy = new ClientObserver();
-        const s = spy.observe().subscribe(event => {
+        const s = spy.clientEvents.subscribe(event => {
             expect(event.method).toBe('get');
             expect(event.event).toBe('error');
             expect(event.stackCount).toBe(0);
@@ -42,7 +42,7 @@ describe('Client Observer', () => {
 
     it('Complete don\'t decrements stack if it is empty', (done) => {
         const spy = new ClientObserver();
-        const s = spy.observe().subscribe(event => {
+        const s = spy.clientEvents.subscribe(event => {
             expect(event.method).toBe('get');
             expect(event.event).toBe('complete');
             expect(event.stackCount).toBe(0);
@@ -61,7 +61,7 @@ describe('Client Observer', () => {
             { count: 1, event: 'error'},
             { count: 0, event: 'complete'}
         ];
-        const s = spy.observe().subscribe(event => {
+        const s = spy.clientEvents.subscribe(event => {
             const r = responses[0];
             expect(event.method).toBe('get');
             expect(event.event).toBe(r.event);

@@ -4,7 +4,6 @@ import { PartialObserver } from 'rxjs/Observer';
 import { Observer, Observable, Subject } from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IClientEvent } from '../client/clientObserver';
 import { ObservableClient } from '../client/observable-client';
 import { SetOrder } from './base-storage';
 import { Storage } from './storage';
@@ -251,6 +250,4 @@ export abstract class Repository<T> extends Observable<IRangeSnapshot<T>> {
         this.load();
         return s;
     };
-
-    public observe = (): Observable<IClientEvent> => this.client.observe();
 }

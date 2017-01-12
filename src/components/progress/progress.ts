@@ -1,58 +1,67 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, Input } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ProgressService } from './progress-service';
+import { IClientEvent } from '../../services/client/clientObserver';
 
 /**
- * This component displays a progress bar 56px from the top of the page.  You can interact with it via
- * ProgressService.notify.  This method takes an IEvent (defined in progress-service.ts) as its only argument.
+ * This component displays a progress bar.  You can interact with it via `ProgressService#notify`.
  *
- * Previously this component included its position fixed in the window (top 56px).
- * Starting on 1.9.0 the position must be provided by the consumer if it's different than the position of the parent element,
- * otherwise it will take position top 0 from the parent element.
+ * Previously this component included an absolute position style which set it 56px from the top of the window.
+ * Starting on 1.9.0 the position must be provided by the consumer, otherwise it will take position top 0 from the 
+ * parent element.
+ * 
+ * The default behavior is that, once a call is in flight, the progress bar will continue progressing while it and any 
+ * additional calls initiated in the meantime are in flight.  It will only complete once the last in-flight call has 
+ * resolved.  To retain control over when the progress bar restarts in your application, pass in the `restartOnAjax` 
+ * attributelike this:
+ * 
+ * <progress-bar [restartOnAjax]="true">
+ *     
+ * This will tell the Progress component to restart on each `start` event it receives from the progress service.  This
+ * affords you complete control because you can filter/validate the events that you send to ProgressService#notify in
+ * your application's controller.
  *
  * ### Simple Example
  * 
  * in main app component:
  * ```
  * @Component({
- *     directives: [ Progress, MyContent ],
- *     providers: [ ProgressService ],
  *     selector: 'app-main',
  *     template: `
  *         <progress-bar></progress-bar>
- *         <my-content></my-content>
+ *         <my-component></my-component>
  *     `
  * })
  * ```
  *
- * and in MyContent component:
+ * and in MyComponent:
  * ```
- *
+ * import { OnInit } from '@angular/core';
  * import { ProgressService } from 'ng2-ue-utils';
  *
  * @Component({
- *     selector: 'my-content',
- *     template: template
+ *     selector: 'my-component',
+ *     template: '<div> my content </div>'
  * })
- * class MyContent {
+ * class MyComponent implements OnInit {
  * 
- *     constructor(private _service: ProgressService){}
+ *     constructor(private progressService: ProgressService, private clientObserver: ClientObserver){}
  *     
- * 
- *     private updateProgressBar(event: string, method: string, stackCount: number){
- *         const event: ProgressService.IEvent = {
- *             event: event as ProgressService.EventType,
- *             method: method as ProgressService.EventMethod,
- *             stackCount: number
- *         }
- *         this._service.notify(event);
+ *     private ngOnInit(){
+ *         this.clientObserver.clientEvents.subscribe(
+ *             (clientEvent: IClientEvent) => {
+ *                 this.progressService.notify(clientEvent);
+ *             }
+ *         )
  *     }
- *     
  * }
  * 
  */
 
 declare const require: any;
 const styles: any = require('!!css-loader!less-loader!./progress.less');
+
+export type progressStatus = 'init'|'started'|'success'|'warning'|'error';
 
 @Component({
     selector: 'progress-bar',
@@ -65,17 +74,20 @@ const styles: any = require('!!css-loader!less-loader!./progress.less');
 })
 export class Progress implements OnDestroy, OnInit {
 
+    @Input() private restartOnAjax: boolean;
+
     private baseColor: string = 'empty';
     private progressColor: string = 'empty';
     private progress: number = 0;
     private intervalId: any;
-    private status: string;
-    private subscription: any;
+    private initColorsTimeoutId: any;
+    private status: progressStatus = 'init';
+    private subscription: Subscription;
 
     constructor (public progressService: ProgressService, private cdr: ChangeDetectorRef) {}
 
-    private onEmit (status: ProgressService.IEvent) {
-        if (status.event === 'start') {
+    private onEmit (status: IClientEvent) {
+        if (status.event === 'start' && (this.restartOnAjax || this.status === 'init')) {
             this.start();
         } else {
             this.setStatus(status.event, status.method);
@@ -88,10 +100,10 @@ export class Progress implements OnDestroy, OnInit {
     public setStatus (value: string, method: string) {
         switch (value) {
             case 'error':
-                this.status = value;
+                this.status = value as progressStatus;
                 break;
             case 'warning':
-                this.status = this.status !== 'error' ? value : this.status;
+                this.status = this.status !== value as progressStatus ? 'warning' : this.status;
                 break;
             case 'complete':
                 if (this.status !== 'error' && this.status !== 'warning' && method !== 'get') {
@@ -104,6 +116,8 @@ export class Progress implements OnDestroy, OnInit {
     }
 
     private start (): void {
+        clearTimeout(this.initColorsTimeoutId);
+        this.status = 'started';
         this.baseColor = 'on';
         this.progressColor = 'default';
         this.progress = 0;
@@ -116,9 +130,9 @@ export class Progress implements OnDestroy, OnInit {
         clearInterval(this.intervalId);
         if (this.status) {
             this.progressColor = this.status;
-            this.status = undefined;
+            this.status = 'init';
         }
-        setTimeout(() => {
+        this.initColorsTimeoutId = setTimeout(() => {
             this.baseColor = 'empty';
             this.progressColor = 'empty';
         }, 500);
@@ -133,8 +147,10 @@ export class Progress implements OnDestroy, OnInit {
     }
 
     public ngOnInit () {
-        this.subscription = this.progressService.observe$.filter(status => status.event !== 'next')
-            .subscribe((event: ProgressService.IEvent) => {
+        this.subscription = this.progressService.observe$
+            .filter(status => !!status)
+            .filter(status => status.event !== 'next')
+            .subscribe((event: IClientEvent) => {
                 this.onEmit(event);
             });
     }

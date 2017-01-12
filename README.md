@@ -30,6 +30,7 @@ This package is intended to be used only in Angular2/Webpack projects. The follo
 * moment: ^2.15.2
 * ng2-bootstrap: ^1.1.16
 * reflect-metadata: ^0.1.8
+* rbac-abacus: "^0.1.0",
 * rxjs: ^5.0.0-beta.12
 * zone.js: ^0.6.26
 
@@ -39,14 +40,32 @@ In your app.module or feature.module import Ng2UEUtilsModule and make all releva
 
 ```
 import { 
+    APP_CONFIG,
     ContextService,
+    Client,
+    ClientObserver,
+    ContextService,
+    IAppConfig,
+    NotificationService,
+    ProgressService,
+    WindowRef,
     Ng2UEUtilsModule } from 'ng2-ue-utils';
     
+    .
+    . more imports
+    .
+    
+const appConfig: IAppConfig = {
+    apiBasePath: 'myProduct',
+    appBasePath: 'myProduct',
+    gtmAppName: 'myProduct'
+};
+
 @NgModule({
     bootstrap:    [ AppComponent ],
     declarations: [
         AppComponent,
-        OtherComponent
+        MyComponent
     ],
     imports:      [
         BrowserModule,
@@ -56,12 +75,13 @@ import {
     ],
     providers: [
        Client,
+       ClientObserver,
        ContextService,
        NotificationService,
-       ProductClient,
-       ProductRepository,
-       ProductStorage,
-       ProductsApiRoutes,
+       MyProductClient,
+       MyProductRepository,
+       MyProductStorage,
+       MyProductsApiRoutes,
        ProgressService,
        Location,
        WindowRef,
@@ -116,19 +136,27 @@ And you are ready to go! :)
 
 #### Services
 
+* ApiRoutes
 * Client
+* ClientObserver
 * Context
-* Router
+* ObservableClient
+* ObservableClientBase
 * Repository
 * Storage
+* ValueStorage
 
-Unfortunately, services are not yet documented.
+Unfortunately, not all services are documented yet.
 Client and Context are intended to help an SPA making client calls and getting the org and user context in which the SPA is being used.
 Router helps as a single point for routes being built according to the context. It includes some shared routes/route templates that all the ALM UE SPAs are using.
 Repository and Storage are intended to help a listing page to handle storage and manipulation of the objects. 
 
-For now the best way to see how they integrate is to take a look at one of the SPAs that are using them. 
-For example, alm-apps, alm-developers, alm-products or alm-orgHistory.  
+**Note** You may not need or want to use all of these services.
+For instance, if your application is logically scoped by the user context, you may not want the Apigee/Google Edge `organization`-scoped methods built into the `ObservableClient` -
+in such case you might do better by using either `ObservableClientBase` or the `Client` itself, depending on the feature set you require of them.
+
+The best way to see how to integrate these resources is to have a look at the [getting started guide](https://revision.aeip.apigee.net/alm/getting-started) one of the SPAs that are using them. 
+For example, [alm-apps](https://revision.aeip.apigee.net/alm/alm-apps), [alm-developers](https://revision.aeip.apigee.net/oponce/alm-developers), [alm-products](https://revision.aeip.apigee.net/alm/alm-products), [proxies](https://revision.aeip.apigee.net/alm/proxies) or [alm-orgHistory](https://revision.aeip.apigee.net/alm/alm-orgHistory).  
 
 ## To run in development mode
 
@@ -164,7 +192,31 @@ or for debugging tests
 npm run test:debug
 ```
 
+### Contributing
+Create a feature branch. In `/src`, find the appropriate directory for your new component(or directive/pipe/service)
+and create a new directory there.
+
+Include your source code and any applicable tests. Document usage instructions for your
+component in the source code. Ensure tests pass. Exclude your tests files on the file `/tsconfig.json` inside the root folder
+ of this project so your tests are not transpiled in later stages.
+
+If you are adding a component, directive or pipe, declare and export it in ng2-ue-utils.module.ts
+
+For any new class, type or interface that you create, extend `index.ts` in root with your new types.
+
+At this point you might want to test your changes locally in an existing project. Follow instructions in the next section for that.
+
+Add your changes in the `CHANGELOG.md` file in the root of this project categorized as Features, bug fixes, breaking changes, dependency changes.
+
+If you created a visual component, extend demo.html with implementation of your component and
+run `npm run build:ghp` to update Github demo page when your commit reaches master branch.
+
+Generate a merge request from your branch to develop branch.
+After the merge request is accepted, the team will publish a new version of the library to npm.
+
 ### Testing the components into another project locally
+
+Build this repo into a tarball file that you can install in another project locally so you can test your changes in action.
 
 For creating the distribution files
 ```bash
@@ -183,26 +235,6 @@ In your other project, use the following command to install the tarball: (note -
 npm install /path/to/ng2-ue-utils-someversion.tgz
 ```
 And you will be ready to use it locally!
-
-### Contributing
-Create a feature branch. In `/src`, find the appropriate directory for your new component(or directive/pipe/service)
-and create a new directory there.
-
-Include your source code and any applicable tests. Ensure tests pass.  Document usage instructions for your
-component in the source code.
-
-If you are adding a component, directive or pipe, declare and export it in ng2-ue-utils.module.ts
-
-Extend `index.ts` in root with your new types.
-
-Extend demo.html with implementation of your component.
-Run `npm run build:ghp` if you want to update Github demo page when your commit reaches master branch.
-Add your changes in the `CHANGELOG.md` file in the root of this project categorized as Features, bug fixes, breaking changes, dependency changes.
-
-Build this repo into a tarball and run it locally in your other project using the directions above to verify implementation.
-
-Generate a merge request from your branch to develop branch.
-After the merge request is accepted, the team will publish a new version of the library to npm.
 
 ## For pushing to NPM (to be done by contributors to NPM project only) 
 

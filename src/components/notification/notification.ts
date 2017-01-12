@@ -44,9 +44,9 @@ import { NotificationService } from './notification-service';
  *     
  *     ...
  * 
- *     private handleError(error: {code: number, message: string}){
+ *     private handleError(error: { code: number, message: string }){
  *         const notification: NotificationService.INotification = { 
- *             message: message, 
+ *             message: error.message, 
  *             type: 'error' as NotificationService.NotificationType 
  *         }
  *         this._service.notify(notification);

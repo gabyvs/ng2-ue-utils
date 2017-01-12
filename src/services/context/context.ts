@@ -141,4 +141,8 @@ export class ContextService {
         this._orgName = this.getContext().orgName;
         return this._orgName;
     }
+
+    public get userEmail(): string {
+        return this.helper.getUser();
+    }
 }

@@ -1,4 +1,12 @@
 <div class="component">
+    <h2>Focus On Init: Directive</h2>
+    <div class="explanation">Gives focus to an element on init using the `ngOnInit` lifecycle hook</div>
+    <div class="flex-container left">
+        <input type="text" focusOnInit>
+    </div>
+</div>
+
+<div class="component">
     <h2>Notification: Component + Service</h2>
     <div class="explanation">A component for displaying notifications whose api is exposed through Notification Service.</div>
     <div class="flex-container left notification-container">
@@ -11,13 +19,27 @@
 
 <div class="component">
     <h2>Progress: Component + Service</h2>
-    <div class="explanation">A component for displaying a progress bar whose api is exposed through Notification Service.</div>
+    <div class="explanation">A component for displaying a progress bar whose api is exposed through Progress Service.</div>
     <div class="flex-container left notification-container">
         <progress-bar></progress-bar>
-        <button (click)="progress()">Start progress (successful)</button>
-        <button (click)="progress(true)">Start progress (errs)</button>
+        <div class="resultBlock">
+            <i>latest event received by progress component, event <b>#{{progressEventsReceived}}</b>, is: </i>
+            <div class="codeBlock">{{ latestEvent | json }}</div>
+        </div>
     </div>
 </div>
+<div class="component">
+    <h2>Progress: Component + Service (RestartOnAjax)</h2>
+    <div class="explanation">Same as above, but using the `restartOnAjax` attribute</div>
+    <div class="flex-container left notification-container">
+        <progress-bar [restartOnAjax]="true"></progress-bar>
+        <div class="resultBlock">
+            <i>latest event received by progress component, event <b>#{{progressEventsReceived}}</b>, is: </i>
+            <div class="codeBlock">{{ latestEvent | json }}</div>
+        </div>
+    </div>
+</div>
+
 <div class="component">
     <h2>Datepicker: Component</h2>
     <div class="explanation">Datepicker component.</div>
@@ -27,13 +49,6 @@
             <span>`datePickerEvent` event payload was:</span>
             <div class="codeBlock">{{ datePickerEvent | json }}</div>
         </div>
-    </div>
-</div>
-<div class="component">
-    <h2>Focus On Init: Directive</h2>
-    <div class="explanation">Gives focus to an element on init using the `ngOnInit` lifecycle hook</div>
-    <div class="flex-container left">
-        <input type="text" focusOnInit>
     </div>
 </div>
 

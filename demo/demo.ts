@@ -1,4 +1,5 @@
-import { Component }    from '@angular/core';
+import { Component, OnInit }    from '@angular/core';
+import { Observable } from 'rxjs';
 
 import {
     ContextService,
@@ -9,6 +10,7 @@ import {
      ProgressService,
      ValueHandler
 }                       from '../src';
+import {IClientEvent} from '../src/services/client/clientObserver';
 
 declare const require: any;
 const template: string = require('./demo.html');
@@ -19,8 +21,26 @@ const styles: any = require('!!css-loader!less-loader!./demo.less');
     styles: [ styles.toString()],
     template: template
 })
-export class Demo {
+export class Demo implements OnInit {
 
+    private progressEventsReceived: number = 0;
+    private progressStart: IClientEvent = {
+        event: 'start',
+        method: 'get',
+        stackCount: 1
+    };
+    private progressSuccess: IClientEvent = {
+        event: 'complete',
+        method: 'get',
+        stackCount: 0
+    };
+    private progressError: IClientEvent = {
+        event: 'error',
+        method: 'get',
+        stackCount: 0
+    };
+    public latestEvent: IClientEvent;
+    
     // Value Handler
     public vhEvent: ValueHandler.IEvent;
 
@@ -183,5 +203,27 @@ export class Demo {
 
     public dateChange(event): void {
         this.datePickerEvent = event;
+    }
+    
+    private handleEvent(event: IClientEvent): void {
+        this.latestEvent = event;
+        this.progressService.notify(event);
+    }
+    
+    public ngOnInit() {
+        Observable
+            .timer(0, 2000)
+            .subscribe(
+                (x) => {
+                    this.progressEventsReceived++;
+                    if (x % 6 === 0) {
+                        this.handleEvent(this.progressError);
+                    } else if (x % 3 === 0) {
+                        this.handleEvent(this.progressSuccess);
+                    } else {
+                        this.handleEvent(this.progressStart);
+                    }
+                }
+            );
     }
 }

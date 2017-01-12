@@ -1,27 +1,68 @@
+import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs/Rx';
 
-export interface IClientObserver {
-    observe: () => Observable<IClientEvent>;
-}
+/**
+ * This injectable service can optionally be provided to the ObservableClient or ObservableClientBase classes included
+ * in this library in order to provide you with a stream of http call status represented as IClientEvent emissions.
+ * 
+ * The spy (ClientObserver) is designed to allow you to feed client events into the progress service to update the 
+ * state of your progress bar component, both of which are also included in this library.
+ *
+ * ### Simple Example
+ *
+ * Add service to your app module so it can be injected into your components
+ * 
+ * ```
+ * import { Ng2UEUtilsModule, ClientObserver } from 'ng2-ue-utils';
+ * import { AppComponent } from './path/to/appComponent';
+ * import { MyComponent } from './path/to/myComponent';
+ *
+ * @NgModule({
+ *   bootstrap:     [ AppComponent ],
+ *   declarations:  [ AppComponent, MyComponent ],
+ *   imports:       [ Ng2UEUtilsModule ],
+ *   providers:     [ ClientObserver ]
+ * })
+ * ```
+ *
+ * And in myComponent.ts
+ * ```
+ * import { ClientObserver } from 'ng2-ue-utils';
+ *
+ * @Component({
+ *     selector: 'my-component',
+ *     template: `<div> my content </div>`
+ * })
+ * class MyComponent {
+ *
+ *     constructor(private progressService: ProgressService, private spy: ClientObserver){}
+ *
+ *     private subscribeToServerCallsEvents () {
+ *       this.spy.clientEvents
+ *          .filter(status => status.event !== 'next')
+ *          .subscribe((event: IClientEvent) => {
+ *               this.progressService.notify(event);
+ *           });
+ *     }
+ * }
+ * ```
+ */
 
 export type ClientEvent = 'error' | 'start' | 'complete' | 'next';
 export type ClientMethod = 'get' | 'put' | 'post' | 'delete';
 
 export interface IClientEvent {
-    stackCount: number;
+    stackCount: number; // number of calls in flight, including this one
     event: ClientEvent;
     method: ClientMethod;
     error?: any;
 }
 
-export class ClientObserver implements IClientObserver {
-    private _emitter: Subject<IClientEvent>;
-    private _stackCount: number;
-    
-    constructor () {
-        this._emitter = new Subject<IClientEvent>();
-        this._stackCount = 0;
-    }
+@Injectable()
+export class ClientObserver {
+    private _emitter: Subject<IClientEvent> = new Subject<IClientEvent>();
+    private _stackCount: number = 0;
+    public clientEvents: Observable<IClientEvent> = this._emitter.asObservable();
 
     private countUp = () => { this._stackCount++; };
 
@@ -56,6 +97,4 @@ export class ClientObserver implements IClientObserver {
             }
         );
     };
-    
-    public observe = (): Observable<IClientEvent> => Observable.from<IClientEvent>(this._emitter);
 }

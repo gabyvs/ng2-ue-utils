@@ -1,9 +1,49 @@
 import { Observable } from 'rxjs/Rx';
 
 import { IResourcePermissionsResponse, IRole, IRoleCollection, RolePermissions } from 'rbac-abacus';
-import { IClientObserver, ClientObserver, ClientMethod, IClientEvent } from './clientObserver';
+import { ClientObserver } from './clientObserver';
 import { ApiRoutes } from '../router/api-routes';
 import { Client } from './client';
+import { ObservableClientBase } from './observable-client-base';
+
+/**
+ * This abstract class is designed for use with the `Repository` and `ApiRoutes` implementations provided in this 
+ * library.  The provided methods are intended for use with the Repository class and the injected router exposes 
+ * common API routes which are injected with Apigee/Google Edge `organization` context. Therefore, if your SPA does 
+ * not make use of these integrations, then it may be more appropriate for you to use the included ObservableClientBase
+ * class which does not implement the router and is more generic.
+ * 
+ * OPTIONAL: When extending this class in your SPA, you may inject and pass in the ClientObserver spy from this
+ * library to your `super` call to ObservableClientBase.  Doing this will make a stream of IClientEvent emissions 
+ * available in your application through which you can track the progress of calls made through this client.
+ *
+ * ### Simple Example
+ *
+ * Extend ObservableClient in your SPA-specific client class
+ * ```
+ * import { Injectable } from '@angular/core';
+ * import { Client, ObservableClient, ClientObserver } from 'ng2-ue-utils';
+ * import { Observable } from 'rxjs/Rx';
+ * import { SampleEntitiesApiRoutes } from './path/to/sampleEntitiesApiRoutes';
+ * import { IApisResponse, IRawProxy } from './path/to/responseInterfaces';
+ * 
+ * @Injectable(
+ * export class ProxyClient extends ObservableClient {
+ *     constructor (client: Client, protected router: SampleEntitiesApiRoutes, spy: ClientObserver) {
+ *         super(client, router, spy);
+ *     }
+ * 
+ *     public getList (): Observable<IRawProxy[]> {
+ *         return this.getListObject<IApisResponse>().map(response => response || []);
+ *     }
+ *     
+ *     public getEnvironments(): Observable<string[]> {
+ *         const route: string = this.router.environments();
+ *         return this.get<string[]>(route);
+ *     }
+ * }
+ * ```
+ */
 
 interface IUserInfo {
     user_id: string;
@@ -14,15 +54,12 @@ interface IUserInfo {
     name: string;
 }
 
-export abstract class ObservableClient implements IClientObserver {
-    protected spy: ClientObserver;
+export abstract class ObservableClient extends ObservableClientBase {
 
-    constructor (protected client: Client, protected router: ApiRoutes) {
-        this.spy = new ClientObserver();
+    constructor (client: Client, protected router: ApiRoutes, spy?: ClientObserver) {
+        super(client, spy);
     }
 
-    // TODO: does this method need to be abstract? If a user is not using the repository, then this client can't be used
-    // without a getList method that might not be needed at all...
     public abstract getList <T>(...callParams: any[]):  Observable<T[]>;
 
     private userInfo = (): Observable<IUserInfo> => this.get<IUserInfo>(this.router.userInfo());
@@ -33,30 +70,6 @@ export abstract class ObservableClient implements IClientObserver {
             .flatMap((info: IUserInfo) => this.get<IRoleCollection>(this.router.userRoles(info.email)))
             .map((col: IRoleCollection) => col.role.filter(r => r.organization === org));
     };
-
-    public spyCall = <T>(method: ClientMethod, obs: Observable<T>): Observable<T> => {
-        return this.spy.observeOn(method, obs);
-    };
-
-    public put = <T, U> (url: string, entity: U): Observable<T> => this.spyCall(
-        'put',
-        this.client.put<T, U>(url, entity)
-    );
-
-    public get = <T> (url: string): Observable<T> => this.spyCall(
-        'get',
-        this.client.get<T>(url)
-    );
-
-    public delete = <T> (url: string): Observable<T> => this.spyCall(
-        'delete',
-        this.client.delete<T>(url)
-    );
-
-    public post = <T, U> (url: string, entity: U): Observable<T> => this.spyCall(
-        'post',
-        this.client.post<T, U>(url, entity)
-    );
 
     public updateEntity = <T, U>(identifier: string, entity: U): Observable<T> =>
         this.put<T, U>(this.router.entity(identifier), entity);
@@ -87,6 +100,4 @@ export abstract class ObservableClient implements IClientObserver {
                 permArray.reduce((prev, perm) => prev.merge(perm), new RolePermissions())
             ) as Observable<RolePermissions>;
     };
-
-    public observe = (): Observable<IClientEvent> => this.spy.observe();
 }

@@ -51,8 +51,8 @@ export interface IClientBase {
 }
 
 const mapToJson = <T>(obs: Observable<Response>): Observable<T> => {
-    return obs.map((response: Response) => {
-        return (response ? response.json() : undefined) as T;
+    return obs.map((response: Response) => { // return `undefined` if response is undefined or response body is an empty string
+        return ((response && response.text()) ? response.json() : undefined) as T;
     });
 };
 

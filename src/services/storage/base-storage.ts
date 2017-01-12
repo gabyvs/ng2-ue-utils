@@ -35,7 +35,6 @@ export abstract class BaseStorage <T> {
     protected filterField: string;
     protected _sortByField: string;
     protected _sortByOrder: SetOrder;
-    public count: number;
     
     protected abstract getValue (t: T, prop: string): any;
     protected abstract matchType (matchFunction: (d: T) => boolean, t: T): boolean;
