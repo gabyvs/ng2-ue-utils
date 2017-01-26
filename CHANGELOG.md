@@ -1,3 +1,10 @@
+<a name="2.1.2"></a>
+## [2.1.2](https://github.com/gabyvs/ng2-ue-utils/compare/2.1.1...2.1.2) (2017-01-26)
+
+### Bug Fixes
+
+* **HintScroll:** Some browsers where showing scrolls even when they were not needed. 
+
 <a name="2.1.1"></a>
 ## [2.1.1](https://github.com/gabyvs/ng2-ue-utils/compare/2.1.1...2.1.0) (2016-12-06)
 

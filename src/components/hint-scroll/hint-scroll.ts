@@ -89,8 +89,7 @@ import * as _ from 'lodash';
         .content-wrapper {
             max-height: inherit;
             height: inherit;
-            overflow-x: auto;
-            overflow-y: scroll;
+            overflow: auto;
         }
     `],
     template: `
