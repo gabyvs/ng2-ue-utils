@@ -28,7 +28,6 @@ This package is intended to be used only in Angular2/Webpack projects. The follo
 * es6-shim: ^0.35.1
 * lodash: 4.16.4
 * moment: ^2.15.2
-* ng2-bootstrap: ^1.1.16
 * reflect-metadata: ^0.1.8
 * rbac-abacus: "^0.1.0",
 * rxjs: ^5.0.0-beta.12
@@ -48,6 +47,7 @@ import {
     IAppConfig,
     NotificationService,
     ProgressService,
+    TooltipService,
     WindowRef,
     Ng2UEUtilsModule } from 'ng2-ue-utils';
     
@@ -83,6 +83,7 @@ const appConfig: IAppConfig = {
        MyProductStorage,
        MyProductsApiRoutes,
        ProgressService,
+       TooltipService,
        Location,
        WindowRef,
        { provide: APP_CONFIG, useValue: appConfig }
@@ -128,6 +129,8 @@ And you are ready to go! :)
 
 * Toggle on hover
 * Focus on init
+* Tooltip
+* Dropdown
 
 #### Pipes
 

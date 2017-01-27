@@ -2,7 +2,6 @@ import { Location }             from '@angular/common';
 import { NgModule }             from '@angular/core';
 import { BrowserModule }        from '@angular/platform-browser';
 import { RouterModule }         from '@angular/router';
-import { Ng2BootstrapModule }   from 'ng2-bootstrap/ng2-bootstrap';
 
 import { AppComponent }         from './app.component';
 import { Demo }                 from './demo';
@@ -13,7 +12,8 @@ import {
     Ng2UEUtilsModule,
     NotificationService,
     ProgressService,
-    WindowRef
+    WindowRef,
+    TooltipService
 }  from '../src';
 
 const appConfig: IAppConfig = {
@@ -34,7 +34,6 @@ const appConfig: IAppConfig = {
             { component: Demo, path: 'ng2-ue-utils' },
             { component: Demo, path: '' }
         ]),
-        Ng2BootstrapModule,
         Ng2UEUtilsModule
     ],
     providers: [
@@ -42,6 +41,7 @@ const appConfig: IAppConfig = {
         Location,
         NotificationService,
         ProgressService,
+        TooltipService,
         WindowRef,
         { provide: APP_CONFIG, useValue: appConfig }
     ]

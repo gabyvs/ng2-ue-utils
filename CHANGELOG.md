@@ -1,3 +1,13 @@
+<a name="3.1.0"></a>
+## [3.1.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.0.0...3.1.0) (2017-02-03)
+
+### Changes
+* **Ng2-Bootstrap:** This peer dependency has been removed.  You may continue to use it in your applications, but it is no longer required. 
+
+### Features
+* **Dropdown** Added a dropdown directives which can be used in the same way as the ones in ng2-bootstrap, which has been removed as a required dependency.
+* **Tooltip** Added tooltip attribute directive, along with component and service.  See source files for usage documentation.  Now using new tooltip in value-handler component.
+
 <a name="3.0.0"></a>
 ## [3.0.0](https://github.com/gabyvs/ng2-ue-utils/compare/2.1.2...3.0.0) (2016-12-05)
 

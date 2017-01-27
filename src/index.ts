@@ -11,9 +11,14 @@ export * from './components/progress/progress-service';
 export * from './components/value-handler/value-handler';
 export * from './components/datepicker/datepicker';
 export * from './components/datepicker-input/datepicker-input';
+export * from './components/tooltip/tooltip';
 
 export * from './directives/focus-on-init/focus-on-init';
 export * from './directives/toggle-on-hover/toggle-on-hover';
+export * from './directives/tooltip/tooltip';
+export * from './directives/tooltip/tooltip-service';
+export * from './directives/dropdown/dropdown';
+export * from './directives/dropdown/dropdown-trigger';
 
 export * from './pipes/date-moment/date-moment';
 export * from './pipes/from-now/from-now';

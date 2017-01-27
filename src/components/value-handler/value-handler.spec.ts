@@ -2,9 +2,11 @@ import {
     ComponentFixture,
     TestBed
 }                               from '@angular/core/testing';
-import { Ng2BootstrapModule }   from 'ng2-bootstrap/ng2-bootstrap';
+import { FormsModule } from '@angular/forms';
 
 import { ValueHandler }         from './value-handler';
+import { TooltipDirective } from '../../directives/tooltip/tooltip';
+import { TooltipService } from '../../directives/tooltip/tooltip-service';
 
 declare const beforeEach, describe, expect, it, jasmine, spyOn;
 
@@ -21,8 +23,9 @@ describe('Component: ValueHandler', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations:   [ ValueHandler ],
-            imports: [ Ng2BootstrapModule ]
+            declarations: [ ValueHandler, TooltipDirective ],
+            imports: [ FormsModule ],
+            providers: [ TooltipService ]
         });
 
         fixture = TestBed.createComponent(ValueHandler);

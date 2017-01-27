@@ -5,7 +5,31 @@
         <input type="text" focusOnInit>
     </div>
 </div>
-
+<div class="component">
+    <h2>Tooltip</h2>
+    <div class="explanation">An attribute directive which generates a tooltip on the directive host.  Note: you need to add a single instance of the tooltip component to your app's root component's template, and declare the TooltipService in the `imports` section of your @ngModule declarations</div>
+    <div class="flex-container left tooltip-demo-container">
+        <button ueTooltip="Tooltips default to 'top' placement">Default tooltip</button>
+        <button [ueTooltip]="firstTooltip" ueTooltipPlacement="right">Tooltip + `tooltipPlacement`</button>
+        <button [ueTooltip]="longTooltip" ueTooltipMaxWidth="350">Long tooltip + `maxWidth`</button>
+        <button ueTooltip="You enabled me!" [ueTooltipEnabled]="isEnabled" (click)="flipIsEnabled()">Click to enable/disable</button>
+        <button [ueTooltip]="dynamicTooltipContent" (click)="changeDynamicTooltip()">Dynamic input, click to change</button>
+    </div>
+</div>
+<div class="component">
+    <h2>Dropdown</h2>
+    <div class="explanation">A pair of attributes and a css class which can together be used to create a dropdown menu</div>
+    <div class="flex-container left tooltip-demo-container">
+        <div ueDropdown>
+            <button ueDropdownTrigger>Click to open dropdown</button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item">Option 1</a></li>
+                <li><a class="dropdown-item">Option 2</a></li>
+                <li><a class="dropdown-item">Option 3</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
 <div class="component">
     <h2>Notification: Component + Service</h2>
     <div class="explanation">A component for displaying notifications whose api is exposed through Notification Service.</div>
@@ -174,8 +198,7 @@
 
 <div class="component">
     <h2>Modal: Component</h2>
-    <div class="explanation">Appends elements to the top or bottom of a container to indicate the presence
-        of scrollable content.</div>
+    <div class="explanation">A modal with an html template which you can define in your application.</div>
     <div class="flex-container left hintScroll-demo">
         <modal #myModal
                title="Do my thing?"
