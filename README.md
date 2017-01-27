@@ -48,6 +48,7 @@ import {
     IAppConfig,
     NotificationService,
     ProgressService,
+    TooltipService,
     WindowRef,
     Ng2UEUtilsModule } from 'ng2-ue-utils';
     
@@ -83,6 +84,7 @@ const appConfig: IAppConfig = {
        MyProductStorage,
        MyProductsApiRoutes,
        ProgressService,
+       TooltipService,
        Location,
        WindowRef,
        { provide: APP_CONFIG, useValue: appConfig }

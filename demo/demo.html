@@ -5,7 +5,17 @@
         <input type="text" focusOnInit>
     </div>
 </div>
-
+<div class="component">
+    <h2>Tooltip</h2>
+    <div class="explanation">An attribute directive which generates a tooltip on the directive host.  Note: you need to add a single instance of the tooltip component to your app's root component's template, and declare the TooltipService in the `imports` section of your @ngModule declarations</div>
+    <div class="flex-container left tooltip-demo-container">
+        <button ueTooltip="Tooltips default to 'top' placement">Default tooltip</button>
+        <button [ueTooltip]="firstTooltip" ueTooltipPlacement="right">Tooltip + `tooltipPlacement`</button>
+        <button [ueTooltip]="longTooltip" ueTooltipMaxWidth="350">Long tooltip + `maxWidth`</button>
+        <button ueTooltip="You enabled me!" [ueTooltipEnabled]="isEnabled" (click)="flipIsEnabled()">Click to enable/disable</button>
+        <button [ueTooltip]="dynamicTooltipContent" (click)="changeDynamicTooltip()">Dynamic input, click to change</button>
+    </div>
+</div>
 <div class="component">
     <h2>Notification: Component + Service</h2>
     <div class="explanation">A component for displaying notifications whose api is exposed through Notification Service.</div>

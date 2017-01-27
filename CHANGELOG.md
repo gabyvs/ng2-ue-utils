@@ -1,3 +1,9 @@
+<a name="3.1.0"></a>
+## [3.1.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.0.0...3.1.0) (2017-02-03)
+
+### Features
+* **Tooltip** Added tooltip attribute directive, along with component and service.  See source files for usage documentation.  Now using new tooltip in value-handler component.
+
 <a name="3.0.0"></a>
 ## [3.0.0](https://github.com/gabyvs/ng2-ue-utils/compare/2.1.2...3.0.0) (2016-12-05)
 
