@@ -1,0 +1,74 @@
+@import '../../common/variables';
+
+.ue-tooltip-pointer {
+  position: absolute;
+  &.ue-tooltip-pointer-top {
+    border-left: 5px solid transparent;
+    border-top: 5px solid @color-tungsten;
+    border-right: 5px solid transparent;
+    margin-left: -5px;
+    left: 50%;
+    bottom: 3px;
+  }
+  &.ue-tooltip-pointer-bottom {
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid @color-tungsten;
+    border-left: 5px solid transparent;
+    margin-left: -5px;
+    left: 50%;
+    top: 3px;
+  }
+  &.ue-tooltip-pointer-left {
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid @color-tungsten;
+    border-top: 5px solid transparent;
+    margin-top: -5px;
+    top: 50%;
+    right: 3px;
+  }
+  &.ue-tooltip-pointer-right {
+    border-bottom: 5px solid transparent;
+    border-right: 5px solid @color-tungsten;
+    border-top: 5px solid transparent;
+    margin-top: -5px;
+    top: 50%;
+    left: 3px;
+  }
+}
+
+.ue-tooltip-content {
+  padding: 10px 20px;
+  border-radius: 3px;
+  font-size: 12px;
+  background-color: @color-tungsten;
+  color: white;
+  text-align: center;
+  &.ue-tooltip-content-top {
+    margin-bottom: 8px;
+  }
+  &.ue-tooltip-content-bottom {
+    margin-top: 8px;
+  }
+  &.ue-tooltip-content-left {
+    margin-right: 8px;
+  }
+  &.ue-tooltip-content-right {
+    margin-left: 8px;
+  }
+}
+
+.ue-tooltip-container {
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 100ms, visibility 100ms;
+  transition-delay: 100ms;
+  &.ue-tooltip-show {
+    visibility: visible;
+    opacity: 0.9;
+  }
+  &.ue-tooltip-disabled {
+    transition: none;
+    transition-delay: 0s;
+  }
+}
