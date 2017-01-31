@@ -29,7 +29,7 @@ import { Client } from './client';
  *   bootstrap:     [ AppComponent ],
  *   declarations:  [ AppComponent ],
  *   imports:       [ Ng2UEUtilsModule ],
- *   providers:     [ Client, ObservableClientBase, ClientObserver ]
+ *   providers:     [ Client, ClientObserver, MyCustomClient ]
  * })
  * ```
  *
