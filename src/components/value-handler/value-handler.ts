@@ -45,7 +45,7 @@ const styles: any = require('!!css-loader!less-loader!./value-handler.less');
     styles: [styles.toString()],
     template: `
         <span class="property" [tooltip]="value" (click)="startEditing()" tooltipPlacement="{{tooltipPlace}}"
-            #propertySpan [tooltipEnable]="enableTooltip"
+            #propertySpan [tooltipEnabled]="enableTooltip"
             *ngIf="!editing" [ngClass]="{ 'success': success, 'error': error }">{{value}}</span>
         <input class="form-control" #propertyInput focusOnInit
             type="text"

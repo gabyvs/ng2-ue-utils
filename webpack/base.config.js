@@ -17,7 +17,6 @@ var config = {
             'rxjs',
             'lodash',
             'moment',
-            'ng2-bootstrap/ng2-bootstrap',
             '@angular/common',
             '@angular/compiler',
             '@angular/core',
