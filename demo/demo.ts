@@ -22,7 +22,19 @@ const styles: any = require('!!css-loader!less-loader!./demo.less');
     template: template
 })
 export class Demo implements OnInit {
-
+    
+    // Tooltip
+    public isEnabled: boolean = false;
+    private dynamicTooltipContentOptions: string[] = ['How much wood would a woodchuck chuck if a woodchuck could ' +
+    'chuck wood?', 'Governor Marley', 'Mélée Island', 'A rubber chicken with a pulley in the middle', 
+        'Captain LeChuck'];
+    public dynamicTooltipContent: string = this.dynamicTooltipContentOptions[0];
+    
+    public firstTooltip: string = 'Tooltip content is set with the \'tooltip\' attribute, ' +
+        'and position is set with the \'tooltipPosition\' attribute';
+    public longTooltip: string = 'I am a very long tooltip... my maximum allowable width is set with the ' +
+        '\'max-width\' attribute (350 in this case, but I default to 200)';
+    
     private progressEventsReceived: number = 0;
     private progressStart: IClientEvent = {
         event: 'start',
@@ -114,8 +126,7 @@ export class Demo implements OnInit {
 
     // From Now Pipe
     public recent = this.today - (1000 * 60 * 10);
-
-    // constructor(public notificationService: NotificationService, public progressService: ProgressService) {}
+    
     constructor(
          public context: ContextService,
          public notificationService: NotificationService,
@@ -225,5 +236,20 @@ export class Demo implements OnInit {
                     }
                 }
             );
+    }
+
+    // Tooltip
+    public changeDynamicTooltip(): void {
+        const otherContentOptions = this.dynamicTooltipContentOptions.filter(word => word !== this.dynamicTooltipContent);
+        const randomContentIndex: number = this.randomIndex(otherContentOptions.length);
+        this.dynamicTooltipContent = otherContentOptions[randomContentIndex];
+    }
+
+    public flipIsEnabled() {
+        this.isEnabled = !this.isEnabled;
+    }
+
+    private randomIndex(upperBound: number) {
+        return Math.floor(Math.random() * upperBound);
     }
 }
