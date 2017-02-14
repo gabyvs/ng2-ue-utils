@@ -1,3 +1,10 @@
+<a name="3.1.1"></a>
+## [3.1.1](https://github.com/gabyvs/ng2-ue-utils/compare/3.1.0...3.1.1) (2017-02-03)
+
+### Bug Fixes
+
+* **Tooltip:** Added missing styles.  Tooltip component content now has `z-index` of 10 and initializes to `top: 0; left: 0;`. 
+
 <a name="3.1.0"></a>
 ## [3.1.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.0.0...3.1.0) (2017-02-03)
 
