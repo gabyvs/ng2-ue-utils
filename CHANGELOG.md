@@ -1,3 +1,10 @@
+<a name="3.1.2"></a>
+## [3.1.2](https://github.com/gabyvs/ng2-ue-utils/compare/3.1.1...3.1.2) (2017-02-03)
+
+### Bug Fixes
+
+* **Tooltip:** Added missing styles.  Tooltip component content now has `overflow-wrap: break-word;` in order to handle very long content with no line breaks.
+
 <a name="3.1.1"></a>
 ## [3.1.1](https://github.com/gabyvs/ng2-ue-utils/compare/3.1.0...3.1.1) (2017-02-03)
 
