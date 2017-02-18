@@ -9,36 +9,44 @@ import { Observable } from 'rxjs/Rx';
 import { ClientRequestOptions } from './client-request-options';
 import { WindowRef } from '../window-ref';
 
-interface ISimplifiedError {
+export interface ISimplifiedError {
     message: string;
     code: string;
+    originalError: any;
+    path: string;
 }
 
 const knownCodes = [401, 403];
 
 const defaultErrorMessages = {
     '401': 'Unauthorized',
-    '403': 'Forbidden. You don\'t have permissions to access this resource'
+    '403': 'Forbidden. You don\'t have permissions to access this resource.'
 };
 
 const extractSimplifiedError = (error: any, path: string): ISimplifiedError => {
     if (!error) {
         return {
             code: 'Unknown Error',
-            message: 'Unknown error processing path: ' + path
+            message: 'Unknown error processing path: ' + path,
+            originalError: error,
+            path: path
         };
     }
     try {
         const err = error.json();
         return {
             code: err.code,
-            message: err.message
+            message: err.message,
+            originalError: error,
+            path: path,
         };
 
     } catch (e) {
         return {
             code: error.status || 'Unknown Error',
-            message: defaultErrorMessages[error.status.toString()] || 'Unknown error processing path: ' + path
+            message: defaultErrorMessages[error.status.toString()] || 'Unknown error processing path: ' + path,
+            originalError: error,
+            path: path
         };
     }
 };
@@ -62,8 +70,7 @@ const errorOrRedirect = (path: string, error: any, win: WindowRef) => {
         console.log('[SPA] Unauthorized call detected. Trying redirection to:', errorLocation);
         win.location(errorLocation);
     }
-    const err = extractSimplifiedError(error, path);
-    return Observable.throw(`${err.message}. Error code: ${err.code}`);
+    return Observable.throw(extractSimplifiedError(error, path));
 };
 
 @Injectable()

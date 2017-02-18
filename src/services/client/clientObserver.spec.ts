@@ -79,4 +79,18 @@ describe('Client Observer', () => {
         spy.emitChange('complete', 'get');
     });
 
+    it('Returns url on the event', done => {
+        const spy = new ClientObserver();
+        const url = '/someurl/here';
+        const s = spy.clientEvents.subscribe(event => {
+            expect(event.method).toBe('get');
+            expect(event.event).toBe('start');
+            expect(event.path).toBe(url);
+            expect(event.stackCount).toBe(1);
+            s.unsubscribe();
+            done();
+        });
+        spy.emitChange('start', 'get', url);
+    });
+
 });

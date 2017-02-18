@@ -19,6 +19,8 @@ import { Client } from './client';
  * The methods on this service take required types and a URL. They register the call in the spy (if available) and 
  * pass the call to the Client (http Client). They return Observables for the calls.
  *
+ * You can also use the method spyCall directly to bundle complex calls to be observed as a single client event.
+ *
  * ### Simple Example
  *
  * To use it on your SPA:
@@ -49,12 +51,13 @@ import { Client } from './client';
  *          return this.get<IRawEntity>(this.router.entityURL(id));
  *      }
  *
- *     // Use for complex custom calls (for example, pagination on the server)
+ *     // Use for bundle complex custom calls (for example, pagination on the server)
  *    public getEntityList (): Observable<Array<IRawEntity>> {
- *       // Only the expanded call will be caught by the spy
- *       return this.spyCall('get', this.aPage()
- *           .expand(this.nextPage, undefined, undefined)
- *           .map((response: IPageableResponse) => response.content || [])
+ *       // The spy will receive a single call, while many calls are being made for pagination
+ *       return this.spyCall(
+ *          'get',
+ *          this.aSinglePage().expand((prevList => this.nextPage(prevList)), undefined, undefined),
+ *          myUrl
  *       );
  *   }
  * }
@@ -66,27 +69,33 @@ export class ObservableClientBase {
         this.spy = spy;
     }
 
-    public spyCall = <T>(method: ClientMethod, obs: Observable<T>): Observable<T> => {
-        return this.spy ? this.spy.observeOn(method, obs) : obs;
+    public spyCall = <T>(method: ClientMethod, obs: Observable<T>, path?: string): Observable<T> => {
+        return this.spy ? this.spy.observeOn(method, obs, path) : obs;
     };
 
     public put = <T, U> (url: string, entity: U): Observable<T> => this.spyCall(
         'put',
-        this.client.put<T, U>(url, entity)
+        this.client.put<T, U>(url, entity),
+        url
     );
 
-    public get = <T> (url: string): Observable<T> => this.spyCall(
-        'get',
-        this.client.get<T>(url)
-    );
+    public get = <T> (url: string): Observable<T> => {
+        return this.spyCall(
+            'get',
+            this.client.get<T>(url),
+            url
+        );
+    }
 
     public delete = <T> (url: string): Observable<T> => this.spyCall(
         'delete',
-        this.client.delete<T>(url)
+        this.client.delete<T>(url),
+        url
     );
 
     public post = <T, U> (url: string, entity: U): Observable<T> => this.spyCall(
         'post',
-        this.client.post<T, U>(url, entity)
+        this.client.post<T, U>(url, entity),
+        url
     );
 }

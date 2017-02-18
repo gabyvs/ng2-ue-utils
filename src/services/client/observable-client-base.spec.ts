@@ -2,7 +2,7 @@ import { TestBed }                                  from '@angular/core/testing'
 
 import { Client }                                   from './client';
 import { ClientMock }                               from './client.mock';
-import { ClientObserver }                           from './clientObserver';
+import { ClientObserver, IClientEvent }             from './clientObserver';
 import { ObservableClientBase }                     from './observable-client-base';
 
 declare const beforeEach, describe, expect, it, spyOn;
@@ -216,5 +216,59 @@ describe('Observable Client Base', () => {
                 );
             }
         );
+    });
+
+    it('can identify particular path failures and filter from event stream', done => {
+        const obsClientBasePlusClientObserver = new ObservableClientBase(client, clientObserver);
+        const path = 'somePath/return';
+        let counter = 0;
+
+        const theError = {
+            'status': 'INTERNAL_SERVER_ERROR',
+            'message': 'A validation constraint failure occurred for class \'com.apigee.edgex.apidmanagement.pojo.ApidCluster\'.',
+            'errors': [
+                'error occurred'
+            ]
+        };
+        client.on(path, theError, true);
+
+        clientObserver.clientEvents
+            .subscribe((event: IClientEvent) => {
+                counter += 1;
+                switch (counter) {
+                    case 1:
+                        expect(event.method).toBe('get');
+                        expect(event.error).toBeUndefined();
+                        expect(event.path).toBe(path);
+                        break;
+                    case 2:
+                        expect(event.method).toBe('get');
+                        expect(event.error).toBe(theError.message);
+                        expect(event.errorInfo).toBe(theError);
+                        expect(event.path).toBe(path);
+                        break;
+                    default:
+                        expect('Should not enter default case').toBeUndefined();
+                        done();
+                        break;
+                }
+            });
+
+        obsClientBasePlusClientObserver.get(path).subscribe(
+            (r) => {
+                expect('Should not emit next').toBeUndefined();
+                done();
+            },
+            (error) => {
+                expect(error).toBe(theError);
+                expect(counter).toBe(2);
+                done();
+            },
+            () => {
+                expect('Should not complete').toBeUndefined();
+                done();
+            }
+        );
+
     });
 });

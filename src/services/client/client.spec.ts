@@ -142,7 +142,9 @@ describe('Client', () => {
             },
             error => {
                 expect(error).toBeDefined();
-                expect(error).toBe('Forbidden. You don\'t have permissions to access this resource. Error code: 403');
+                expect(error.message).toBeDefined();
+                expect(error.message).toBe('Forbidden. You don\'t have permissions to access this resource.');
+                expect(error.code).toBe(403);
                 done();
             }
         );

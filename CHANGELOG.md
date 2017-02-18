@@ -1,3 +1,11 @@
+<a name="3.2.0"></a>
+## [3.2.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.1.2...3.2.0) (2017-02-17)
+
+### Features
+
+* **ClientObserver:** Now accepts a path returns the path to the reported events as part of the interface IClientEvent. 
+* **IClientEvent:** Now includes path for all HTTP call events. In case of an HTTP error it also includes the original error object. 
+
 <a name="3.1.2"></a>
 ## [3.1.2](https://github.com/gabyvs/ng2-ue-utils/compare/3.1.1...3.1.2) (2017-02-15)
 
