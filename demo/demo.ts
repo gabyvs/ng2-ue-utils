@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import {
     ContextService,
      Filtering,
-     Modal,
      NotificationService,
      Pagination,
      ProgressService,
@@ -85,7 +84,13 @@ export class Demo implements OnInit {
     ];
 
     // Modal
-    public modalResult: string;
+    public baseModalSubmitCount: number = 0;
+    public baseModalCloseCount: number = 0;
+    
+    // Binary Choice Modal
+    public binaryModalSubmitCount: number = 0;
+    public binaryModalCancelCount: number = 0;
+    public binaryModalCloseCount: number = 0;
 
     // Pagination
     public paginationEvent: any;
@@ -182,12 +187,27 @@ export class Demo implements OnInit {
     }
 
     // Modal
-    public openModal(myModal: Modal): void {
-        myModal.open();
+    public openModal(modal: any): void {
+        modal.open();
     }
 
-    public resolveModal(submitted): void {
-        this.modalResult = submitted ? 'submitted!' : 'cancelled.';
+    public baseModalSubmit(): void {
+        this.baseModalSubmitCount++;
+    }
+    
+    public baseModalClose(): void {
+        this.baseModalCloseCount++;
+    }
+
+    public modalCountText(prop: string): string {
+        const timeOrTimes: string = this[prop] > 1 ? 'times' : 'time';
+        return this[prop] + ' ' + timeOrTimes;
+    }
+    
+    // Binary Choice Modal
+    public binaryChoiceModalHandler(result: boolean): void {
+        result ? this.binaryModalSubmitCount++ : this.binaryModalCancelCount++;
+        this.binaryModalCloseCount++;
     }
 
     // Pagination

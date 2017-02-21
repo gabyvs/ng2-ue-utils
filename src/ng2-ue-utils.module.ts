@@ -6,6 +6,7 @@ import { Filtering }                from './components/filtering/filtering';
 import { HintScroll }               from './components/hint-scroll/hint-scroll';
 import { ListHeaders }              from './components/list-headers/list-headers';
 import { LoadingDots }              from './components/loading-dots/loading-dots';
+import { BinaryChoiceModal }        from './components/binary-choice-modal/binary-choice-modal';
 import { Modal }                    from './components/modal/modal';
 import { Notification }             from './components/notification/notification';
 import { Pagination }               from './components/pagination/pagination';
@@ -24,6 +25,7 @@ import { DropdownTriggerDirective } from './directives/dropdown/dropdown-trigger
 
 @NgModule({
     declarations: [
+        BinaryChoiceModal,
         Filtering,
         HintScroll,
         ListHeaders,
@@ -50,6 +52,7 @@ import { DropdownTriggerDirective } from './directives/dropdown/dropdown-trigger
         ListHeaders,
         LoadingDots,
         Modal,
+        BinaryChoiceModal,
         Notification,
         Pagination,
         Progress,

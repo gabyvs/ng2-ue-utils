@@ -1,0 +1,8 @@
+<modal (emitClose)="emitResult()" [modalClass]="modalClass">
+    <span modal-title>{{ titleText }}</span>
+    <p modal-body>{{ bodyText }}</p>
+    <div modal-footer>
+        <button>{{ cancelText }}</button>
+        <button (click)="modalSubmit()">{{ confirmText }}</button>
+    </div>
+</modal>

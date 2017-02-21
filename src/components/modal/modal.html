@@ -1,22 +1,23 @@
 <div class="modal"
      tabindex="-1" role="dialog"
      #modal
-     (keyup.esc)="close(false)"
-     (click)="close(false)"
+     (keyup.esc)="close()"
+     (click)="close()"
      [ngClass]="{ in: isOpened, fade: isOpened }"
      [ngStyle]="{ display: isOpened ? 'block' : 'none' }">
     <div [class]="combinedModalClass">
         <div class="modal-content" *ngIf="isOpened" tabindex="0">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" (click)="close(false)"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" *ngIf="title">{{ title }}</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">
+                    <ng-content select="[modal-title]"></ng-content>
+                </h4>
             </div>
             <div class="modal-body">
-                <ng-content></ng-content>
+                <ng-content select="[modal-body]"></ng-content>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" (click)="close(false)">Cancel</button>
-                <button type="button" class="btn btn-primary" (click)="close(true)">{{ submitLabel }}</button>
+                <ng-content select="[modal-footer]"></ng-content>
             </div>
         </div>
     </div>
