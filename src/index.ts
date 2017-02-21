@@ -2,6 +2,7 @@ export * from './components/filtering/filtering';
 export * from './components/hint-scroll/hint-scroll';
 export * from './components/list-headers/list-headers';
 export * from './components/loading-dots/loading-dots';
+export * from './components/modal-base/modal-base';
 export * from './components/modal/modal';
 export * from './components/notification/notification';
 export * from './components/notification/notification-service';

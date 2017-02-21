@@ -119,6 +119,7 @@ And you are ready to go! :)
 * Hint scroll
 * Loading dots
 * Modal
+* ModalBase
 * Notification
 * Pagination
 * Progress bar

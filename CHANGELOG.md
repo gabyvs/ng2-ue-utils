@@ -1,3 +1,14 @@
+<a name="3.3.0"></a>
+## [3.3.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.2.0...3.3.0) (2017-02-21)
+
+### Features
+
+* **BaseModal:** A more flexible modal which allows consumers to define contents via transcludes and emits when the modal closes.
+
+### Changes
+
+* **Modal:** Refactored Modal to use the new BaseModal.  Added optional input `cancelLabel` for defining the text content of the cancel button.
+
 <a name="3.2.0"></a>
 ## [3.2.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.1.2...3.2.0) (2017-02-17)
 

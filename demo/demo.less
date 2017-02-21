@@ -1,4 +1,7 @@
 @import '../node_modules/bootstrap/less/bootstrap';
+@brand-success:         #5cb85c;
+@brand-info:            #5bc0de;
+@brand-danger:          #d9534f;
 
 h1, h2 {
     font-weight: lighter;
@@ -121,5 +124,22 @@ input {
         &:nth-child(even) {
             background-color: rgba(173, 216, 230, 0.2);
         }
+    }
+}
+
+.modal-component {
+    .resultBlock {
+        display: inline-block;
+        width: 275px;
+        font-weight: 100;
+    }
+    .submitted {
+        color: @brand-success;
+    }
+    .closed {
+        color: @brand-info;
+    }
+    .cancelled {
+        color: @brand-danger;
     }
 }

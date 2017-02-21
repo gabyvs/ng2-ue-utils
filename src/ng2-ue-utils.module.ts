@@ -7,6 +7,7 @@ import { HintScroll }               from './components/hint-scroll/hint-scroll';
 import { ListHeaders }              from './components/list-headers/list-headers';
 import { LoadingDots }              from './components/loading-dots/loading-dots';
 import { Modal }                    from './components/modal/modal';
+import { ModalBase }                from './components/modal-base/modal-base';
 import { Notification }             from './components/notification/notification';
 import { Pagination }               from './components/pagination/pagination';
 import { Progress }                 from './components/progress/progress';
@@ -29,6 +30,7 @@ import { DropdownTriggerDirective } from './directives/dropdown/dropdown-trigger
         ListHeaders,
         LoadingDots,
         Modal,
+        ModalBase,
         Notification,
         Pagination,
         Progress,
@@ -50,6 +52,7 @@ import { DropdownTriggerDirective } from './directives/dropdown/dropdown-trigger
         ListHeaders,
         LoadingDots,
         Modal,
+        ModalBase,
         Notification,
         Pagination,
         Progress,
