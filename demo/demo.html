@@ -196,24 +196,47 @@
     </div>
 </div>
 
-<div class="component">
+<div class="component modal-component">
     <h2>Modal: Component</h2>
-    <div class="explanation">A modal with an html template which you can define in your application.</div>
-    <div class="flex-container left hintScroll-demo">
-        <modal #myModal
-               title="Do my thing?"
-               submitLabel="submitMyModal"
-               [modalClass]="classForE2E"
-               (emitSubmit)="resolveModal($event)">
-            <p>Are you sure you want to do my thing?</p>
+    <div class="explanation">A modal with an html template and action bindings which you can define in your application.  For convenience, we offer a base <strong>Modal</strong> which simply emits an undefined event when it closes, as well as a <strong>BinaryChoiceModal</strong> which emits with the result of the user's action.</div>     
+    
+        <modal #myModal [modalClass]="classForE2E" (emitClose)="baseModalClose()">
+            <span modal-title>Do a thing?</span>
+            <p modal-body>Are you sure you want to do this thing?  This thing cannot be undone.  Oh, the shame...</p>
+            <div modal-footer>
+                <button>Not at all, dude</button>
+                <button (click)="baseModalSubmit(myModal)">Yeah, totally!</button>
+            </div>
         </modal>
+        <binary-choice-modal #myBinaryChoiceModal
+                             titleText="Do something?"
+                             bodyText="Do it or don't do it?"
+                             cancelText="Don't do it"
+                             confirmText="Do it"
+                             (modalResult)="binaryChoiceModalHandler($event)">
+        </binary-choice-modal>
+        
         <div class="elsewhereOnThePage">
             <button (click)="openModal(myModal)">Open modal</button>
         </div>
-        <div *ngIf="modalResult" class="resultBlock">
-            <span class="codeBlock">Modal action was {{ modalResult }}</span>
+        <div *ngIf="baseModalCloseCount" class="resultBlock">
+            <span class="codeBlock">Modal was <strong>closed</strong> {{ modalCountText('baseModalCloseCount') }}</span>
         </div>
-    </div>
+        <div *ngIf="baseModalCloseCount" class="resultBlock">
+            <span class="codeBlock">Modal action was <strong>submitted</strong> {{ modalCountText('baseModalSubmitCount') }}</span>
+        </div>
+        <div class="elsewhereOnThePage">
+            <button (click)="openModal(myBinaryChoiceModal)">Open binary choice modal</button>
+        </div>
+        <div *ngIf="binaryModalCloseCount" class="resultBlock">
+            <span class="codeBlock">Modal was <strong>closed</strong> {{ modalCountText('binaryModalCloseCount') }}</span>
+        </div>
+        <div *ngIf="binaryModalCloseCount" class="resultBlock">
+            <span class="codeBlock">Modal action was <strong>submitted</strong> {{ modalCountText('binaryModalSubmitCount') }}</span>
+        </div>
+        <div *ngIf="binaryModalCloseCount" class="resultBlock">
+            <span class="codeBlock">Modal action was <strong>cancelled</strong> {{ modalCountText('binaryModalCancelCount') }}</span>
+        </div>
 </div>
 
 <div class="component">

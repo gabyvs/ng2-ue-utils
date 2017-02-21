@@ -3,6 +3,7 @@ export * from './components/hint-scroll/hint-scroll';
 export * from './components/list-headers/list-headers';
 export * from './components/loading-dots/loading-dots';
 export * from './components/modal/modal';
+export * from './components/binary-choice-modal/binary-choice-modal';
 export * from './components/notification/notification';
 export * from './components/notification/notification-service';
 export * from './components/pagination/pagination';

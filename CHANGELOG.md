@@ -1,3 +1,11 @@
+<a name="4.0.0"></a>
+## [4.0.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.2.0...4.0.0) (2017-02-21)
+
+### Breaking Changes
+
+* **Modal:** Made modal more flexible by allowing consumers to define contents via transcludes and emitting whenever user takes action to close modal, regardless of the result of that action.
+* **BinaryChoiceModal:** Implementation of Modal which emits a boolean to represent user intent: `true` for submission, `false` for cancellation.
+
 <a name="3.2.0"></a>
 ## [3.2.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.1.2...3.2.0) (2017-02-17)
 

@@ -1,26 +1,32 @@
-import {Component, Input, OnInit, Output, EventEmitter, ElementRef, ViewChild} from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 
 /**
- * This simple modal presents users with some customizable content and a binary decision (submit/cancel).
+ * This simple modal emits an event when the modal closes. It's content is defined by consumers in transcludes, as
+ * demonstrated in the sample below and the demo application.  Notice the `modal-title`, `modal-body`, 
+ * and `modal-footer` attributes.
  * 
- * @input This component takes the modal title, the submit button label, and a class name (for use in integration testing) as inputs.
- * Any html you place between the opening and closeing <modal> tags will be inserted into the modal body.
- * 
- * @output When the user closes the modal by clicking either `submit` or `cancel`, the `emitSubmit` event is emitted with a
- * with an argument, `true` for submit and `false` for cancel.
- * 
+ * If you would like a modal which emits the result of the user's action (submit/cancel), you may be interested in
+ * the Binary Choice Modal included in this library.
+ *
+ * @input modalClass: string *OPTIONAL
+ *   This string is a space-separated list of css classnames to be applied to the modal
+ *
+ * @output emitClose: boolean
+ *   This event emits whenever the modal is closed by any means (any click and `esc` keyup).
+ *   
  * It may be helpful to declare a local var on the component in order to make it available to be opened elsewhere in
  * the page, as demonstrated below.
  *
  * ### Simple Example
  *
  * ```
- *  <modal #myModal
- *      title="Do my thing?"
- *      submitLabel="submitMyModal"
- *      (emitSubmit)="resolveModal($event)">
- *        <!-- All elements between modal tags will be transcluded to the content of the modal -->
- *        <p>Are you sure you want to do my thing?</p>
+ *  <modal #myModal" (emitClose)="modalCloseHandler()">
+ *        <span modal-title>Do a thing?</span>
+ *        <p modal-body>Are you sure you want to do this thing?  This thing cannot be undone.  Oh, the shame...</p>
+ *        <div modal-footer>
+ *            <button>Not at all, dude</button>
+ *            <button (click)="modalSubmitHandler(myModal)">Yeah, totally!</button>
+ *        </div>
  *  </modal>
  *  <div class="elsewhereOnThePage">
  *      <button (click)="openModal(myModal)">Open modal</button>
@@ -38,15 +44,9 @@ declare const require: any;
 })
 export class Modal implements OnInit {
     
-    @Input() public modalClass: string = '';
-
-    @Input() public title: string;
-
-    @Input() public submitLabel: string;
-
-    @Output() public emitSubmit = new EventEmitter();
-
     @ViewChild('modal') private modal: ElementRef;
+    @Input() public modalClass: string = '';
+    @Output() public emitClose: EventEmitter<any> = new EventEmitter<any>();
 
     private combinedModalClass: string;
     private isOpened = false;
@@ -57,18 +57,17 @@ export class Modal implements OnInit {
         this.combinedModalClass = this.modalClass ? 'modal-dialog ' + this.modalClass : 'modal-dialog';
     }
 
-    public open() {
+    public open(): void {
         this.isOpened = true;
         document.body.appendChild(this.backdropElement);
-        setTimeout(() => this.modal.nativeElement.focus(), 0);
+        setTimeout(() => this.modal.nativeElement.focus());
     }
 
-    public close(...args: any[]) {
+    public close() {
         this.isOpened = false;
-        if (this.backdropElement.parentElement) {
-            document.body.removeChild(this.backdropElement);
-            this.emitSubmit.emit(args[0]);
-        }
+        const backdropAttached: boolean = !!this.backdropElement.parentElement;
+        if (backdropAttached) { document.body.removeChild(this.backdropElement); }
+        this.emitClose.emit();
     }
 
     private createBackDrop() {

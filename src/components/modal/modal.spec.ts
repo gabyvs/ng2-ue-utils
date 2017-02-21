@@ -13,8 +13,6 @@ describe('Component: Modal', () => {
     let element;
 
     const initialize = () => {
-        modal.title = 'Delete Developer';
-        modal.submitLabel = 'Delete';
         modal.modalClass = 'myClass';
         fixture.detectChanges();
     };
@@ -44,25 +42,23 @@ describe('Component: Modal', () => {
         expect(modal.backdropElement.parentElement).toBeTruthy();
     });
 
-    it('should close on cancel emitting false', () => {
-        spyOn(modal.emitSubmit, 'emit');
+    it('should close on cancel and make a close emission', () => {
+        const closeSpy = spyOn(modal.emitClose, 'emit');
         modal.open();
         expect(modal.isOpened).toBe(true);
-        modal.close(false);
+        modal.close();
         expect(modal.isOpened).toBe(false);
         expect(modal.backdropElement.parentElement).toBeFalsy();
-        expect(modal.emitSubmit.emit).toHaveBeenCalled();
-        expect(modal.emitSubmit.emit.calls.argsFor(0)[0]).toBe(false);
+        expect(closeSpy).toHaveBeenCalled();
     });
 
-    it('should close on confirm emitting true', () => {
-        spyOn(modal.emitSubmit, 'emit');
+    it('should close on confirm and make a close emission', () => {
+        const closeSpy = spyOn(modal.emitClose, 'emit');
         modal.open();
         expect(modal.isOpened).toBe(true);
-        modal.close(true);
+        modal.close();
         expect(modal.isOpened).toBe(false);
         expect(modal.backdropElement.parentElement).toBeFalsy();
-        expect(modal.emitSubmit.emit).toHaveBeenCalled();
-        expect(modal.emitSubmit.emit.calls.argsFor(0)[0]).toBe(true);
+        expect(closeSpy).toHaveBeenCalled();
     });
 });
