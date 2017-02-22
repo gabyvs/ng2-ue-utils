@@ -4,9 +4,6 @@
 ### Features
 
 * **BaseModal:** A more flexible modal which allows consumers to define contents via transcludes and emits when the modal closes.
-
-### Changes
-
 * **Modal:** Refactored Modal to use the new BaseModal.  Added optional input `cancelLabel` for defining the text content of the cancel button.
 
 <a name="3.2.0"></a>
