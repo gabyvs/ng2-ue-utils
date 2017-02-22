@@ -119,7 +119,7 @@ And you are ready to go! :)
 * Hint scroll
 * Loading dots
 * Modal
-* BinaryChoiceModal
+* ModalBase
 * Notification
 * Pagination
 * Progress bar

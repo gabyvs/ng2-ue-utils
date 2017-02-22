@@ -1,77 +1,77 @@
-import { Component, OnInit, ElementRef, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { ModalBase } from '../modal-base/modal-base';
 
 /**
- * This simple modal emits an event when the modal closes. It's content is defined by consumers in transcludes, as
- * demonstrated in the sample below and the demo application.  Notice the `modal-title`, `modal-body`, 
- * and `modal-footer` attributes.
+ * This is a modal implementation built around the ModalBase component included in this library.  You can pass in its
+ * content and receive a boolean event, `modalResult`, to know whether the user submitted or cancelled the modal action.
  * 
- * If you would like a modal which emits the result of the user's action (submit/cancel), you may be interested in
- * the Binary Choice Modal included in this library.
+ * **IMPORTANT** The body of the modal is included via html transclude.
  *
+ * @input title: string
+ *   This is the modal title text
+ *
+ * @input cancelLabel: string *OPTIONAL
+ *   This is the modal 'cancel' button's text
+ *   Defaults to 'Cancel'
+ *   
+ * @input submitLabel: string *OPTIONAL
+ *   This is the modal 'cancel' button's text
+ *   Defaults to 'Submit'
+ *   
  * @input modalClass: string *OPTIONAL
  *   This string is a space-separated list of css classnames to be applied to the modal
+ *   Defaults to empty string
  *
- * @output emitClose: boolean
- *   This event emits whenever the modal is closed by any means (any click and `esc` keyup).
- *   
- * It may be helpful to declare a local var on the component in order to make it available to be opened elsewhere in
- * the page, as demonstrated below.
+ * @output modalResult: boolean
+ *   This boolean event indicates whether the user submitted by clicking on the 'submit' button, or cancelled by closing
+ *   the modal by any other means (any click which was not on the 'submit' button, 'esc' keyup).
  *
  * ### Simple Example
  *
  * ```
- *  <modal #myModal" (emitClose)="modalCloseHandler()">
- *        <span modal-title>Do a thing?</span>
- *        <p modal-body>Are you sure you want to do this thing?  This thing cannot be undone.  Oh, the shame...</p>
- *        <div modal-footer>
- *            <button>Not at all, dude</button>
- *            <button (click)="modalSubmitHandler(myModal)">Yeah, totally!</button>
- *        </div>
+ *  <modal
+ *      titleText="Do something?"
+ *      bodyText="Do it or don't do it?"
+ *      cancelText="Don't do it"
+ *      confirmText="Do it"
+ *      (emitSubmit)="emitHandler($event)">
+ *      
+ *      ** Anything in here is transcluded into the modal body **
+ *      <p>This is the modal body</p>
  *  </modal>
- *  <div class="elsewhereOnThePage">
- *      <button (click)="openModal(myModal)">Open modal</button>
- *  </div>
  * ```
  *
  */
 
 declare const require: any;
+const styles = require('!!css-loader!less-loader!./modal.less').toString();
 
 @Component({
     selector: 'modal',
-    styles: [require('!!css-loader!less-loader!./modal.less').toString()],
+    styles: [ styles.toString() ],
     template: require('./modal.html')
 })
-export class Modal implements OnInit {
+export class Modal {
     
-    @ViewChild('modal') private modal: ElementRef;
+    private submitted: boolean = false;
+    @ViewChild(ModalBase) private modal: ModalBase;
+    
+    @Output() public emitSubmit: EventEmitter<boolean> = new EventEmitter<boolean>();
+    @Input() public title: string = '';
+    @Input() public cancelLabel: string = 'Cancel';
+    @Input() public submitLabel: string = 'Submit';
     @Input() public modalClass: string = '';
-    @Output() public emitClose: EventEmitter<any> = new EventEmitter<any>();
 
-    private combinedModalClass: string;
-    private isOpened = false;
-    private backdropElement: HTMLElement;
-
-    public ngOnInit() {
-        this.createBackDrop();
-        this.combinedModalClass = this.modalClass ? 'modal-dialog ' + this.modalClass : 'modal-dialog';
+    public modalSubmit(): void {
+        this.submitted = true;
     }
-
+    
+    public emit(): void {
+        this.emitSubmit.emit(this.submitted);
+        this.submitted = false;
+    }
+    
     public open(): void {
-        this.isOpened = true;
-        document.body.appendChild(this.backdropElement);
-        setTimeout(() => this.modal.nativeElement.focus());
-    }
-
-    public close() {
-        this.isOpened = false;
-        const backdropAttached: boolean = !!this.backdropElement.parentElement;
-        if (backdropAttached) { document.body.removeChild(this.backdropElement); }
-        this.emitClose.emit();
-    }
-
-    private createBackDrop() {
-        this.backdropElement = document.createElement('div');
-        this.backdropElement.classList.add('fade', 'in', 'modal-backdrop');
+        this.modal.open();
     }
 }
