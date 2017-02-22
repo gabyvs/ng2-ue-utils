@@ -1,12 +1,12 @@
 import { Component, OnInit, ElementRef, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 
 /**
- * This simple modal emits an event when the modal closes. It's content is defined by consumers in transcludes, as
- * demonstrated in the sample below and the demo application.  Notice the `modal-title`, `modal-body`, 
+ * This simple modal emits an event when the modal closes. Its content is defined by consumers in transcludes, as
+ * demonstrated in the sample below and the demo application.  Notice the `modal-header`, `modal-body`, 
  * and `modal-footer` attributes.
  * 
  * If you would like a modal which emits the result of the user's action (submit/cancel), you may be interested in
- * the Binary Choice Modal included in this library.
+ * the Modal included in this library.
  *
  * @input modalClass: string *OPTIONAL
  *   This string is a space-separated list of css classnames to be applied to the modal
@@ -20,15 +20,15 @@ import { Component, OnInit, ElementRef, ViewChild, Input, Output, EventEmitter }
  * ### Simple Example
  *
  * ```
- *  <modal-base #myModal" (emitClose)="closeHandler()">
+ *  <modal-base #myModal (emitClose)="closeHandler()">
  *      
- *        ** NOTICE the `modal-title`, `modal-body`, and `modal-footer` attributes. **  
+ *        ** NOTICE the `modal-header`, `modal-body`, and `modal-footer` attributes. **  
  *        ** These are necessary in order for your content to be transcluded into the modal. **
  *        
- *        <span modal-title>Do a thing?</span>
+ *        <span modal-header>Do a thing?</span>
  *        <p modal-body>Are you sure you want to do this thing?  This thing cannot be undone.  Oh, the shame...</p>
  *        <div modal-footer>
- *            <button>Not at all, dude</button>
+ *            <button>No way, dude</button>
  *            <button (click)="submitHandler(myModal)">Yeah, totally!</button>
  *        </div>
  *  </modal-base>
@@ -38,6 +38,7 @@ import { Component, OnInit, ElementRef, ViewChild, Input, Output, EventEmitter }
  *  </div>
  * ```
  *
+ * See the `Modal` implementation in this library for a slightly more advanced example
  */
 
 declare const require: any;

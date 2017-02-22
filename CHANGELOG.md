@@ -1,3 +1,10 @@
+<a name="3.3.1"></a>
+## [3.3.1](https://github.com/gabyvs/ng2-ue-utils/compare/3.3.0...3.3.1) (2017-02-22)
+
+### Changes
+
+* **BaseModal:** Removed hard-coded DOM from base modal header to make it more flexible.  Implemented instead in the **Modal** component.
+
 <a name="3.3.0"></a>
 ## [3.3.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.2.0...3.3.0) (2017-02-21)
 

@@ -44,12 +44,6 @@ describe('Component: Binary Choice Modal', () => {
         expect(baseModalEl.getElementsByClassName('myOtherClass').length).toBe(1);
         baseModal.isOpened = true;
         fixture.detectChanges();
-        baseModalEl = baseModal.modal.nativeElement;
-        const title = baseModalEl.getElementsByClassName('modal-title')[0].children[0];
-        const footerButtons = baseModalEl.getElementsByClassName('modal-footer')[0].children[0];
-        expect(title.innerHTML).toBe('Delete Developer');
-        expect(footerButtons.children[0].innerHTML).toBe('Not right now');
-        expect(footerButtons.children[1].innerHTML).toBe('Do it!');
     });
 
     it('should open element', () => {

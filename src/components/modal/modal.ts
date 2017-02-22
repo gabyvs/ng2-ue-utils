@@ -30,10 +30,9 @@ import { ModalBase } from '../modal-base/modal-base';
  *
  * ```
  *  <modal
- *      titleText="Do something?"
- *      bodyText="Do it or don't do it?"
- *      cancelText="Don't do it"
- *      confirmText="Do it"
+ *      title="Do something?"
+ *      cancelLabel="Don't do it"
+ *      submitLabel="Do it"
  *      (emitSubmit)="emitHandler($event)">
  *      
  *      ** Anything in here is transcluded into the modal body **
