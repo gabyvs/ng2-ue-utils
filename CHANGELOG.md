@@ -4,7 +4,7 @@
 ### Features
 
 * **ClientObserver:** New reset method.
-* **ModalBase:** More flexible modal. Some classes included to replicate styles of ue SPAs.
+* **ModalBase:** More flexible modal.
 
 <a name="3.3.1"></a>
 ## [3.3.1](https://github.com/gabyvs/ng2-ue-utils/compare/3.3.0...3.3.1) (2017-02-22)
