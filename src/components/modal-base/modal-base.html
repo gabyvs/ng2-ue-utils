@@ -3,19 +3,10 @@
      #modal
      (keyup.esc)="close()"
      (click)="close()"
-     [ngClass]="{ in: isOpened, fade: isOpened }"
      [ngStyle]="{ display: isOpened ? 'block' : 'none' }">
     <div [class]="combinedModalClass">
-        <div class="modal-content" *ngIf="isOpened" tabindex="0">
-            <div class="modal-header">
-                <ng-content select="[modal-header]"></ng-content>
-            </div>
-            <div class="modal-body">
-                <ng-content select="[modal-body]"></ng-content>
-            </div>
-            <div class="modal-footer">
-                <ng-content select="[modal-footer]"></ng-content>
-            </div>
+        <div class="modal-content" *ngIf="isOpened" tabindex="0" (click)="prevent($event)">
+            <ng-content></ng-content>
         </div>
     </div>
 </div>

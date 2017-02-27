@@ -64,17 +64,17 @@ describe('Component: Binary Choice Modal', () => {
         expect(modal.submitted).toBe(false);
     });
 
-    it('should emit and close properly when user submits', () => {
-        const closeSpy = spyOn(modal.emitSubmit, 'emit');
+    it('should emit and close properly when user submits', done => {
+        modal.emitSubmit.subscribe(
+            (emit) => {
+                expect(emit).toBe(true);
+                expect(baseModal.isOpened).toBe(false);
+                expect(baseModal.backdropElement.parentElement).toBeFalsy();
+                done();
+            }
+        );
         modal.open();
         expect(baseModal.isOpened).toBe(true);
         modal.modalSubmit();
-        expect(modal.submitted).toBe(true);
-        baseModal.close();
-        expect(baseModal.isOpened).toBe(false);
-        expect(baseModal.backdropElement.parentElement).toBeFalsy();
-        expect(closeSpy).toHaveBeenCalled();
-        expect(closeSpy).toHaveBeenCalledWith(true);
-        expect(modal.submitted).toBe(false);
     });
 });

@@ -1,15 +1,17 @@
-import { Component, OnInit }    from '@angular/core';
-import { Observable } from 'rxjs';
+import {
+    Component,
+    OnInit }            from '@angular/core';
+import { Observable }   from 'rxjs';
 
 import {
     ContextService,
-     Filtering,
-     NotificationService,
-     Pagination,
-     ProgressService,
-     ValueHandler
-}                       from '../src';
-import {IClientEvent} from '../src/services/client/clientObserver';
+    Filtering,
+    ModalBase,
+    NotificationService,
+    Pagination,
+    ProgressService,
+    ValueHandler }      from '../src';
+import { IClientEvent } from '../src/services/client/clientObserver';
 
 declare const require: any;
 const template: string = require('./demo.html');
@@ -187,14 +189,11 @@ export class Demo implements OnInit {
     }
 
     // Modal
-    public openModal(modal: any): void {
-        modal.open();
+    public baseModalSubmit(modal: ModalBase): void {
+        this.baseModalSubmitCount++;
+        modal.close();
     }
 
-    public baseModalSubmit(): void {
-        this.baseModalSubmitCount++;
-    }
-    
     public baseModalClose(): void {
         this.baseModalCloseCount++;
     }

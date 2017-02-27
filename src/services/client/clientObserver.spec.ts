@@ -93,4 +93,19 @@ describe('Client Observer', () => {
         spy.emitChange('start', 'get', url);
     });
 
+    it('Reset resets internal count ', (done) => {
+        const spy = new ClientObserver();
+        const s = spy.clientEvents
+            .filter(e => e.event !== 'start')
+            .subscribe(event => {
+                expect(event.method).toBe('get');
+                expect(event.event).toBe('complete');
+                expect(event.stackCount).toBe(0);
+                s.unsubscribe();
+                done();
+        });
+        spy.emitChange('start', 'get');
+        spy.emitChange('start', 'get');
+        spy.reset();
+    });
 });

@@ -63,6 +63,7 @@ export class Modal {
 
     public modalSubmit(): void {
         this.submitted = true;
+        this.close();
     }
     
     public emit(): void {
@@ -72,5 +73,9 @@ export class Modal {
     
     public open(): void {
         this.modal.open();
+    }
+
+    public close(): void {
+        this.modal.close();
     }
 }

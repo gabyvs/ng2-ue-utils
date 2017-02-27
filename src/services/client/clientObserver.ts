@@ -112,4 +112,13 @@ export class ClientObserver {
             }
         );
     };
+
+    public reset = () => {
+        this._stackCount = 0;
+        this._emitter.next({
+            event: 'complete',
+            method: 'get',
+            stackCount: this._stackCount
+        });
+    }
 }
