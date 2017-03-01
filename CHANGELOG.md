@@ -1,3 +1,10 @@
+<a name="3.5.0"></a>
+## [3.5.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.4.0...3.5.0) (2017-02-28)
+
+### Features
+
+* **ContextHelper:** Context helper service is now public. You can use this to get context information of the logged in user. 
+
 <a name="3.4.0"></a>
 ## [3.4.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.3.1...3.4.0) (2017-02-27)
 

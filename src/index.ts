@@ -31,6 +31,7 @@ export * from './services/client/observable-client';
 export * from './services/client/observable-client-base';
 export * from './services/client/observable-client.mock';
 export * from './services/context/context';
+export * from './services/context/context-helper';
 export * from './services/router/api-routes';
 export * from './services/storage/repository';
 export * from './services/storage/base-storage';

@@ -47,6 +47,8 @@ class EmptyContext implements IContext {
 
 /**
  * This service is used to get the organization and user context in which an SPA is being used.
+ * Note: If your SPA is not organization based, you might want to use ContextHelper instead.
+ *
  * Ideally, it should be included as part of your providers in your app.component file so all the application has access to it.
  * Its dependencies must be provided in app.component as well.
  * So, your app.component.ts should look something like this
