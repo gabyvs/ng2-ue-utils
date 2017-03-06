@@ -36,7 +36,7 @@ const extractSimplifiedError = (error: any, path: string): ISimplifiedError => {
         const err = error.json();
         return {
             code: err.code,
-            message: err.message,
+            message: err.message || err.reason,
             originalError: error,
             path: path,
         };
