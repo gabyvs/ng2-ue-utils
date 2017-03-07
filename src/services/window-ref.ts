@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { IGAEventProps, IGAPageView, IGAEvent, IGTMContext } from './context/gtm';
 
 interface IWindow {
     location: any;
@@ -8,17 +9,6 @@ interface IWindow {
 
 interface IDocument {
     cookie: string;
-}
-
-export interface IGTMContext {
-    'user.uuid'?: string;
-    'user.email'?: string;
-    'user.internal'?: string;
-    'organization.name'?: string;
-    'organization.type'?: string;
-    'webapp.name': string;
-    'webapp.version'?: string;
-    'event'?: string;
 }
 
 declare const window: IWindow;
@@ -56,18 +46,40 @@ export class WindowRef {
             window.dataLayer.push(context);
         }
     }
+
+    public registerPageTrack (path: string) {
+        if (window && window.dataLayer) {
+            window.dataLayer.push({
+                'event': 'content-view',
+                'content-name': path
+            });
+        }
+    }
+
+    public registerEventTrack (action: string, properties: IGAEventProps = {}) {
+        if (window && window.dataLayer) {
+            window.dataLayer.push({
+                'event': properties.event || 'interaction',
+                'target': properties.category,
+                'action': action,
+                'target-properties': properties.label,
+                'value': properties.value,
+                'interaction-type': properties.noninteraction
+            });
+        }
+    }
 }
 
 @Injectable()
 export class WindowMock implements WindowRef {
     public locationPath: string;
     public cookieString: string;
-    public gtmContexts: IGTMContext[];
+    public dataLayer: Array<IGTMContext | IGAEvent | IGAPageView>;
     public local: any;
 
     constructor () {
         this.local = {};
-        this.gtmContexts = [];
+        this.dataLayer = [];
     }
 
     public location (path: string): void {
@@ -83,10 +95,28 @@ export class WindowMock implements WindowRef {
     }
 
     public gtmContext (context: IGTMContext) {
-        this.gtmContexts.push(context);
+        this.dataLayer.push(context);
     }
 
     public cookies (): string {
         return this.cookieString;
+    }
+
+    public registerPageTrack (path: string) {
+        this.dataLayer.push({
+            'event': 'content-view',
+            'content-name': path
+        });
+    }
+
+    public registerEventTrack (action: string, properties: IGAEventProps = {}) {
+        this.dataLayer.push({
+            'event': properties.event || 'interaction',
+            'target': properties.category,
+            'action': action,
+            'target-properties': properties.label,
+            'value': properties.value,
+            'interaction-type': properties.noninteraction
+        });
     }
 }

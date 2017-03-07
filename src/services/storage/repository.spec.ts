@@ -1,19 +1,27 @@
-import { Location }                                 from '@angular/common';
-import { SpyLocation }                              from '@angular/common/testing';
-import { TestBed }                                  from '@angular/core/testing';
-import * as _                                       from 'lodash';
-import { RolePermissions }                          from 'rbac-abacus';
-import { Observable }                               from 'rxjs/Rx';
+import { Location }         from '@angular/common';
+import { SpyLocation }      from '@angular/common/testing';
+import { TestBed }          from '@angular/core/testing';
+import * as _               from 'lodash';
+import { RolePermissions }  from 'rbac-abacus';
+import { Observable }       from 'rxjs/Rx';
 
-import { IRangeSnapshot, Repository }               from './repository';
-import { Storage }                                  from './storage';
-import { ValueStorage }                             from './value-storage';
-import { Client }                                   from '../client/client';
-import { ClientMock }                               from '../client/client.mock';
-import { ObservableClient }                         from '../client/observable-client';
-import { ContextService, APP_CONFIG, IAppConfig }   from '../context/context';
-import { ApiRoutes }                                from '../router/api-routes';
-import { WindowRef, WindowMock }                    from '../window-ref';
+import {
+    IRangeSnapshot,
+    Repository }            from './repository';
+import { Storage }          from './storage';
+import { ValueStorage }     from './value-storage';
+import { Client }           from '../client/client';
+import { ClientMock }       from '../client/client.mock';
+import { ObservableClient } from '../client/observable-client';
+import {
+    APP_CONFIG,
+    IAppConfig }            from '../context/app-config';
+import { ContextService }   from '../context/context';
+import { ApiRoutes }        from '../router/api-routes';
+import {
+    WindowRef,
+    WindowMock }            from '../window-ref';
+import {GTMService} from '../context/gtm';
 
 declare const beforeEach, describe, expect, it;
 
@@ -124,6 +132,7 @@ describe('EntityRepository', () => {
         TestBed.configureTestingModule({
             providers:      [
                 ContextService,
+                GTMService,
                 { provide: Location, useClass: SpyLocation} ,
                 { provide: WindowRef, useClass: WindowMock },
                 { provide: Client, useClass: ClientMock },

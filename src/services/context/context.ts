@@ -1,9 +1,15 @@
-import { Inject, Injectable, OpaqueToken } from '@angular/core';
-import { Location } from '@angular/common';
+import {
+    Inject,
+    Injectable }            from '@angular/core';
+import { Location }         from '@angular/common';
 import 'rxjs/Rx';
 
-import { ContextHelper } from './context-helper';
-import { WindowRef } from '../window-ref';
+import {
+    APP_CONFIG,
+    IAppConfig }            from './app-config';
+import { ContextHelper }    from './context-helper';
+import { GTMService }       from './gtm';
+import { WindowRef }        from '../window-ref';
 
 /**
  * This interface is the one that your app should be implementing to configure main paths to your API and basepath for your app URL
@@ -24,14 +30,6 @@ import { WindowRef } from '../window-ref';
  * };
  *
  */
-export interface IAppConfig {
-    appBasePath: string;
-    apiBasePath: string;
-    gtmAppName: string;
-}
-
-export const APP_CONFIG = new OpaqueToken('AppConfig');
-
 export interface IContext {
     orgName: string;
 }
@@ -67,10 +65,12 @@ class EmptyContext implements IContext {
  *   gtmAppName: 'nameforgoogletagmanager'
  * };
  *
- * @Component({
- *   directives: [
+ *  @NgModule({
+ *   bootstrap:    [ MyMainComponent ],
+ *   declarations: [
  *       MyMainComponent
  *   ],
+ *   imports: [ Ng2UEUtilsModule ],
  *   providers: [
  *       HTTP_PROVIDERS,
  *       Location,
@@ -78,11 +78,9 @@ class EmptyContext implements IContext {
  *       ContextService,
  *       WindowRef,
  *       { provide: APP_CONFIG, useValue: appConfig }
- *   ],
- *   selector: 'app',
- *   template: '<myMainComponent-or-routerOutlet></myMainComponent-or-routerOutlet>'
+ *   ]
  * })
- * export class AppComponent {}
+ * export class AppModule {}
  * ```
  *
  * The most common usage for it is to get the organization name inside a component.
@@ -102,8 +100,9 @@ export class ContextService {
     constructor(
         private location: Location,
         private window: WindowRef,
+        private gtmService: GTMService,
         @Inject(APP_CONFIG) private appConfig: IAppConfig) {
-        this.helper = new ContextHelper(window, this.appConfig.gtmAppName);
+            this.helper = new ContextHelper(window);
     }
 
     public getContext (): IContext {
@@ -117,7 +116,7 @@ export class ContextService {
         if (orgFromUrl) {
             // Ensure Local Storage is in sync with current selection
             this.helper.orgNameToLocal(orgFromUrl);
-            this.helper.updateGtmContext(orgFromUrl, userId, userName);
+            this.gtmService.updateGtmContext(orgFromUrl, userId, userName);
             return new Context(orgFromUrl);
         }
 
@@ -126,7 +125,7 @@ export class ContextService {
         if (orgFromLocalStorage) {
             // Redirect to the org:
             const newPath = `/organizations/${orgFromLocalStorage}/${this.appConfig.appBasePath}`;
-            this.helper.updateGtmContext(orgFromLocalStorage, userId, userName);
+            this.gtmService.updateGtmContext(orgFromLocalStorage, userId, userName);
             this.location.go(newPath);
             return new Context(orgFromLocalStorage);
         }

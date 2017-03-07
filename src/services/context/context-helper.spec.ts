@@ -7,7 +7,6 @@ declare const beforeEach, describe, expect, it;
 
 describe('Context Helper', () => {
 
-    const appName = 'someappfortest';
     let helper: ContextHelper;
     let window: WindowMock;
 
@@ -17,37 +16,15 @@ describe('Context Helper', () => {
         });
 
         window = TestBed.get(WindowRef);
-        helper = new ContextHelper(window, appName);
+        helper = new ContextHelper(window);
     });
 
-    it('Extract org name from path', () => {
+    it('Extracts org name from path', () => {
         expect(helper.orgNameFromPath('/organizations/abc/some/thing')).toBe('abc');
     });
 
-    it('Extract org name from local', () => {
+    it('Extracts org name from local', () => {
         window.setLocal('organization', 'abc');
         expect(helper.orgNameFromLocal()).toBe('abc');
-    });
-
-    it('Set context for Google Tag Manager', () => {
-        const org = 'apigeeui';
-        const id = 'theid';
-        const internalEmail = 'theemail@apigee.com';
-        const externalEmail = 'theemail@test.com';
-        helper.updateGtmContext(org, id, internalEmail);
-        expect(window.gtmContexts).toBeDefined();
-        expect(window.gtmContexts.length).toBe(1);
-        expect(window.gtmContexts[0]['organization.name']).toBe(org);
-        expect(window.gtmContexts[0]['webapp.name']).toBe(appName);
-        expect(window.gtmContexts[0]['user.internal']).toBe('internal');
-        expect(window.gtmContexts[0]['user.email']).toBe(internalEmail);
-        expect(window.gtmContexts[0]['user.uuid']).toBe(id);
-        helper.updateGtmContext(org, id, externalEmail);
-        expect(window.gtmContexts.length).toBe(2);
-        expect(window.gtmContexts[1]['organization.name']).toBe(org);
-        expect(window.gtmContexts[1]['webapp.name']).toBe(appName);
-        expect(window.gtmContexts[1]['user.internal']).toBeUndefined();
-        expect(window.gtmContexts[1]['user.email']).toBe(externalEmail);
-        expect(window.gtmContexts[1]['user.uuid']).toBe(id);
     });
 });

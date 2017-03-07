@@ -8,12 +8,13 @@ import { Demo }                 from './demo';
 import {
     APP_CONFIG,
     ContextService,
+    GTMService,
     IAppConfig,
     Ng2UEUtilsModule,
     NotificationService,
     ProgressService,
-    WindowRef,
-    TooltipService
+    TooltipService,
+    WindowRef
 }  from '../src';
 
 const appConfig: IAppConfig = {
@@ -38,6 +39,7 @@ const appConfig: IAppConfig = {
     ],
     providers: [
         ContextService,
+        GTMService,
         Location,
         NotificationService,
         ProgressService,

@@ -144,6 +144,7 @@ And you are ready to go! :)
 * Client
 * ClientObserver
 * Context
+* GTMService
 * ObservableClient
 * ObservableClientBase
 * Repository

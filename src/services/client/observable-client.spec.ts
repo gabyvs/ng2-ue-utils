@@ -1,15 +1,21 @@
-import { Location }                                 from '@angular/common';
-import { SpyLocation }                              from '@angular/common/testing';
-import { TestBed }                                  from '@angular/core/testing';
-import * as _                                       from 'lodash';
-import { Observable }                               from 'rxjs/Rx';
+import { Location }         from '@angular/common';
+import { SpyLocation }      from '@angular/common/testing';
+import { TestBed }          from '@angular/core/testing';
+import * as _               from 'lodash';
+import { Observable }       from 'rxjs/Rx';
 
-import { Client }                                   from './client';
-import { ClientMock }                               from './client.mock';
-import { ObservableClient }                         from './observable-client';
-import { APP_CONFIG, ContextService, IAppConfig }   from '../context/context';
-import { ApiRoutes }                                from '../router/api-routes';
-import { WindowMock, WindowRef }                    from '../window-ref';
+import { Client }           from './client';
+import { ClientMock }       from './client.mock';
+import { ObservableClient } from './observable-client';
+import {
+    APP_CONFIG,
+    IAppConfig }            from '../context/app-config';
+import { ContextService }   from '../context/context';
+import { GTMService }       from '../context/gtm';
+import { ApiRoutes }        from '../router/api-routes';
+import {
+    WindowMock,
+    WindowRef }             from '../window-ref';
 
 declare const beforeEach, describe, expect, it;
 
@@ -58,11 +64,12 @@ describe('Observable Client', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers:      [
-                ContextService,
                 { provide: Location, useClass: SpyLocation} ,
                 { provide: WindowRef, useClass: WindowMock },
                 { provide: Client, useClass: ClientMock },
-                { provide: APP_CONFIG, useValue: appConfig }
+                { provide: APP_CONFIG, useValue: appConfig },
+                ContextService,
+                GTMService
             ]
         });
 

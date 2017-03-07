@@ -1,3 +1,10 @@
+<a name="3.6.0"></a>
+## [3.6.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.5.0...3.6.0) (2017-03-07)
+
+### Features
+
+* **GTM:** Adding a service and interfaces to track virtual page views and events to Google Analytics. 
+
 <a name="3.5.0"></a>
 ## [3.5.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.4.0...3.5.0) (2017-02-28)
 

@@ -1,11 +1,17 @@
-import { Location }                                 from '@angular/common';
-import { SpyLocation }                              from '@angular/common/testing';
-import { TestBed }                                  from '@angular/core/testing';
+import { Location }        from '@angular/common';
+import { SpyLocation }     from '@angular/common/testing';
+import { TestBed }         from '@angular/core/testing';
 
-import { ContextService, APP_CONFIG, IAppConfig }   from './context';
-import { Client }                                   from '../client/client';
-import { ClientMock }                               from '../client/client.mock';
-import { WindowMock, WindowRef }                    from '../window-ref';
+import {
+    APP_CONFIG,
+    IAppConfig }            from './app-config';
+import { ContextService }   from './context';
+import { GTMService }       from './gtm';
+import { Client }           from '../client/client';
+import { ClientMock }       from '../client/client.mock';
+import {
+    WindowMock,
+    WindowRef }             from '../window-ref';
 
 declare const beforeEach, describe, expect, it, spyOn;
 
@@ -28,6 +34,7 @@ describe('Context Service', () => {
         TestBed.configureTestingModule({
             providers:      [
                 ContextService,
+                GTMService,
                 { provide: Location, useClass: SpyLocation} ,
                 { provide: WindowRef, useClass: WindowMock },
                 { provide: Client, useClass: ClientMock },

@@ -41,6 +41,7 @@
     "src/services/client/observable-client-base.spec.ts",
     "src/services/context/context.spec.ts",
     "src/services/context/context-helper.spec.ts",
+    "src/services/context/gtm.spec.ts",
     "src/services/context/jwt.spec.ts",
     "src/services/router/api-routes.spec.ts",
     "src/services/storage/repository.spec.ts",

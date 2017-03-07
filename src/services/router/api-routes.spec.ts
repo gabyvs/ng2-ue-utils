@@ -1,12 +1,19 @@
-import { Location }                                 from '@angular/common';
-import { SpyLocation }                              from '@angular/common/testing';
-import { TestBed }                                  from '@angular/core/testing';
+import { Location }         from '@angular/common';
+import { SpyLocation }      from '@angular/common/testing';
+import { TestBed }          from '@angular/core/testing';
 
-import { ApiRoutes }                                from './api-routes';
-import { Client }                                   from '../client/client';
-import { ClientMock }                               from '../client/client.mock';
-import { ContextService, APP_CONFIG, IAppConfig }   from '../context/context';
-import { WindowMock, WindowRef }                    from '../window-ref';
+import { ApiRoutes }        from './api-routes';
+import { Client }           from '../client/client';
+import { ClientMock }       from '../client/client.mock';
+import {
+    APP_CONFIG,
+    IAppConfig }            from '../context/app-config';
+import { ContextService }   from '../context/context';
+import { GTMService }       from '../context/gtm';
+
+import {
+    WindowMock,
+    WindowRef }             from '../window-ref';
 
 declare const beforeEach, describe, expect, it;
 
@@ -27,6 +34,7 @@ describe('Generated URLs', () => {
         TestBed.configureTestingModule({
             providers:      [
                 ContextService,
+                GTMService,
                 { provide: Location, useClass: SpyLocation} ,
                 { provide: WindowRef, useClass: WindowMock },
                 { provide: Client, useClass: ClientMock },

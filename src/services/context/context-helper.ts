@@ -9,60 +9,25 @@ export class Cookie {
  * This service is used to get the user context in which an SPA is being used.
  * Note: If your SPA is organization based, you might want to use Context service instead.
  *
- * Ideally, it should be included as part of your providers in your app.component file so all the application has access to it.
- * Its dependencies must be provided in app.component as well.
- * So, your app.component.ts should look something like this
+ * You can use it in any of your components, and its dependencies must be provided in app.module as well.
+ * So, your app.module.ts should look something like this
  *
  * ```
- * import { Location } from '@angular/common';
- * import { Component } from '@angular/core';
- * import { HTTP_PROVIDERS } from '@angular/http';
- * import { APP_CONFIG, ContextService, Client, IAppConfig, WindowRef } from 'ng2-ue-utils';
- *
- * import { MyMainComponent } from './route/to/myMainComponent';
- *
- * const appConfig: IAppConfig = {
- *   apiBasePath: 'myapibasepath',
- *   appBasePath: 'myappbasepath',
- *   gtmAppName: 'nameforgoogletagmanager'
- * };
- *
- * @Component({
- *   directives: [
+ * @NgModule({
+ *   bootstrap:    [ MyMainComponent ],
+ *   declarations: [
  *       MyMainComponent
  *   ],
+ *   imports: [ Ng2UEUtilsModule ],
  *   providers: [
- *       ContextHelper,
- *       WindowRef,
- *       { provide: APP_CONFIG, useValue: appConfig }
- *   ],
- *   selector: 'app',
- *   template: '<myMainComponent-or-routerOutlet></myMainComponent-or-routerOutlet>'
+ *       WindowRef
+ *   ]
  * })
- * export class AppComponent {}
+ * export class AppModule {}
  * ```
- *
- * The most common usage for this service is to set the context of the user for GTM.
- * To do that create it in the component or service constructor and use it as follows
- *
- * ```
- *  constructor (
- *      @Inject(APP_CONFIG) appConfig: IAppConfig,
- *      window: WindowRef) {
- *          this.helper = new ContextHelper(window, appConfig.gtmAppName);
- *      }
- *
- *  // to be called in a good place on your flow
- *  private setContext () {
- *      const userName = this.helper.getUser();
- *      const userId = this.helper.getUuid();
- *      this.helper.updateGtmContext('', userId, userName);
- *  }
- * ```
- *
  */
 export class ContextHelper {
-    constructor(private window: WindowRef, private gtmAppName: string) {}
+    constructor(private window: WindowRef) {}
 
     public orgNameFromPath (path: string): string {
         const parts: RegExpExecArray = /^\/(?:o|organizations)\/([^\/]+)\//.exec(path);
@@ -82,24 +47,6 @@ export class ContextHelper {
 
     public orgNameToLocal (name: string): void {
         this.window.setLocal('organization', name);
-    }
-
-    public updateGtmContext (orgName?: string, uuid?: string, email?: string) {
-        const context = {
-            'organization.name': orgName,
-            'webapp.name': this.gtmAppName,
-            'event': 'Push Context'
-        };
-        if (/^[^@]+@apigee.com/.test(email || '')) {
-            context['user.internal'] = 'internal';
-        }
-        if (uuid) {
-            context['user.uuid'] = uuid;
-        }
-        if (email) {
-            context['user.email'] = email;
-        }
-        this.window.gtmContext(context);
     }
 
     public cookies (): Cookie[] {
