@@ -36,7 +36,7 @@ export class Filtering implements OnInit {
 
     @Input() public filterFields: Filtering.IFilterField[];
 
-    @Output() public emitFilter = new EventEmitter();
+    @Output() public emitFilter = new EventEmitter<Filtering.IFilterEmission>();
 
     public allField = { field: '', label: 'All' };
 
@@ -69,5 +69,10 @@ export namespace Filtering {
     export interface IFilterField {
         field: string;
         label: string;
+    }
+
+    export interface IFilterEmission {
+        filterBy: string;
+        filterText: string;
     }
 }

@@ -57,7 +57,7 @@ export class Pagination {
     public pageSize: number = 25;
 
     @Output()
-    public emitPaginate = new EventEmitter();
+    public emitPaginate = new EventEmitter<Pagination.IPaginationEmission>();
 
     public forward () {
         if (this.settings.to === this.settings.filteredCount) { return; }
@@ -77,6 +77,11 @@ export namespace Pagination {
     export interface IRangeSnapshot {
         count: number;
         filteredCount: number;
+        from: number;
+        to: number;
+    }
+
+    export interface IPaginationEmission {
         from: number;
         to: number;
     }

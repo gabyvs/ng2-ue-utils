@@ -1,6 +1,6 @@
 {
   "name": "ng2-ue-utils",
-  "version": "3.6.0",
+  "version": "3.6.1",
   "description": "Set of angular2 components, directives, pipes and services that will be shared among unified experience SPAs",
   "main": "./build/index.js",
   "typings": "./build/index.d.ts",

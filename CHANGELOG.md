@@ -1,3 +1,12 @@
+<a name="3.6.1"></a>
+## [3.6.1](https://github.com/gabyvs/ng2-ue-utils/compare/3.6.0...3.6.1) (2017-03-07)
+
+### Features
+
+* **Filtering:** Exposing missing interface for its event emitter. 
+* **Pagination:** Exposing missing interface for its event emitter. 
+* **ListHeaders:** Exposing missing interface for its event emitter. 
+
 <a name="3.6.0"></a>
 ## [3.6.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.5.0...3.6.0) (2017-03-07)
 

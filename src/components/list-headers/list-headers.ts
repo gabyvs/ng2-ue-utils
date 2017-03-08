@@ -47,7 +47,7 @@ const styles: any = require('!!css-loader!less-loader!./list-headers.less');
 })
 export class ListHeaders implements OnInit {
     @Input() public headers: ListHeaders.IHeader[];
-    @Output() public emitSort = new EventEmitter();
+    @Output() public emitSort = new EventEmitter<ListHeaders.ISortEmission>();
 
     private sortedBy: string;
     private ascOrder: boolean;
@@ -80,6 +80,11 @@ export namespace ListHeaders {
 
     export interface IStyle {
         width: string;
+    }
+
+    export interface ISortEmission {
+        order: ListHeaders.ascOrder;
+        sortBy: string;
     }
 
     export interface IHeader {
