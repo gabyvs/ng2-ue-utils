@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Rx';
 
-import { IResourcePermissionsResponse, IRole, IRoleCollection, RolePermissions } from 'rbac-abacus';
+import { IResourcePermissionsResponse, IResourcePermissions, RolePermissions } from 'rbac-abacus';
 import { ClientObserver } from './clientObserver';
 import { ApiRoutes } from '../router/api-routes';
 import { Client } from './client';
@@ -64,13 +64,6 @@ export abstract class ObservableClient extends ObservableClientBase {
 
     private userInfo = (): Observable<IUserInfo> => this.get<IUserInfo>(this.router.userInfo());
 
-    private userRoles = (): Observable<IRole[]> => {
-        const org = this.router.orgName;
-        return this.userInfo()
-            .flatMap((info: IUserInfo) => this.get<IRoleCollection>(this.router.userRoles(info.email)))
-            .map((col: IRoleCollection) => col.role.filter(r => r.organization === org));
-    };
-
     public updateEntity = <T, U>(identifier: string, entity: U): Observable<T> =>
         this.put<T, U>(this.router.entity(identifier), entity);
 
@@ -85,19 +78,15 @@ export abstract class ObservableClient extends ObservableClientBase {
 
     public getListObject = <T>(): Observable<T> =>
         this.get<T>(this.router.list());
-
+    
     public permissions = (): Observable<RolePermissions> => {
-        return this.userRoles()
-            .flatMap((roles: IRole[]) => {
-                if (roles.length < 1) {
-                    throw Error('User is not part of this organization.');
-                }
-                const obs = roles.map(r => this.get<IResourcePermissionsResponse>(this.router.orgRole(r.name)));
-                return Observable.combineLatest<IResourcePermissionsResponse[]>(obs);
-            })
-            .map(permArray => permArray.map(p => new RolePermissions(p)))
-            .map(permArray =>
-                permArray.reduce((prev, perm) => prev.merge(perm), new RolePermissions())
-            ) as Observable<RolePermissions>;
+        return this.userInfo()
+            .flatMap((info: IUserInfo) => this.get<IResourcePermissionsResponse>(this.router.permissions(info.email))
+                .map((response: IResourcePermissionsResponse) => {
+                    response.resourcePermission = response.resourcePermission
+                        .filter((p: IResourcePermissions) => p.organization === this.router.orgName);
+                    return response;
+                }))
+            .map((response: IResourcePermissionsResponse) => new RolePermissions(response));
     };
 }

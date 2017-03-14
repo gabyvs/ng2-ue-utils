@@ -262,7 +262,7 @@ describe('EntityRepository', () => {
 
     it('Does not load entities and updates permissions if the user does not have permissions', (done) => {
         const errorMessage = 'Forbidden. You don\'t have permissions to access this resource. Error code: 403';
-        client.on('/organizations/abc/userroles/orgadmin/permissions', {
+        client.on('/users/dimitri@apigee.com/permissions', {
             resourcePermission: [ { organization: 'abc', path: '/', permissions: []} ]
         });
         client.on(`/organizations/abc/${apiBasePath}`, errorMessage, true);

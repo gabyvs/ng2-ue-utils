@@ -91,7 +91,7 @@ export class ClientMock implements IClientBase {
                     role: [ { name: 'orgadmin', organization: 'abc' } ]
                 }
             },
-            '/organizations/abc/userroles/orgadmin/permissions': {
+            '/users/dimitri@apigee.com/permissions': {
                 value: {
                     resourcePermission: [ { organization: 'abc', path: '/', permissions: ['get', 'put', 'delete']} ]
                 }
