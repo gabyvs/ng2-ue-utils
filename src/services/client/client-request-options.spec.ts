@@ -10,5 +10,6 @@ describe('ClientRequestOptions', () => {
         expect(opts.headers).toBeDefined();
         expect(opts.headers.get('Accept')).toBe('application/json');
         expect(opts.headers.get('Content-Type')).toBe('application/json');
+        expect(opts.headers.get('X-Requested-With')).toBe('XMLHttpRequest');
     });
 });

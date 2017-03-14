@@ -15,5 +15,6 @@ export class ClientRequestOptions extends RequestOptions {
         }
         this.headers.append('Accept', 'application/json');
         this.headers.append('Content-Type', 'application/json');
+        this.headers.append('X-Requested-With', 'XMLHttpRequest');
     }
 }
