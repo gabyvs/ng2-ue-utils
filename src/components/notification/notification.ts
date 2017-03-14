@@ -1,5 +1,15 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { NotificationService } from './notification-service';
+import {
+    Component,
+    Inject,
+    Input,
+    OnDestroy,
+    OnInit }                    from '@angular/core';
+
+import { NotificationService }  from './notification-service';
+import {
+    APP_CONFIG,
+    IAppConfig }                from '../../services/context/app-config';
+import { GTMService }           from '../../services/context/gtm';
 
 /**
  * This component leverages the `NotificationService` to display dismissible notifications on the DOM.  In order to
@@ -83,10 +93,19 @@ export class Notification implements OnDestroy, OnInit {
     private hideTime: number = 1000;
     private fadeTime: number = 4000;
     private fadeTimerHandle: any;
+    private defaultErrorAction: string;
 
-    constructor (private notificationService: NotificationService) {}
+    constructor (
+        private notificationService: NotificationService,
+        private gtmService: GTMService,
+        @Inject(APP_CONFIG) private appConfig: IAppConfig
+    ) {
+        const app = this.appConfig.gtmAppName || this.appConfig.appBasePath;
+        this.defaultErrorAction = 'Error from NG2UEUtils Notification component' +
+            (app ? '. Action not provided from app ' + app  + '.' : '');
+    }
 
-    public show (message: string, type?: string) {
+    public show (message: string, type?: string, gtmAction?: string) {
         this.notification = message;
         switch (type) {
             case 'success':
@@ -99,6 +118,7 @@ export class Notification implements OnDestroy, OnInit {
                 this.baseColor = 'warning';
                 break;
             default: //must be an error
+                this.logUserVisibleError(message, gtmAction);
                 this.setIconClass('alert');
                 this.baseColor = 'error';
                 break;
@@ -133,12 +153,17 @@ export class Notification implements OnDestroy, OnInit {
 
     public ngOnInit () {
         this.serviceSubscription = this.notificationService.observe$.subscribe((notification: NotificationService.INotification) => {
-            this.show(notification.message, notification.type);
+            this.show(notification.message, notification.type, notification.gtmAction);
         });
     }
 
     public ngOnDestroy () {
         this.serviceSubscription.unsubscribe();
         this.serviceSubscription = undefined;
+    }
+
+    private logUserVisibleError (message: string, gtmAction?: string) {
+        this.gtmService.registerEventTrack(gtmAction || this.defaultErrorAction,
+            { category: 'Edge_userVisibleError', label: message });
     }
 }

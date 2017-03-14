@@ -19,6 +19,7 @@ export namespace NotificationService {
     export interface INotification {
         message: string;
         type?: NotificationType;
+        gtmAction?: string;
     }
 
     export type NotificationType = 'error' | 'warning' | 'success';

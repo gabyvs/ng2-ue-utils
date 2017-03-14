@@ -1,19 +1,33 @@
 import {
     ComponentFixture,
-    TestBed
-}                               from '@angular/core/testing';
+    TestBed }                   from '@angular/core/testing';
 import { By }                   from '@angular/platform-browser';
 
 import { Notification }         from './notification';
 import { NotificationService }  from './notification-service';
+import {
+    APP_CONFIG,
+    IAppConfig }                from '../../services/context/app-config';
+import { GTMService }           from '../../services/context/gtm';
+import {
+    WindowRef,
+    WindowMock }                from '../../services/window-ref';
 
 declare const beforeEach, describe, expect, it, jasmine, spyOn;
+const apiBasePath = 'apiproducts';
+const appBasePath = 'products';
+const appName = 'ProductsSPA';
+const appConfig: IAppConfig = {
+    apiBasePath: apiBasePath,
+    appBasePath: appBasePath,
+    gtmAppName: appName
+};
 
 describe('Component: Notification', () => {
     let notification:   Notification;
     let fixture:        ComponentFixture<Notification>;
 
-    let rootElement, textElement, iconElement;
+    let rootElement, textElement, iconElement, window;
     const message = 'The message';
 
     const initializeDebugElements = () => {
@@ -25,10 +39,16 @@ describe('Component: Notification', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations:   [ Notification ],
-            providers:      [ NotificationService ]
+            providers:      [
+                NotificationService,
+                GTMService,
+                { provide: WindowRef, useClass: WindowMock },
+                { provide: APP_CONFIG, useValue: appConfig }
+            ]
         });
 
         fixture = TestBed.createComponent(Notification);
+        window = TestBed.get(WindowRef);
         notification = fixture.componentInstance;
         fixture.detectChanges();
         initializeDebugElements();
@@ -138,6 +158,26 @@ describe('Component: Notification', () => {
         spyOn(notification, 'show');
         const notificationService = TestBed.get(NotificationService);
         notificationService.notify(errorNotification);
-        expect(notification.show).toHaveBeenCalledWith(errorNotification.message, errorNotification.type);
+        expect(notification.show).toHaveBeenCalledWith(errorNotification.message, errorNotification.type, undefined);
+    });
+
+    it('should push user visible errors to GTM', () => {
+        let errorNotification: NotificationService.INotification = {
+            gtmAction: 'Some action',
+            message: 'an error message',
+            type: 'error' as NotificationService.NotificationType
+        };
+        spyOn(notification, 'show').and.callThrough();
+        const notificationService = TestBed.get(NotificationService);
+        notificationService.notify(errorNotification);
+        expect(notification.show).toHaveBeenCalledWith(errorNotification.message, errorNotification.type, errorNotification.gtmAction);
+        expect(window.dataLayer).toBeDefined();
+        expect(window.dataLayer.length).toBe(1);
+        expect(window.dataLayer[0]['event']).toBe('interaction');
+        expect(window.dataLayer[0]['target']).toBe('Edge_userVisibleError');
+        expect(window.dataLayer[0]['action']).toBe(errorNotification.gtmAction);
+        expect(window.dataLayer[0]['target-properties']).toBe(errorNotification.message);
+        expect(window.dataLayer[0]['value']).toBe();
+        expect(window.dataLayer[0]['interaction-type']).toBeUndefined();
     });
 });
