@@ -81,12 +81,11 @@ export abstract class ObservableClient extends ObservableClientBase {
     
     public permissions = (): Observable<RolePermissions> => {
         return this.userInfo()
-            .flatMap((info: IUserInfo) => this.get<IResourcePermissionsResponse>(this.router.permissions(info.email))
-                .map((response: IResourcePermissionsResponse) => {
-                    response.resourcePermission = response.resourcePermission
-                        .filter((p: IResourcePermissions) => p.organization === this.router.orgName);
-                    return response;
-                }))
+            .flatMap((info: IUserInfo) => this.get<IResourcePermissionsResponse>(this.router.permissions(info.email)))
+            .map((response: IResourcePermissionsResponse) => ({
+                resourcePermission: response.resourcePermission
+                    .filter((p: IResourcePermissions) => p.organization === this.router.orgName)
+            }))
             .map((response: IResourcePermissionsResponse) => new RolePermissions(response));
     };
 }
