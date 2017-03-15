@@ -69,14 +69,13 @@ describe('Context Helper', () => {
     });
 
     it('Pushes events to data layer object', () => {
-        const action = 'user-visible error';
-        const props = { category: 'MySPA', label: 'myLabel', noninteraction: true, value: 'thevalue' };
-        gtmService.registerEventTrack(action, props);
+        const props = { action: 'user-visible error', label: 'myLabel', noninteraction: true, value: 'thevalue' };
+        gtmService.registerSPAEvent(props);
         expect(window.dataLayer).toBeDefined();
         expect(window.dataLayer.length).toBe(1);
         expect(window.dataLayer[0]['event']).toBe('interaction');
-        expect(window.dataLayer[0]['target']).toBe(props.category);
-        expect(window.dataLayer[0]['action']).toBe(action);
+        expect(window.dataLayer[0]['target']).toBe(appConfig.gtmAppName);
+        expect(window.dataLayer[0]['action']).toBe(props.action);
         expect(window.dataLayer[0]['target-properties']).toBe(props.label);
         expect(window.dataLayer[0]['value']).toBe(props.value);
         expect(window.dataLayer[0]['interaction-type']).toBe(true);

@@ -3,7 +3,7 @@
 ### Features
 
 * **ContextHelper:** Reading user context from cookie, supporting jwt for local development. 
-* **Client:** Adding X-Requested-With header to all client calls.
+* **Client:** Adding X-Requested-With header to all client calls. Tracking all client calls response times to GTM.
 * **ObservableClient:** Reading user permissions from user calls instead of roles calls.
 * **Router:** Exposing new route for user permissions 
  

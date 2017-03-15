@@ -56,12 +56,12 @@ export class WindowRef {
         }
     }
 
-    public registerEventTrack (action: string, properties: IGAEventProps = {}) {
+    public registerEventTrack (properties: IGAEventProps) {
         if (window && window.dataLayer) {
             window.dataLayer.push({
                 'event': properties.event || 'interaction',
                 'target': properties.category,
-                'action': action,
+                'action': properties.action,
                 'target-properties': properties.label,
                 'value': properties.value,
                 'interaction-type': properties.noninteraction
@@ -109,11 +109,11 @@ export class WindowMock implements WindowRef {
         });
     }
 
-    public registerEventTrack (action: string, properties: IGAEventProps = {}) {
+    public registerEventTrack (properties: IGAEventProps) {
         this.dataLayer.push({
             'event': properties.event || 'interaction',
             'target': properties.category,
-            'action': action,
+            'action': properties.action,
             'target-properties': properties.label,
             'value': properties.value,
             'interaction-type': properties.noninteraction

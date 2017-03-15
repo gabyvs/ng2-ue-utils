@@ -1,13 +1,13 @@
-import {Injectable} from '@angular/core';
+import { Injectable }           from '@angular/core';
 import {
     Http,
     RequestOptionsArgs,
-    Response,
-} from '@angular/http';
-import { Observable } from 'rxjs/Rx';
+    Response }                  from '@angular/http';
+import { Observable }           from 'rxjs/Rx';
 
 import { ClientRequestOptions } from './client-request-options';
-import { WindowRef } from '../window-ref';
+import { GTMService }           from '../context/gtm';
+import { WindowRef }            from '../window-ref';
 
 export interface ISimplifiedError {
     message: string;
@@ -58,12 +58,6 @@ export interface IClientBase {
     post: <T, U>(path: string, payload: U, options?: RequestOptionsArgs) => Observable<T>;
 }
 
-const mapToJson = <T>(obs: Observable<Response>): Observable<T> => {
-    return obs.map((response: Response) => { // return `undefined` if response is undefined or response body is an empty string
-        return ((response && response.text()) ? response.json() : undefined) as T;
-    });
-};
-
 const errorOrRedirect = (path: string, error: any, win: WindowRef) => {
     if (error && error.status === 401 && error.headers && error.headers.get) {
         const errorLocation = error.headers.get('location') ||  error.headers.get('Location');
@@ -75,12 +69,29 @@ const errorOrRedirect = (path: string, error: any, win: WindowRef) => {
 
 @Injectable()
 export class Client implements IClientBase {
-    constructor (private http: Http, private win: WindowRef) {}
+    constructor (private http: Http, private gtmService: GTMService, private win: WindowRef) {}
+
+    private mapToJson = <T>(obs: Observable<Response>): Observable<T> => {
+        return new Observable<T>(o => {
+            const start: number = new Date().valueOf();
+            const measure = (response: Response) => {
+                const end: number = new Date().valueOf();
+                this.gtmService.registerClientCall(response.status, response.url, end - start);
+            };
+            const s = obs
+                .do(measure, measure)
+                .map((response: Response) => { // return `undefined` if response is undefined or response body is an empty string
+                    return ((response && response.text()) ? response.json() : undefined) as T;
+                })
+                .subscribe(o);
+            return s;
+        });
+    };
 
     private catchOrRedirect = (path: string) =>
         (error: any, caught: Observable<Response>) => errorOrRedirect(path, error, this.win);
 
-    private mapAndCatch = <T>(path: string, obs: Observable<Response>): Observable<T> => mapToJson<T>(
+    private mapAndCatch = <T>(path: string, obs: Observable<Response>): Observable<T> => this.mapToJson<T>(
         obs
             .flatMap(resp => {
                 if (knownCodes.indexOf(resp.status) >= 0) {

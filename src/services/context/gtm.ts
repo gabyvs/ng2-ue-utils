@@ -8,20 +8,21 @@ export interface IGAPageView {
 }
 
 export interface IGAEventProps {
+    action: string | number;
     event?: string;
     category?: string;
-    label?: string;
+    label?: string | number;
     value?: any;
     noninteraction?: boolean;
 }
 
 export interface IGAEvent {
-    event: string;
+    event?: string;
     target?: string;
-    action?: string;
-    'target-properties': string;
-    value: string;
-    'interaction-type': boolean;
+    action?: string | number;
+    'target-properties'?: string | number;
+    value?: string | number;
+    'interaction-type'?: boolean;
 }
 
 export interface IGTMContext {
@@ -138,9 +139,25 @@ export class GTMService {
         this.window.registerPageTrack(path);
     }
 
-    public registerEventTrack (action: string, properties: IGAEventProps = {}) {
-        if (!action) { return; }
-        this.window.registerEventTrack(action, properties);
+    public registerEventTrack (properties: IGAEventProps) {
+        this.window.registerEventTrack(properties);
+    }
+
+    public registerSPAEvent (properties: IGAEventProps) {
+        const newProps = Object.assign({}, properties, { category: this.appConfig.gtmAppName });
+        this.window.registerEventTrack(newProps);
+    }
+
+    public registerClientCall (responseCode: number, path: string, responseTime: number) {
+        const props: IGAEventProps = {
+            action: responseCode,
+            category: 'Edge_APICall',
+            event: 'timing',
+            label: path,
+            noninteraction: true,
+            value: responseTime
+        };
+        this.window.registerEventTrack(props);
     }
 
     public updateGtmContext (orgName?: string, uuid?: string, email?: string) {
