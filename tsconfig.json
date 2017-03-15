@@ -7,7 +7,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
-    "removeComments": false,
+    "removeComments": true,
     "noImplicitAny": false,
     "outDir": "./build"
   },
