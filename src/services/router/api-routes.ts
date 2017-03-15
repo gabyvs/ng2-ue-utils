@@ -20,4 +20,6 @@ export class ApiRoutes {
     public userRoles = (user: string): string => `/users/${user}/userroles`;
 
     public orgRole = (role: string): string => this.orgUrl(`/userroles/${role}/permissions`);
+    
+    public permissions = (email: string) => `/users/${email}/permissions`;
 }

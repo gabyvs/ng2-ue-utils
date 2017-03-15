@@ -83,22 +83,14 @@ describe('Observable Client', () => {
         someObservableClient = new SomeObservableClient(client, router);
     });
 
-    it('Loading Permissions for current user', done => {
-        const rawRoles = {
-            role: [
-                { name: 'orgadmin', organization: 'abc' },
-                { name: 'custom', organization: 'abc' },
-                { name: 'orgadmin', organization: 'abcd' },
-            ]
-        };
+    it('Loading Permissions for current user and org', done => {
+
         const root = { organization: 'abc', path: '/path', permissions: ['get', 'put', 'delete']};
         const custom = { organization: 'abc', path: '/custom', permissions: ['get', 'put', 'delete']};
-        const orgAdmin = { resourcePermission: [root] };
-        const customRole = { resourcePermission: [custom] };
+        const otherOrgPerms = { organization: 'def', path: '/otherPath', permissions: []};
+        const response = { resourcePermission: [root, custom, otherOrgPerms] };
 
-        client.on('/users/dimitri@apigee.com/userroles', rawRoles);
-        client.on('/organizations/abc/userroles/orgadmin/permissions', orgAdmin);
-        client.on('/organizations/abc/userroles/custom/permissions', customRole);
+        client.on('/users/dimitri@apigee.com/permissions', response);
 
         someObservableClient.permissions().subscribe(
             permissions => {
