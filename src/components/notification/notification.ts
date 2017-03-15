@@ -101,8 +101,7 @@ export class Notification implements OnDestroy, OnInit {
         @Inject(APP_CONFIG) private appConfig: IAppConfig
     ) {
         const app = this.appConfig.gtmAppName || this.appConfig.appBasePath;
-        this.defaultErrorAction = 'Error from NG2UEUtils Notification component' +
-            (app ? '. Action not provided from app ' + app  + '.' : '');
+        this.defaultErrorAction = app ? 'Action not provided from app ' + app  : 'Error from NG2UEUtils Notification component';
     }
 
     public show (message: string, type?: string, gtmAction?: string) {

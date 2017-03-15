@@ -146,4 +146,12 @@ export class ContextService {
     public get userEmail(): string {
         return this.helper.getUser();
     }
+
+    public get uuid(): string {
+        return this.helper.getUuid();
+    }
+
+    public get sessionContext(): ContextHelper.ISessionContext {
+        return this.helper.getSessionContext();
+    }
 }

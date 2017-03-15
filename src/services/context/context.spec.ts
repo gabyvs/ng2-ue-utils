@@ -12,6 +12,7 @@ import { ClientMock }       from '../client/client.mock';
 import {
     WindowMock,
     WindowRef }             from '../window-ref';
+import { ContextHelper }    from './context-helper';
 
 declare const beforeEach, describe, expect, it, spyOn;
 
@@ -23,6 +24,9 @@ const appConfig: IAppConfig = {
     appBasePath: appBasePath,
     gtmAppName: appName
 };
+const sessionContext: ContextHelper.ISessionContext = { email: 'test@test.com', uuid: 'a-uuid-here' };
+const jsString = JSON.stringify(sessionContext);
+const cookieValue = `session_context=${btoa(jsString)}`;
 
 describe('Context Service', () => {
     let service: ContextService;
@@ -85,5 +89,18 @@ describe('Context Service', () => {
         expect(theSpy).toHaveBeenCalled();
         expect(theSpy.calls.count()).toBe(1);
         expect(theSpy.calls.argsFor(0)[0]).toBe(`/no-org`);
+    });
+
+    it('gets uuid from cookie', () => {
+        window.cookieString = cookieValue;
+        expect(service.uuid).toBe('a-uuid-here');
+    });
+
+    it('gets context from cookie', () => {
+        window.cookieString = cookieValue;
+        expect(service.sessionContext.email).toBeDefined();
+        expect(service.sessionContext.email).toBe('test@test.com');
+        expect(service.sessionContext.uuid).toBeDefined();
+        expect(service.sessionContext.uuid).toBe('a-uuid-here');
     });
 });

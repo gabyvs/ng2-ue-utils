@@ -70,11 +70,44 @@ export class ContextHelper {
         }
     }
 
-    public accessToken = (): string =>  this.cookie('access_token');
+    public getUser = (): string => {
+        return this.getSessionContext().email;
+    };
 
-    public jwt = (): Jwt => new Jwt(this.accessToken());
+    public getUuid = (): string => {
+        return this.getSessionContext().uuid;
 
-    public getUser = (): string => this.jwt().user;
+    };
 
-    public getUuid = (): string => this.jwt().uuid;
+    public getSessionContext = (): ContextHelper.ISessionContext => {
+        let cookieContext = this.sessionContext();
+        if (cookieContext) {
+            return JSON.parse(atob(cookieContext));
+        } else if (this.accessToken()) {
+            return {
+                email: this.jwt().user,
+                uuid: this.jwt().uuid
+            };
+        } else {
+            return {
+                email: '',
+                uuid: ''
+            };
+        }
+    };
+
+    private sessionContext = (): string =>  this.cookie('session_context');
+
+    private accessToken = (): string =>  this.cookie('access_token');
+
+    private jwt = (): Jwt => new Jwt(this.accessToken());
+}
+
+export namespace ContextHelper {
+    'use strict';
+
+    export interface ISessionContext {
+        uuid: string;
+        email: string;
+    }
 }

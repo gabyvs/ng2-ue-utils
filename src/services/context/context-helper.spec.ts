@@ -9,6 +9,9 @@ describe('Context Helper', () => {
 
     let helper: ContextHelper;
     let window: WindowMock;
+    const sessionContext: ContextHelper.ISessionContext = { email: 'test@test.com', uuid: 'a-uuid-here' };
+    const jsString = JSON.stringify(sessionContext);
+    const cookieValue = `session_context=${btoa(jsString)}`;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -26,5 +29,29 @@ describe('Context Helper', () => {
     it('Extracts org name from local', () => {
         window.setLocal('organization', 'abc');
         expect(helper.orgNameFromLocal()).toBe('abc');
+    });
+
+    it('Sets org name to local storage', () => {
+        const theOrg = 'thisorg';
+        helper.orgNameToLocal(theOrg);
+        expect(window.getLocal('organization')).toBe(theOrg);
+    });
+
+    it('gets user email from cookie', () => {
+        window.cookieString = cookieValue;
+        expect(helper.getUser()).toBe('test@test.com');
+    });
+
+    it('gets uuid from cookie', () => {
+        window.cookieString = cookieValue;
+        expect(helper.getUuid()).toBe('a-uuid-here');
+    });
+
+    it('gets context from cookie', () => {
+        window.cookieString = cookieValue;
+        expect(helper.getSessionContext().email).toBeDefined();
+        expect(helper.getSessionContext().email).toBe('test@test.com');
+        expect(helper.getSessionContext().uuid).toBeDefined();
+        expect(helper.getSessionContext().uuid).toBe('a-uuid-here');
     });
 });
