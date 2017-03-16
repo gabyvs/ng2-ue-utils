@@ -94,7 +94,7 @@ describe('Client', () => {
                 expect(theEvent.target).toBe('Edge_APICall');
                 expect(theEvent['target-properties']).toBe(someUrl);
                 expect(theEvent.value).toBeDefined();
-                expect(theEvent.value).toBeGreaterThan(0);
+                expect(theEvent.value >= 0).toBeTruthy();
                 done();
             }
         );

@@ -161,7 +161,6 @@ export class Notification implements OnDestroy, OnInit {
     }
 
     private logUserVisibleError (message: string, gtmAction?: string) {
-        this.gtmService.registerEventTrack(
-            { action : gtmAction || this.defaultErrorAction, category: 'Edge_userVisibleError', label: message });
+        this.gtmService.registerUserVisibleError(message, gtmAction);
     }
 }

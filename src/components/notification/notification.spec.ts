@@ -178,6 +178,6 @@ describe('Component: Notification', () => {
         expect(window.dataLayer[0]['action']).toBe(errorNotification.gtmAction);
         expect(window.dataLayer[0]['target-properties']).toBe(errorNotification.message);
         expect(window.dataLayer[0]['value']).toBe();
-        expect(window.dataLayer[0]['interaction-type']).toBeUndefined();
+        expect(window.dataLayer[0]['interaction-type']).toBe(true);
     });
 });

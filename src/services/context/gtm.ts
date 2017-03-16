@@ -143,6 +143,17 @@ export class GTMService {
         this.window.registerEventTrack(properties);
     }
 
+    public registerUserVisibleError (errorMessage: string, action?: string) {
+        const props: IGAEventProps = {
+            action: action,
+            category: 'Edge_userVisibleError',
+            event: 'interaction',
+            label: errorMessage,
+            noninteraction: true
+        };
+        this.window.registerEventTrack(props);
+    }
+
     public registerSPAEvent (properties: IGAEventProps) {
         const newProps = Object.assign({}, properties, { category: this.appConfig.gtmAppName });
         this.window.registerEventTrack(newProps);

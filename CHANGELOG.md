@@ -1,9 +1,10 @@
-## [3.7.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.6.1...3.7.0) (2017-03-15)
+## [3.7.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.6.1...3.7.0) (2017-03-17)
 
 ### Features
 
 * **ContextHelper:** Reading user context from cookie, supporting jwt for local development. 
 * **Client:** Adding X-Requested-With header to all client calls. Tracking all client calls response times to GTM.
+* **Notification:** Tracking all user visible errors to GTM.
 * **ObservableClient:** Reading user permissions from user calls instead of roles calls.
 * **Router:** Exposing new route for user permissions 
  

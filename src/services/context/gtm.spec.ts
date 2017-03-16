@@ -69,7 +69,20 @@ describe('Context Helper', () => {
     });
 
     it('Pushes events to data layer object', () => {
-        const props = { action: 'user-visible error', label: 'myLabel', noninteraction: true, value: 'thevalue' };
+        const props = { action: 'the action', category: 'random category', label: 'myLabel', noninteraction: true, value: 'thevalue' };
+        gtmService.registerEventTrack(props);
+        expect(window.dataLayer).toBeDefined();
+        expect(window.dataLayer.length).toBe(1);
+        expect(window.dataLayer[0]['event']).toBe('interaction');
+        expect(window.dataLayer[0]['target']).toBe(props.category);
+        expect(window.dataLayer[0]['action']).toBe(props.action);
+        expect(window.dataLayer[0]['target-properties']).toBe(props.label);
+        expect(window.dataLayer[0]['value']).toBe(props.value);
+        expect(window.dataLayer[0]['interaction-type']).toBe(true);
+    });
+
+    it('Pushes events to data layer object marking them as SPA events', () => {
+        const props = { action: 'the action', category: 'override', label: 'myLabel', noninteraction: true, value: 'thevalue' };
         gtmService.registerSPAEvent(props);
         expect(window.dataLayer).toBeDefined();
         expect(window.dataLayer.length).toBe(1);
@@ -78,6 +91,33 @@ describe('Context Helper', () => {
         expect(window.dataLayer[0]['action']).toBe(props.action);
         expect(window.dataLayer[0]['target-properties']).toBe(props.label);
         expect(window.dataLayer[0]['value']).toBe(props.value);
+        expect(window.dataLayer[0]['interaction-type']).toBe(true);
+    });
+
+    it('Registers client calls', () => {
+        const path = 'my/path/to/page';
+        const code = 200;
+        gtmService.registerClientCall(code, path, 111);
+        expect(window.dataLayer).toBeDefined();
+        expect(window.dataLayer.length).toBe(1);
+        expect(window.dataLayer[0]['event']).toBe('timing');
+        expect(window.dataLayer[0]['target']).toBe('Edge_APICall');
+        expect(window.dataLayer[0]['action']).toBe(code);
+        expect(window.dataLayer[0]['target-properties']).toBe(path);
+        expect(window.dataLayer[0]['value']).toBe(111);
+        expect(window.dataLayer[0]['interaction-type']).toBe(true);
+    });
+
+    it('Registers user visible errors', () => {
+        const message = 'Some message';
+        const action = 'Action that caused message';
+        gtmService.registerUserVisibleError(message, action);
+        expect(window.dataLayer).toBeDefined();
+        expect(window.dataLayer.length).toBe(1);
+        expect(window.dataLayer[0]['event']).toBe('interaction');
+        expect(window.dataLayer[0]['target']).toBe('Edge_userVisibleError');
+        expect(window.dataLayer[0]['action']).toBe(action);
+        expect(window.dataLayer[0]['target-properties']).toBe(message);
         expect(window.dataLayer[0]['interaction-type']).toBe(true);
     });
 });
