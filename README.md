@@ -235,7 +235,12 @@ npm pack
 ```
 This will generate a .tgz file in the root folder. 
 
-In your other project, use the following command to install the tarball: (note - delete this repo's source files in `node_modules` before installing from tarball, if already present)
+On the project that you want to try this library, delete ng2-ue-utils source files inside `node_modules` folder if a previous version is already present. From your other project root folder:
+```bash
+rm -rf ./node-modules/ng2-ue-utils
+```
+
+Again in your other project root folder, use the following command to install the tarball:
 ```bash
 npm install /path/to/ng2-ue-utils-someversion.tgz
 ```
