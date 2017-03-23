@@ -1,3 +1,10 @@
+## [3.8.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.7.0...3.8.0) (2017-03-22)
+
+### Features
+
+* **ListHeaders:** Adding support for table markup 
+ 
+<a name="3.7.0"></a>
 ## [3.7.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.6.1...3.7.0) (2017-03-17)
 
 ### Features
@@ -22,7 +29,11 @@
 
 ### Features
 
-* **GTM:** Adding a service and interfaces to track virtual page views and events to Google Analytics. 
+* **GTM:** Adding a service and interfaces to track virtual page views and events to Google Analytics.
+ 
+### Breaking changes
+
+* **Client:** Adding dependency on GTMService, import `GTMService` from `ng2-ue-utils` and add to the `providers` field of your app.module
 
 <a name="3.5.0"></a>
 ## [3.5.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.4.0...3.5.0) (2017-02-28)

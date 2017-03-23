@@ -287,3 +287,21 @@
         </div>
     </div>
 </div>
+
+<div class="component">
+    <h2>Table Header with table markup</h2>
+    <div class="explanation">Table header controls for data rows</div>
+    <table class="flex-list" style="width: 100%;">
+        <thead ue-table-headers class="list-headers" (emitSort)="sort2($event)" [headers]="headersTableMarkup" [tableMarkup]="true"></thead>
+        <tbody>
+        <tr *ngIf="listheaderTableMarkupEvent">
+            <td colspan="3">
+                <div class="resultBlock paginationResult">
+                    <span>`listheaderEvent` event payload was:</span>
+                    <div class="codeBlock">{{ listheaderTableMarkupEvent | json }}</div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
