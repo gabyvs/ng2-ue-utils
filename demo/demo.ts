@@ -117,6 +117,14 @@ export class Demo implements OnInit {
         { label: 'modified',        property: 'lastModifiedAt', styles: { width: '23%' } }
     ];
 
+    // List Headers Table Markup
+    public listheaderTableMarkupEvent: any;
+    public headersTableMarkup = [
+        { label: 'display name',    property: 'displayName' },
+        { label: 'description',     property: 'description',    sortOnInit: 'desc' },
+        { label: 'modified',        property: 'lastModifiedAt' }
+    ];
+
     // Date change
     public datePickerEvent: any;
 
@@ -217,6 +225,11 @@ export class Demo implements OnInit {
     // List Headers
     public sort(listheaderEvent): void {
         this.listheaderEvent = listheaderEvent;
+    }
+
+    // List Headers Table Markup
+    public sort2(listheaderEvent): void {
+        this.listheaderTableMarkupEvent = listheaderEvent;
     }
 
     // Filtering
