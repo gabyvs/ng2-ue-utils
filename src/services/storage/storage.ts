@@ -17,7 +17,7 @@ export const createDictionaryFilter = <T>(pattern?: string, field?: string): (d:
     }
     return <T extends Dictionary<{}>>(d: T) => {
         const v = _.get(d, fieldName);
-        return v ? v.toString().toLowerCase().indexOf(pattern.toLocaleLowerCase()) >= 0 : false;
+        return _.isUndefined(v) ? false : v.toString().toLowerCase().indexOf(pattern.toLocaleLowerCase()) >= 0;
     };
 };
 
