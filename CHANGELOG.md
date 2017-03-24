@@ -1,8 +1,11 @@
-## [3.8.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.7.0...3.8.0) (2017-03-22)
+## [3.8.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.7.0...3.8.0) (2017-03-24)
 
 ### Features
 
 * **ListHeaders:** Adding support for table markup 
+
+### Bug Fixes
+* **Storage:** Fix case where filtering on pattern and field skips falsey values
  
 <a name="3.7.0"></a>
 ## [3.7.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.6.1...3.7.0) (2017-03-17)
