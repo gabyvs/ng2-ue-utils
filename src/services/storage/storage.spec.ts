@@ -341,9 +341,10 @@ describe('Filters', () => {
     });
 
     it('Create Filter with pattern & field', () => {
-        const f = createDictionaryFilter<{ a?; some?; b?; }>('some', 'b');
-        expect(f({a: 'some'})).toBe(false);
-        expect(f({b: 'some'})).toBe(true);
+        const f = createDictionaryFilter<{ a?; some?; b?; }>('0', 'b');
+        expect(f({a: '0'})).toBe(false);
+        expect(f({b: '0'})).toBe(true);
+        expect(f({b: 0})).toBe(true);
     });
 
     it('Filters are case insensitive', () => {
