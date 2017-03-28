@@ -103,7 +103,7 @@ export class Notification implements OnDestroy, OnInit {
             this.defaultErrorAction = app ? 'Action not provided from app ' + app  : 'Error from NG2UEUtils Notification component';
         }
 
-    public show (message: string, type?: string, gtmAction?: string) {
+    public show (message: string, type?: string) {
         this.notification = message;
         switch (type) {
             case 'success':
@@ -116,7 +116,7 @@ export class Notification implements OnDestroy, OnInit {
                 this.baseColor = 'warning';
                 break;
             default: //must be an error
-                this.logUserVisibleError(message, gtmAction);
+                this.logUserVisibleError(message);
                 this.setIconClass('alert');
                 this.baseColor = 'error';
                 break;
@@ -151,7 +151,7 @@ export class Notification implements OnDestroy, OnInit {
 
     public ngOnInit () {
         this.serviceSubscription = this.notificationService.observe$.subscribe((notification: NotificationService.INotification) => {
-            this.show(notification.message, notification.type, notification.gtmAction);
+            this.show(notification.message, notification.type);
         });
     }
 
@@ -160,7 +160,7 @@ export class Notification implements OnDestroy, OnInit {
         this.serviceSubscription = undefined;
     }
 
-    private logUserVisibleError (message: string, gtmAction?: string) {
-        this.gtmService.registerUserVisibleError(message, gtmAction);
+    private logUserVisibleError (message: string) {
+        this.gtmService.registerUserVisibleError(message, window.location.pathname);
     }
 }

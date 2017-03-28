@@ -3,52 +3,22 @@ import {
     Http,
     RequestOptionsArgs,
     Response }                  from '@angular/http';
-import { Observable }           from 'rxjs/Rx';
+import { Observable }           from 'rxjs/Observable';
 
 import { ClientRequestOptions } from './client-request-options';
 import { GTMService }           from '../context/gtm';
 import { WindowRef }            from '../window-ref';
+import {
+    parse,
+    IParseResult }              from './client-error-parser';
+
+const knownCodes = [401, 403];
 
 export interface ISimplifiedError {
     message: string;
     code: string;
     originalError: any;
     path: string;
-}
-
-const knownCodes = [401, 403];
-
-const defaultErrorMessages = {
-    '401': 'Unauthorized',
-    '403': 'Forbidden. You don\'t have permissions to access this resource.'
-};
-
-const extractSimplifiedError = (error: any, path: string): ISimplifiedError => {
-    if (!error) {
-        return {
-            code: 'Unknown Error',
-            message: 'Unknown error processing path: ' + path,
-            originalError: error,
-            path: path
-        };
-    }
-    try {
-        const err = error.json();
-        return {
-            code: err.code,
-            message: err.message || err.reason,
-            originalError: error,
-            path: path,
-        };
-
-    } catch (e) {
-        return {
-            code: error.status || 'Unknown Error',
-            message: defaultErrorMessages[error.status.toString()] || 'Unknown error processing path: ' + path,
-            originalError: error,
-            path: path
-        };
-    }
 };
 
 export interface IClientBase {
@@ -58,15 +28,6 @@ export interface IClientBase {
     post: <T, U>(path: string, payload: U, options?: RequestOptionsArgs) => Observable<T>;
 }
 
-const errorOrRedirect = (path: string, error: any, win: WindowRef) => {
-    if (error && error.status === 401 && error.headers && error.headers.get) {
-        const errorLocation = error.headers.get('location') ||  error.headers.get('Location');
-        console.log('[SPA] Unauthorized call detected. Trying redirection to:', errorLocation);
-        win.location(errorLocation);
-    }
-    return Observable.throw(extractSimplifiedError(error, path));
-};
-
 @Injectable()
 export class Client implements IClientBase {
     constructor (private http: Http, private gtmService: GTMService, private win: WindowRef) {}
@@ -74,9 +35,14 @@ export class Client implements IClientBase {
     private mapToJson = <T>(obs: Observable<Response>): Observable<T> => {
         return new Observable<T>(o => {
             const start: number = new Date().valueOf();
-            const measure = (response: Response) => {
+            const measure = (response) => {
                 const end: number = new Date().valueOf();
-                this.gtmService.registerClientCall(response.status, response.url, end - start);
+                if (response.url) {
+                    this.gtmService.registerClientCall(response.status, response.url, end - start);
+                } else if (response.originalError) {
+                    this.gtmService.registerClientCall(response.originalError.status, response.originalError.url, end - start);
+                }
+
             };
             const s = obs
                 .do(measure, measure)
@@ -88,8 +54,22 @@ export class Client implements IClientBase {
         });
     };
 
+    private errorOrRedirect = (path: string, error: any, win: WindowRef) => {
+        if (error && error.status === 401 && error.headers && error.headers.get) {
+            const errorLocation = error.headers.get('location') ||  error.headers.get('Location');
+            console.log('[SPA] Unauthorized call detected. Trying redirection to:', errorLocation);
+            win.location(errorLocation);
+        }
+        const parsingResult: IParseResult = parse(error, path);
+        if (parsingResult.malformedError) {
+            this.gtmService.registerSPAEvent(
+                { action: path, event: 'Edge_malFormedError', label: parsingResult.malformedError, value: error.status });
+        }
+        return Observable.throw(parsingResult.simplifiedError);
+    };
+
     private catchOrRedirect = (path: string) =>
-        (error: any, caught: Observable<Response>) => errorOrRedirect(path, error, this.win);
+        (error: any, caught: Observable<Response>) => this.errorOrRedirect(path, error, this.win);
 
     private mapAndCatch = <T>(path: string, obs: Observable<Response>): Observable<T> => this.mapToJson<T>(
         obs

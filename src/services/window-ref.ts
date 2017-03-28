@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { IGAEventProps, IGAPageView, IGAEvent, IGTMContext } from './context/gtm';
+import {
+    IGAEventProps,
+    IGAPageView,
+    IGAEvent,
+    IGTMContext,
+    IGATimingEvent } from './context/gtm';
 
 interface IWindow {
     location: any;
@@ -68,13 +73,25 @@ export class WindowRef {
             });
         }
     }
+
+    public registerTimingEvent (properties: IGATimingEvent) {
+        if (window && window.dataLayer) {
+            window.dataLayer.push({
+                'event': 'timing',
+                'timingCategory': properties.timingCategory,
+                'timingVar': properties.timingVar,
+                'timingLabel': properties.timingLabel,
+                'timingValue': properties.timingValue
+            });
+        }
+    }
 }
 
 @Injectable()
 export class WindowMock implements WindowRef {
     public locationPath: string;
     public cookieString: string;
-    public dataLayer: Array<IGTMContext | IGAEvent | IGAPageView>;
+    public dataLayer: Array<IGTMContext | IGAEvent | IGAPageView | IGATimingEvent>;
     public local: any;
 
     constructor () {
@@ -117,6 +134,16 @@ export class WindowMock implements WindowRef {
             'target-properties': properties.label,
             'value': properties.value,
             'interaction-type': properties.noninteraction
+        });
+    }
+
+    public registerTimingEvent (properties: IGATimingEvent) {
+        this.dataLayer.push({
+            'event': 'timing',
+            'timingCategory': properties.timingCategory,
+            'timingVar': properties.timingVar,
+            'timingLabel': properties.timingLabel,
+            'timingValue': properties.timingValue
         });
     }
 }

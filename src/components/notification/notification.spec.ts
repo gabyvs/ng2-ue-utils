@@ -158,26 +158,26 @@ describe('Component: Notification', () => {
         spyOn(notification, 'show');
         const notificationService = TestBed.get(NotificationService);
         notificationService.notify(errorNotification);
-        expect(notification.show).toHaveBeenCalledWith(errorNotification.message, errorNotification.type, undefined);
+        expect(notification.show).toHaveBeenCalledWith(errorNotification.message, errorNotification.type);
     });
 
     it('should push user visible errors to GTM', () => {
         let errorNotification: NotificationService.INotification = {
-            gtmAction: 'Some action',
             message: 'an error message',
             type: 'error' as NotificationService.NotificationType
         };
         spyOn(notification, 'show').and.callThrough();
         const notificationService = TestBed.get(NotificationService);
         notificationService.notify(errorNotification);
-        expect(notification.show).toHaveBeenCalledWith(errorNotification.message, errorNotification.type, errorNotification.gtmAction);
+        expect(notification.show).toHaveBeenCalledWith(errorNotification.message, errorNotification.type);
         expect(window.dataLayer).toBeDefined();
         expect(window.dataLayer.length).toBe(1);
         expect(window.dataLayer[0]['event']).toBe('interaction');
         expect(window.dataLayer[0]['target']).toBe('Edge_userVisibleError');
-        expect(window.dataLayer[0]['action']).toBe(errorNotification.gtmAction);
-        expect(window.dataLayer[0]['target-properties']).toBe(errorNotification.message);
+        expect(window.dataLayer[0]['action']).toBe(errorNotification.message);
+        expect(window.dataLayer[0]['target-properties']).toBeDefined();
+        expect(window.dataLayer[0]['target-properties'][0]).toBe('/');
         expect(window.dataLayer[0]['value']).toBe();
-        expect(window.dataLayer[0]['interaction-type']).toBe(true);
+        expect(window.dataLayer[0]['interaction-type']).toBeUndefined();
     });
 });

@@ -101,23 +101,23 @@ describe('Context Helper', () => {
         expect(window.dataLayer).toBeDefined();
         expect(window.dataLayer.length).toBe(1);
         expect(window.dataLayer[0]['event']).toBe('timing');
-        expect(window.dataLayer[0]['target']).toBe('Edge_APICall');
-        expect(window.dataLayer[0]['action']).toBe(code);
-        expect(window.dataLayer[0]['target-properties']).toBe(path);
-        expect(window.dataLayer[0]['value']).toBe(111);
-        expect(window.dataLayer[0]['interaction-type']).toBe(true);
+        expect(window.dataLayer[0]['timingCategory']).toBe('Edge_APICall');
+        expect(window.dataLayer[0]['timingVar']).toBe(code);
+        expect(window.dataLayer[0]['timingLabel']).toBe(path);
+        expect(window.dataLayer[0]['timingValue']).toBe(111);
+        expect(window.dataLayer[0]['interaction-type']).toBeUndefined();
     });
 
     it('Registers user visible errors', () => {
         const message = 'Some message';
-        const action = 'Action that caused message';
-        gtmService.registerUserVisibleError(message, action);
+        const pathName = '/some/partial/path';
+        gtmService.registerUserVisibleError(message, pathName);
         expect(window.dataLayer).toBeDefined();
         expect(window.dataLayer.length).toBe(1);
         expect(window.dataLayer[0]['event']).toBe('interaction');
         expect(window.dataLayer[0]['target']).toBe('Edge_userVisibleError');
-        expect(window.dataLayer[0]['action']).toBe(action);
-        expect(window.dataLayer[0]['target-properties']).toBe(message);
-        expect(window.dataLayer[0]['interaction-type']).toBe(true);
+        expect(window.dataLayer[0]['action']).toBe(message);
+        expect(window.dataLayer[0]['target-properties']).toBe(pathName);
+        expect(window.dataLayer[0]['interaction-type']).toBeUndefined();
     });
 });

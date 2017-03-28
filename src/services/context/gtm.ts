@@ -25,6 +25,14 @@ export interface IGAEvent {
     'interaction-type'?: boolean;
 }
 
+export interface IGATimingEvent {
+    event?: string;
+    timingCategory?: string;
+    timingVar?: string | number;
+    timingLabel?: string | number;
+    timingValue?: string | number;
+}
+
 export interface IGTMContext {
     'user.uuid'?: string;
     'user.email'?: string;
@@ -143,13 +151,12 @@ export class GTMService {
         this.window.registerEventTrack(properties);
     }
 
-    public registerUserVisibleError (errorMessage: string, action?: string) {
+    public registerUserVisibleError (errorMessage: string, pagePathName: string) {
         const props: IGAEventProps = {
-            action: action,
+            action: errorMessage,
             category: 'Edge_userVisibleError',
             event: 'interaction',
-            label: errorMessage,
-            noninteraction: true
+            label: pagePathName
         };
         this.window.registerEventTrack(props);
     }
@@ -160,15 +167,13 @@ export class GTMService {
     }
 
     public registerClientCall (responseCode: number, path: string, responseTime: number) {
-        const props: IGAEventProps = {
-            action: responseCode,
-            category: 'Edge_APICall',
-            event: 'timing',
-            label: path,
-            noninteraction: true,
-            value: responseTime
+        const props: IGATimingEvent = {
+            timingCategory: 'Edge_APICall',
+            timingLabel: path,
+            timingValue: responseTime,
+            timingVar: responseCode
         };
-        this.window.registerEventTrack(props);
+        this.window.registerTimingEvent(props);
     }
 
     public updateGtmContext (orgName?: string, uuid?: string, email?: string) {

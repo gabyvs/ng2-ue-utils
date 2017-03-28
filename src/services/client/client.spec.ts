@@ -1,23 +1,26 @@
-import { TestBed }    from '@angular/core/testing';
+import { TestBed }      from '@angular/core/testing';
 import {
     XHRBackend,
     Response,
     ResponseOptions,
     RequestMethod,
     Headers,
-    HttpModule }      from '@angular/http';
+    HttpModule }        from '@angular/http';
 import {
     MockBackend,
-    MockConnection }  from '@angular/http/testing';
+    MockConnection }    from '@angular/http/testing';
 
-import { Client }     from './client';
+import { Client }       from './client';
 import {
     APP_CONFIG,
-    IAppConfig }      from '../context/app-config';
-import {GTMService, IGAEvent} from '../context/gtm';
+    IAppConfig }        from '../context/app-config';
+import {
+    GTMService,
+    IGAEvent,
+    IGATimingEvent }    from '../context/gtm';
 import {
     WindowRef,
-    WindowMock }      from '../window-ref';
+    WindowMock }        from '../window-ref';
 
 declare const beforeEach, expect, it, describe;
 
@@ -54,6 +57,14 @@ const newForbidden = (): Response =>
         })
     );
 
+const newMalFormedError = (): Response =>  new Response(
+    new ResponseOptions({
+        body: '{ "context" : []}',
+        status: 500,
+        statusText: 'Server Error'
+    })
+);
+
 describe('Client', () => {
     let client: Client;
     let backend: MockBackend;
@@ -88,13 +99,13 @@ describe('Client', () => {
                 expect(connection.request.url).toBe(someUrl);
                 expect(connection.request.method).toBe(RequestMethod.Get);
                 expect(window.dataLayer.length).toBe(1);
-                const theEvent: IGAEvent = window.dataLayer[0];
+                const theEvent: IGATimingEvent = window.dataLayer[0];
                 expect(theEvent.event).toBe('timing');
-                expect(theEvent.action).toBe(200);
-                expect(theEvent.target).toBe('Edge_APICall');
-                expect(theEvent['target-properties']).toBe(someUrl);
-                expect(theEvent.value).toBeDefined();
-                expect(theEvent.value >= 0).toBeTruthy();
+                expect(theEvent.timingVar).toBe(200);
+                expect(theEvent.timingCategory).toBe('Edge_APICall');
+                expect(theEvent.timingLabel).toBe(someUrl);
+                expect(theEvent.timingValue).toBeDefined();
+                expect(theEvent.timingValue >= 0).toBeTruthy();
                 done();
             }
         );
@@ -159,18 +170,44 @@ describe('Client', () => {
         backend.connections.subscribe((cn: MockConnection) => connection = cn);
         client.get(someUrl).subscribe(
             next => {
-                expect(next).toBeUndefined();
+                expect('Should not enter success case').toBeUndefined();
                 done();
             },
             error => {
                 expect(error).toBeDefined();
                 expect(error.message).toBeDefined();
                 expect(error.message).toBe('Forbidden. You don\'t have permissions to access this resource.');
-                expect(error.code).toBe(403);
+                expect(error.code).toBe('403');
                 done();
             }
         );
         connection.mockRespond(newForbidden());
+    });
+
+    it('GET with malformed error', (done) => {
+        let connection: MockConnection;
+        backend.connections.subscribe((cn: MockConnection) => connection = cn);
+        client.get(someUrl).subscribe(
+            next => {
+                expect('Should not enter success case').toBeUndefined();
+                done();
+            },
+            error => {
+                expect(error).toBeDefined();
+                expect(error.message).toBeDefined();
+                expect(error.message).toBe('Internal Server Error');
+                expect(error.code).toBe('500');
+                const theMalFormedError: IGAEvent = window.dataLayer[0];
+                expect(theMalFormedError.event).toBe('Edge_malFormedError');
+                expect(theMalFormedError.target).toBe('ProductsSPA');
+                expect(theMalFormedError.action).toBe(someUrl);
+                expect(theMalFormedError['target-properties']).toBe('{"context":[]}');
+                done();
+            }
+        );
+        const err: any = newMalFormedError();
+        err.name = 'error name';
+        connection.mockError(err);
     });
 
 });

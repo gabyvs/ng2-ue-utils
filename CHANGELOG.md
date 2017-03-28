@@ -1,3 +1,11 @@
+## [3.8.1](https://github.com/gabyvs/ng2-ue-utils/compare/3.8.0...3.8.1) (2017-03-29)
+
+### Features
+
+* **GTMService:** Adding specific method for Google Analytics timing events 
+* **Notifications:** Logging user visible errors to Google Analytics now includes the current location pathName
+* **Client:** Better error parsing, logging malformed errors to Google Analytics
+
 ## [3.8.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.7.0...3.8.0) (2017-03-24)
 
 ### Features

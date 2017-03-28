@@ -36,6 +36,7 @@
     "src/pipes/from-now/from-now.spec.ts",
     "src/services/client/clientObserver.spec.ts",
     "src/services/client/client.spec.ts",
+    "src/services/client/client-error-parser.spec.ts",
     "src/services/client/client-request-options.spec.ts",
     "src/services/client/observable-client.spec.ts",
     "src/services/client/observable-client-base.spec.ts",

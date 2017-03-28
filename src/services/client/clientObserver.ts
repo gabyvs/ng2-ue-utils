@@ -89,7 +89,7 @@ export class ClientObserver {
             this.countDown();
         }
         this._emitter.next({
-            error: error ? (error.message || error) : undefined,
+            error: error ? (error.message) : undefined,
             errorInfo: error,
             event: event,
             method: method,
