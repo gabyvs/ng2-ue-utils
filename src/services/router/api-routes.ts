@@ -21,5 +21,5 @@ export class ApiRoutes {
 
     public orgRole = (role: string): string => this.orgUrl(`/userroles/${role}/permissions`);
     
-    public permissions = (email: string) => `/users/${email}/permissions`;
+    public permissions = (email: string) => `/users/${email}/permissions?organization=${this.orgName}`;
 }

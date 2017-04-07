@@ -78,7 +78,11 @@ export abstract class ObservableClient extends ObservableClientBase {
 
     public getListObject = <T>(): Observable<T> =>
         this.get<T>(this.router.list());
-    
+
+    // MGMT-3977 EDGEUE-249 // TODO remove filtering logic when API is ready
+    // We are now passing an `organization` query param in this call in order to sidestep the MGMT-3977 bug, but API
+    // still returns all permissions for all orgs.  We have been advised to keep the filtering logic below until the
+    // API has been fixed to do this filtering on the backend.
     public permissions = (): Observable<RolePermissions> => {
         return this.userInfo()
             .flatMap((info: IUserInfo) => this.get<IResourcePermissionsResponse>(this.router.permissions(info.email)))
