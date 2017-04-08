@@ -1,3 +1,18 @@
+## [3.9.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.8.1...3.9.0) (2017-04-07)
+
+### Features
+
+* **Client:** Adding X-Apigee-App-Id header to all client calls to identify SPA that is making the call.
+
+### Breaking changes for tests and development environment configuration
+
+* **ApiRoutes:** Use `organization` query param in permissions call
+
+The change on the ApiRoutes will break any of your application tests that are mocking permissions response. 
+If your application is using a local router (like Nezaldi), depending on the configuration of your routes
+you probably would need to change the route for the permissions call there as well. 
+
+
 ## [3.8.1](https://github.com/gabyvs/ng2-ue-utils/compare/3.8.0...3.8.1) (2017-03-29)
 
 ### Features

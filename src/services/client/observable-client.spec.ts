@@ -90,7 +90,7 @@ describe('Observable Client', () => {
         const otherOrgPerms = { organization: 'def', path: '/otherPath', permissions: []};
         const response = { resourcePermission: [root, custom, otherOrgPerms] };
 
-        client.on('/users/dimitri@apigee.com/permissions', response);
+        client.on('/users/dimitri@apigee.com/permissions?organization=abc', response);
 
         someObservableClient.permissions().subscribe(
             permissions => {

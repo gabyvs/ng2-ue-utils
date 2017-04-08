@@ -1,16 +1,21 @@
-import { Injectable }           from '@angular/core';
+import {
+    Inject,
+    Injectable }                from '@angular/core';
 import {
     Http,
     RequestOptionsArgs,
     Response }                  from '@angular/http';
 import { Observable }           from 'rxjs/Observable';
 
-import { ClientRequestOptions } from './client-request-options';
-import { GTMService }           from '../context/gtm';
-import { WindowRef }            from '../window-ref';
 import {
     parse,
     IParseResult }              from './client-error-parser';
+import { ClientRequestOptions } from './client-request-options';
+import {
+    APP_CONFIG,
+    IAppConfig }                from '../context/app-config';
+import { GTMService }           from '../context/gtm';
+import { WindowRef }            from '../window-ref';
 
 const knownCodes = [401, 403];
 
@@ -19,7 +24,7 @@ export interface ISimplifiedError {
     code: string;
     originalError: any;
     path: string;
-};
+}
 
 export interface IClientBase {
     get: <T>(path: string, options?: RequestOptionsArgs) => Observable<T>;
@@ -30,7 +35,11 @@ export interface IClientBase {
 
 @Injectable()
 export class Client implements IClientBase {
-    constructor (private http: Http, private gtmService: GTMService, private win: WindowRef) {}
+    constructor (
+        private http: Http,
+        private gtmService: GTMService,
+        private win: WindowRef,
+        @Inject(APP_CONFIG) private appConfig: IAppConfig) {}
 
     private mapToJson = <T>(obs: Observable<Response>): Observable<T> => {
         return new Observable<T>(o => {
@@ -87,15 +96,19 @@ export class Client implements IClientBase {
         // https://github.com/angular/angular/issues/10612 Should be fixed in RC6
         if (!options) { options = {}; }
         if (!options.body) { options.body = ''; }
-        return this.mapAndCatch<T>(path, this.http.get(path, new ClientRequestOptions(options)));
+        return this.mapAndCatch<T>(path,
+            this.http.get(path, new ClientRequestOptions(options, this.appConfig.gtmAppName)));
     };
 
     public delete = <T>(path: string, options?: RequestOptionsArgs): Observable<T>  =>
-        this.mapAndCatch<T>(path, this.http.delete(path, new ClientRequestOptions(options)));
+        this.mapAndCatch<T>(path, this.http.delete(path,
+            new ClientRequestOptions(options, this.appConfig.gtmAppName)));
 
     public put = <T, U>(path: string, payload: U, options?: RequestOptionsArgs): Observable<T>  =>
-        this.mapAndCatch<T>(path, this.http.put(path, JSON.stringify(payload), new ClientRequestOptions(options)));
+        this.mapAndCatch<T>(path, this.http.put(path, JSON.stringify(payload),
+            new ClientRequestOptions(options, this.appConfig.gtmAppName)));
 
     public post = <T, U>(path: string, payload: U, options?: RequestOptionsArgs): Observable<T>  =>
-        this.mapAndCatch<T>(path, this.http.post(path, JSON.stringify(payload), new ClientRequestOptions(options)));
+        this.mapAndCatch<T>(path, this.http.post(path, JSON.stringify(payload),
+            new ClientRequestOptions(options, this.appConfig.gtmAppName)));
 }
