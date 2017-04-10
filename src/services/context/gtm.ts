@@ -98,11 +98,11 @@ export interface IGTMContext {
  * export class AppComponent implements OnDestroy, OnInit {
  *   private subscription: Subscription;
  *
- *   constructor (private gtmService: GTMService) {}
+ *   constructor (private gtmService: GTMService, private router: Router) {}
  *
  *   public ngOnInit () {
  *       this.subscription = this.router.events
- *           .filter(e => e instanceof NavigationStart)
+ *           .filter(e => e instanceof NavigationEnd)
  *           .subscribe(_ => {
  *               this.gtmService.registerPageTrack(window.location.pathname)
  *           });
