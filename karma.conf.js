@@ -6,7 +6,7 @@ module.exports = function (config) {
         basePath: '',
         port: 3334,
         logLevel: config.LOG_INFO,
-        browsers: ['Chrome'], //use Chrome as default
+        browsers: [process.env.TRAVIS ? 'Chrome_travis_ci' : 'Chrome'], //use Chrome locally only
         singleRun: true, //just run once by default
         frameworks: ['jasmine'], //use jasmine as framework
         files: [
@@ -37,6 +37,12 @@ module.exports = function (config) {
         webpack: webpackConfig,
         webpackMiddleware: {
             noInfo: true
+        },
+        customLaunchers: {
+            Chrome_travis_ci: {
+                base: 'Chrome',
+                flags: ['--no-sandbox']
+            }
         }
     });
 };
