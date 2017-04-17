@@ -18,7 +18,6 @@ module.exports = function (config) {
             'node_modules/zone.js/dist/jasmine-patch.js',
             'node_modules/zone.js/dist/async-test.js',
             'node_modules/zone.js/dist/fake-async-test.js',
-            'node_modules/phantomjs-polyfill/bind-polyfill.js',
             'node_modules/reflect-metadata/Reflect.js',
             { pattern: 'karma.tests.js', watched: false } //test files
         ],
