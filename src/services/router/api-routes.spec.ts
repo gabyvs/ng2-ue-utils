@@ -5,9 +5,8 @@ import { TestBed }          from '@angular/core/testing';
 import { ApiRoutes }        from './api-routes';
 import { Client }           from '../client/client';
 import { ClientMock }       from '../client/client.mock';
-import {
-    APP_CONFIG,
-    IAppConfig }            from '../context/app-config';
+import { APP_CONFIG }       from '../context/app-config';
+import { mockAppConfig }    from '../context/app-config.mock';
 import { ContextService }   from '../context/context';
 import { GTMService }       from '../context/gtm';
 
@@ -20,14 +19,6 @@ declare const beforeEach, describe, expect, it;
 describe('Generated URLs', () => {
 
     const orgName = 'abc';
-    const apiBasePath = 'apiproducts';
-    const appBasePath = 'products';
-    const appName = 'ProductsSPA';
-    const appConfig: IAppConfig = {
-        apiBasePath: apiBasePath,
-        appBasePath: appBasePath,
-        gtmAppName: appName
-    };
     let router;
 
     beforeEach(() => {
@@ -38,14 +29,14 @@ describe('Generated URLs', () => {
                 { provide: Location, useClass: SpyLocation} ,
                 { provide: WindowRef, useClass: WindowMock },
                 { provide: Client, useClass: ClientMock },
-                { provide: APP_CONFIG, useValue: appConfig }
+                { provide: APP_CONFIG, useValue: mockAppConfig }
             ]
         });
 
         const service = TestBed.get(ContextService);
         const a = TestBed.get(APP_CONFIG);
         const loc = TestBed.get(Location);
-        loc.go(`/organizations/${orgName}/${appBasePath}`);
+        loc.go(`/organizations/${orgName}/${mockAppConfig.appBasePath}`);
         router = new ApiRoutes(service, a.apiBasePath);
     });
 
@@ -76,15 +67,15 @@ describe('Generated URLs', () => {
 
     it('Entity New URL', () => {
         expect(router.new())
-            .toBe(`/organizations/abc/${apiBasePath}`);
+            .toBe(`/organizations/abc/${mockAppConfig.apiBasePath}`);
     });
 
     it('Entity One URL', () => {
         expect(router.entity('id'))
-            .toBe(`/organizations/abc/${apiBasePath}/id`);
+            .toBe(`/organizations/abc/${mockAppConfig.apiBasePath}/id`);
     });
 
     it('List URL', () => {
-        expect(router.list()).toBe(`/organizations/abc/${apiBasePath}`);
+        expect(router.list()).toBe(`/organizations/abc/${mockAppConfig.apiBasePath}`);
     });
 });

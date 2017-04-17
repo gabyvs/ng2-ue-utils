@@ -11,9 +11,8 @@ import {
     MockConnection }    from '@angular/http/testing';
 
 import { Client }       from './client';
-import {
-    APP_CONFIG,
-    IAppConfig }        from '../context/app-config';
+import { APP_CONFIG }   from '../context/app-config';
+import { mockAppConfig }from '../context/app-config.mock';
 import {
     GTMService,
     IGAEvent,
@@ -25,14 +24,6 @@ import {
 declare const beforeEach, expect, it, describe;
 
 const someUrl = '/organziations/abc/proxies';
-const apiBasePath = 'apiproducts';
-const appBasePath = 'products';
-const appName = 'ProductsSPA';
-const appConfig: IAppConfig = {
-    apiBasePath: apiBasePath,
-    appBasePath: appBasePath,
-    gtmAppName: appName
-};
 
 const emptyResponse: Response = new Response(
     new ResponseOptions({
@@ -77,7 +68,7 @@ describe('Client', () => {
                 Client,
                 GTMService,
                 { provide: XHRBackend, useClass: MockBackend },
-                { provide: APP_CONFIG, useValue: appConfig },
+                { provide: APP_CONFIG, useValue: mockAppConfig },
                 { provide: WindowRef, useClass: WindowMock },
             ]
         });

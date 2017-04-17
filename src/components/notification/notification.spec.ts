@@ -5,23 +5,14 @@ import { By }                   from '@angular/platform-browser';
 
 import { Notification }         from './notification';
 import { NotificationService }  from './notification-service';
-import {
-    APP_CONFIG,
-    IAppConfig }                from '../../services/context/app-config';
+import { APP_CONFIG }           from '../../services/context/app-config';
+import { mockAppConfig }        from '../../services/context/app-config.mock';
 import { GTMService }           from '../../services/context/gtm';
 import {
     WindowRef,
     WindowMock }                from '../../services/window-ref';
 
 declare const beforeEach, describe, expect, it, jasmine, spyOn;
-const apiBasePath = 'apiproducts';
-const appBasePath = 'products';
-const appName = 'ProductsSPA';
-const appConfig: IAppConfig = {
-    apiBasePath: apiBasePath,
-    appBasePath: appBasePath,
-    gtmAppName: appName
-};
 
 describe('Component: Notification', () => {
     let notification:   Notification;
@@ -43,7 +34,7 @@ describe('Component: Notification', () => {
                 NotificationService,
                 GTMService,
                 { provide: WindowRef, useClass: WindowMock },
-                { provide: APP_CONFIG, useValue: appConfig }
+                { provide: APP_CONFIG, useValue: mockAppConfig }
             ]
         });
 

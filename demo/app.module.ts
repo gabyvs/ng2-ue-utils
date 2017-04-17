@@ -20,6 +20,7 @@ import {
 const appConfig: IAppConfig = {
     apiBasePath: 'demoapp',
     appBasePath: 'demoapp',
+    appVersion: 'demoapp',
     gtmAppName: 'demoapp'
 };
 

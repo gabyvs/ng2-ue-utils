@@ -1,24 +1,13 @@
 import { TestBed }      from '@angular/core/testing';
 
-import {
-    APP_CONFIG,
-    IAppConfig }        from './app-config';
+import { APP_CONFIG }   from './app-config';
+import { mockAppConfig }from './app-config.mock';
 import { GTMService }   from './gtm';
 import {
     WindowMock,
     WindowRef }         from '../window-ref';
 
 declare const beforeEach, describe, expect, it;
-
-const apiBasePath = 'apiproducts';
-const appBasePath = 'products';
-const appName = 'ProductsSPA';
-const appConfig: IAppConfig = {
-    apiBasePath: apiBasePath,
-    appBasePath: appBasePath,
-    gtmAppName: appName
-};
-
 describe('Context Helper', () => {
 
     let gtmService: GTMService;
@@ -28,7 +17,7 @@ describe('Context Helper', () => {
         TestBed.configureTestingModule({
             providers:      [
                 { provide: WindowRef, useClass: WindowMock },
-                { provide: APP_CONFIG, useValue: appConfig },
+                { provide: APP_CONFIG, useValue: mockAppConfig },
                 { provide: GTMService, useClass: GTMService }
             ]
         });
@@ -46,14 +35,14 @@ describe('Context Helper', () => {
         expect(window.dataLayer).toBeDefined();
         expect(window.dataLayer.length).toBe(1);
         expect(window.dataLayer[0]['organization.name']).toBe(org);
-        expect(window.dataLayer[0]['webapp.name']).toBe(appName);
+        expect(window.dataLayer[0]['webapp.name']).toBe(mockAppConfig.gtmAppName);
         expect(window.dataLayer[0]['user.internal']).toBe('internal');
         expect(window.dataLayer[0]['user.email']).toBe(internalEmail);
         expect(window.dataLayer[0]['user.uuid']).toBe(id);
         gtmService.updateGtmContext(org, id, externalEmail);
         expect(window.dataLayer.length).toBe(2);
         expect(window.dataLayer[1]['organization.name']).toBe(org);
-        expect(window.dataLayer[1]['webapp.name']).toBe(appName);
+        expect(window.dataLayer[1]['webapp.name']).toBe(mockAppConfig.gtmAppName);
         expect(window.dataLayer[1]['user.internal']).toBeUndefined();
         expect(window.dataLayer[1]['user.email']).toBe(externalEmail);
         expect(window.dataLayer[1]['user.uuid']).toBe(id);
@@ -87,7 +76,7 @@ describe('Context Helper', () => {
         expect(window.dataLayer).toBeDefined();
         expect(window.dataLayer.length).toBe(1);
         expect(window.dataLayer[0]['event']).toBe('interaction');
-        expect(window.dataLayer[0]['target']).toBe(appConfig.gtmAppName);
+        expect(window.dataLayer[0]['target']).toBe(mockAppConfig.gtmAppName);
         expect(window.dataLayer[0]['action']).toBe(props.action);
         expect(window.dataLayer[0]['target-properties']).toBe(props.label);
         expect(window.dataLayer[0]['value']).toBe(props.value);

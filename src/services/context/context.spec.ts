@@ -1,29 +1,19 @@
-import { Location }        from '@angular/common';
-import { SpyLocation }     from '@angular/common/testing';
-import { TestBed }         from '@angular/core/testing';
+import { Location }         from '@angular/common';
+import { SpyLocation }      from '@angular/common/testing';
+import { TestBed }          from '@angular/core/testing';
 
-import {
-    APP_CONFIG,
-    IAppConfig }            from './app-config';
+import { APP_CONFIG }       from './app-config';
+import { mockAppConfig }    from './app-config.mock';
 import { ContextService }   from './context';
+import { ContextHelper }    from './context-helper';
 import { GTMService }       from './gtm';
 import { Client }           from '../client/client';
 import { ClientMock }       from '../client/client.mock';
 import {
     WindowMock,
     WindowRef }             from '../window-ref';
-import { ContextHelper }    from './context-helper';
 
 declare const beforeEach, describe, expect, it, spyOn;
-
-const apiBasePath = 'apiproducts';
-const appBasePath = 'products';
-const appName = 'ProductsSPA';
-const appConfig: IAppConfig = {
-    apiBasePath: apiBasePath,
-    appBasePath: appBasePath,
-    gtmAppName: appName
-};
 const sessionContext: ContextHelper.ISessionContext = { email: 'test@test.com', uuid: 'a-uuid-here' };
 const jsString = JSON.stringify(sessionContext);
 const cookieValue = `session_context=${btoa(jsString)}`;
@@ -42,7 +32,7 @@ describe('Context Service', () => {
                 { provide: Location, useClass: SpyLocation} ,
                 { provide: WindowRef, useClass: WindowMock },
                 { provide: Client, useClass: ClientMock },
-                { provide: APP_CONFIG, useValue: appConfig }
+                { provide: APP_CONFIG, useValue: mockAppConfig }
             ]
         });
 
@@ -54,7 +44,7 @@ describe('Context Service', () => {
 
     it('Populates the org name', () => {
         const orgName = 'fromPath';
-        loc.path = () => { return `/organizations/${orgName}/${appBasePath}`; };
+        loc.path = () => { return `/organizations/${orgName}/${mockAppConfig.appBasePath}`; };
         const context = service.getContext();
         expect(context.orgName).toBe(orgName);
     });
@@ -79,7 +69,7 @@ describe('Context Service', () => {
         expect(context.orgName).toBe(orgName);
         expect(loc.go).toHaveBeenCalled();
         expect(theSpy.calls.count()).toBe(1);
-        expect(theSpy.calls.argsFor(0)[0]).toBe(`/organizations/${orgName}/${appBasePath}`);
+        expect(theSpy.calls.argsFor(0)[0]).toBe(`/organizations/${orgName}/${mockAppConfig.appBasePath}`);
     });
 
     it('Redirects to no-org page if organization was not in url nor in local storage', () => {

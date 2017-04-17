@@ -1,3 +1,18 @@
+## [3.9.1](https://github.com/gabyvs/ng2-ue-utils/compare/3.9.0...3.9.1) (2017-04-17)
+
+### Features
+
+* **Client:** Adding X-Apigee-App-Version header to all client calls to identify SPA version that is making the call.
+* **GTMService:** Adding webapp.version to GTM context to identify SPA version that is setting GTM events
+* **IAppConfig:** Adding optional appVersion to the AppConfig interface. This version is the version that will be used in the previously mentioned features. 
+See an example of the full AppConfig object on `src/services/context/app-config.mock.ts` file
+
+**Note:** although IAppConfig.appVersion property is optional now, it might be enforced in future releases. 
+
+### Dependency Changes
+
+* **PhantomJS:** Removing PhantomJS dependency. Now all tests are run against Chrome browser. 
+
 ## [3.9.0](https://github.com/gabyvs/ng2-ue-utils/compare/3.8.1...3.9.0) (2017-04-07)
 
 ### Features

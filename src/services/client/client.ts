@@ -97,18 +97,18 @@ export class Client implements IClientBase {
         if (!options) { options = {}; }
         if (!options.body) { options.body = ''; }
         return this.mapAndCatch<T>(path,
-            this.http.get(path, new ClientRequestOptions(options, this.appConfig.gtmAppName)));
+            this.http.get(path, new ClientRequestOptions(options, this.appConfig)));
     };
 
     public delete = <T>(path: string, options?: RequestOptionsArgs): Observable<T>  =>
         this.mapAndCatch<T>(path, this.http.delete(path,
-            new ClientRequestOptions(options, this.appConfig.gtmAppName)));
+            new ClientRequestOptions(options, this.appConfig)));
 
     public put = <T, U>(path: string, payload: U, options?: RequestOptionsArgs): Observable<T>  =>
         this.mapAndCatch<T>(path, this.http.put(path, JSON.stringify(payload),
-            new ClientRequestOptions(options, this.appConfig.gtmAppName)));
+            new ClientRequestOptions(options, this.appConfig)));
 
     public post = <T, U>(path: string, payload: U, options?: RequestOptionsArgs): Observable<T>  =>
         this.mapAndCatch<T>(path, this.http.post(path, JSON.stringify(payload),
-            new ClientRequestOptions(options, this.appConfig.gtmAppName)));
+            new ClientRequestOptions(options, this.appConfig)));
 }

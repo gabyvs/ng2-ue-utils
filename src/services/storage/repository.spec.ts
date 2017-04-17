@@ -13,15 +13,14 @@ import { ValueStorage }     from './value-storage';
 import { Client }           from '../client/client';
 import { ClientMock }       from '../client/client.mock';
 import { ObservableClient } from '../client/observable-client';
-import {
-    APP_CONFIG,
-    IAppConfig }            from '../context/app-config';
+import { APP_CONFIG }       from '../context/app-config';
 import { ContextService }   from '../context/context';
+import { mockAppConfig }    from '../context/app-config.mock';
+import { GTMService }       from '../context/gtm';
 import { ApiRoutes }        from '../router/api-routes';
 import {
     WindowRef,
     WindowMock }            from '../window-ref';
-import {GTMService} from '../context/gtm';
 
 declare const beforeEach, describe, expect, it;
 
@@ -108,15 +107,6 @@ class SomeObservableClient extends ObservableClient {
 }
 // TODO: this test is wrong! it should use mocks of repository.
 describe('EntityRepository', () => {
-
-    const apiBasePath = 'apiproducts';
-    const appBasePath = 'products';
-    const appName = 'ProductsSPA';
-    let appConfig: IAppConfig = {
-        apiBasePath: apiBasePath,
-        appBasePath: appBasePath,
-        gtmAppName: appName
-    };
     let repository: SomeTypeRepository;
     let client;
 
@@ -136,7 +126,7 @@ describe('EntityRepository', () => {
                 { provide: Location, useClass: SpyLocation} ,
                 { provide: WindowRef, useClass: WindowMock },
                 { provide: Client, useClass: ClientMock },
-                { provide: APP_CONFIG, useValue: appConfig }
+                { provide: APP_CONFIG, useValue: mockAppConfig }
             ]
         });
 
@@ -146,13 +136,13 @@ describe('EntityRepository', () => {
         const router = new ApiRoutes(service, a.apiBasePath);
         client = TestBed.get(Client);
 
-        loc.go(`/organizations/abc/${appBasePath}`);
+        loc.go(`/organizations/abc/${mockAppConfig.appBasePath}`);
         const o = new SomeObservableClient(client, router);
         repository = new SomeTypeRepository(o, a.apiBasePath, new SomeTypeStorage());
     });
 
     it('Subscription will emit latest data.', done => {
-        client.on(`/organizations/abc/${apiBasePath}`, { sometype: []});
+        client.on(`/organizations/abc/${mockAppConfig.apiBasePath}`, { sometype: []});
 
         let flag = 0;
 
@@ -206,7 +196,7 @@ describe('EntityRepository', () => {
     });
 
     it('Fetching should change status, and complete loading should be updated once it finishes', done => {
-        client.on(`/organizations/abc/${apiBasePath}`, { sometype: initArray(6) });
+        client.on(`/organizations/abc/${mockAppConfig.apiBasePath}`, { sometype: initArray(6) });
         let counts = [6, 6];
         let status = ['loading', 'loaded'];
         repository.subscribe(
@@ -232,7 +222,7 @@ describe('EntityRepository', () => {
     });
 
     it('Fetching should load entities', done => {
-        client.on(`/organizations/abc/${apiBasePath}`, { sometype: initArray(6) });
+        client.on(`/organizations/abc/${mockAppConfig.apiBasePath}`, { sometype: initArray(6) });
 
         let counts = [6, 6];
         let tos = [6, 6];
@@ -265,7 +255,7 @@ describe('EntityRepository', () => {
         client.on('/users/dimitri@apigee.com/permissions?organization=abc', {
             resourcePermission: [ { organization: 'abc', path: '/', permissions: []} ]
         });
-        client.on(`/organizations/abc/${apiBasePath}`, errorMessage, true);
+        client.on(`/organizations/abc/${mockAppConfig.apiBasePath}`, errorMessage, true);
 
         repository.subscribe(
             (state: IRangeSnapshot<SomeType>) => {
@@ -299,10 +289,10 @@ describe('EntityRepository', () => {
         types.push(new SomeRawType(4, 'other4'));
         types.push(new SomeRawType(5, 'other5'));
         types.push(new SomeRawType(6, 'other6'));
-        client.on(`/organizations/abc/${apiBasePath}`, { sometype: types});
-        client.on(`/organizations/abc/${apiBasePath}/1`, types[0]);
-        client.on(`/organizations/abc/${apiBasePath}/2`, types[1]);
-        client.on(`/organizations/abc/${apiBasePath}/3`, types[2]);
+        client.on(`/organizations/abc/${mockAppConfig.apiBasePath}`, { sometype: types});
+        client.on(`/organizations/abc/${mockAppConfig.apiBasePath}/1`, types[0]);
+        client.on(`/organizations/abc/${mockAppConfig.apiBasePath}/2`, types[1]);
+        client.on(`/organizations/abc/${mockAppConfig.apiBasePath}/3`, types[2]);
         let counter = -1;
 
         repository.subscribe(
@@ -363,7 +353,7 @@ describe('EntityRepository', () => {
     });
 
     it('Sorts entity', done => {
-        client.on(`/organizations/abc/${apiBasePath}`, { sometype: initArray(6) });
+        client.on(`/organizations/abc/${mockAppConfig.apiBasePath}`, { sometype: initArray(6) });
         let counter = -1;
         repository.subscribe(
             (state: IRangeSnapshot<SomeType>) => {
@@ -419,7 +409,7 @@ describe('EntityRepository', () => {
         types.push(new SomeType(4, 'odd'));
         types.push(new SomeType(5, 'name2'));
         types.push(new SomeType(6, 'name1'));
-        client.on(`/organizations/abc/${apiBasePath}`, { sometype: types });
+        client.on(`/organizations/abc/${mockAppConfig.apiBasePath}`, { sometype: types });
         let counter = -1;
         repository.subscribe(
             (state: IRangeSnapshot<SomeType>) => {
@@ -483,7 +473,7 @@ describe('EntityRepository', () => {
     });
 
     it('Getting a range of entities.', done => {
-        client.on(`/organizations/abc/${apiBasePath}`, { sometype: initArray(65) });
+        client.on(`/organizations/abc/${mockAppConfig.apiBasePath}`, { sometype: initArray(65) });
         let counter = -1;
 
         repository.subscribe(

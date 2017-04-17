@@ -1,8 +1,9 @@
 import { OpaqueToken } from '@angular/core';
 
 export interface IAppConfig {
-    appBasePath: string;
     apiBasePath: string;
+    appBasePath: string;
+    appVersion?: string;
     gtmAppName: string;
 }
 

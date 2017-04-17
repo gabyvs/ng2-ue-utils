@@ -6,7 +6,7 @@ module.exports = function (config) {
         basePath: '',
         port: 3334,
         logLevel: config.LOG_INFO,
-        browsers: ['Chrome'], //use PhantomJS as default
+        browsers: ['Chrome'], //use Chrome as default
         singleRun: false, //just run once by default
         frameworks: ['jasmine'], //use jasmine as framework
         autoWatch: true, //use jasmine as framework

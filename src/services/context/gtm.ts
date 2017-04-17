@@ -180,6 +180,7 @@ export class GTMService {
         const context = {
             'organization.name': orgName,
             'webapp.name': this.appConfig.gtmAppName,
+            'webapp.version': this.appConfig.appVersion,
             'event': 'Push Context'
         };
         if (/^[^@]+@apigee.com/.test(email || '')) {

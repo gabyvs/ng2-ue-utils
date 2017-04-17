@@ -56,9 +56,10 @@ import {
     .
     
 const appConfig: IAppConfig = {
-    apiBasePath: 'myProduct',
-    appBasePath: 'myProduct',
-    gtmAppName: 'myProduct'
+    apiBasePath: 'myApiBasePath',
+    appBasePath: 'myAppBasePath',
+    appVersion: 'myAppVersion',
+    gtmAppName: 'myGTMAppName'
 };
 
 @NgModule({

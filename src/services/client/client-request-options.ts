@@ -1,11 +1,11 @@
 import {
     Headers,
     RequestOptionsArgs,
-    RequestOptions
-} from '@angular/http';
+    RequestOptions }    from '@angular/http';
+import { IAppConfig }   from '../context/app-config';
 
 export class ClientRequestOptions extends RequestOptions {
-    constructor(options?: RequestOptionsArgs, spaName?: string) {
+    constructor(options?: RequestOptionsArgs, appConfig?: IAppConfig) {
         super(options);
         if (!this.headers) {
             this.headers = new Headers();
@@ -16,8 +16,11 @@ export class ClientRequestOptions extends RequestOptions {
         this.headers.append('Accept', 'application/json');
         this.headers.append('Content-Type', 'application/json');
         this.headers.append('X-Requested-With', 'XMLHttpRequest');
-        if (spaName) {
-            this.headers.append('x-apigee-app-id', spaName);
+        if (appConfig) {
+            this.headers.append('x-apigee-app-id', appConfig.gtmAppName);
+            if (appConfig.appVersion) {
+                this.headers.append('x-apigee-app-version', appConfig.appVersion);
+            }
         }
     }
 }

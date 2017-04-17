@@ -7,9 +7,8 @@ import { Observable }       from 'rxjs/Rx';
 import { Client }           from './client';
 import { ClientMock }       from './client.mock';
 import { ObservableClient } from './observable-client';
-import {
-    APP_CONFIG,
-    IAppConfig }            from '../context/app-config';
+import { APP_CONFIG }       from '../context/app-config';
+import { mockAppConfig }    from '../context/app-config.mock';
 import { ContextService }   from '../context/context';
 import { GTMService }       from '../context/gtm';
 import { ApiRoutes }        from '../router/api-routes';
@@ -50,14 +49,6 @@ class SomeObservableClient extends ObservableClient {
 }
 
 describe('Observable Client', () => {
-
-    const appBasePath = 'products';
-    const appName = 'ProductsSPA';
-    let appConfig: IAppConfig = {
-        apiBasePath: apiBasePath,
-        appBasePath: appBasePath,
-        gtmAppName: appName
-    };
     let someObservableClient: SomeObservableClient;
     let client;
 
@@ -67,7 +58,7 @@ describe('Observable Client', () => {
                 { provide: Location, useClass: SpyLocation} ,
                 { provide: WindowRef, useClass: WindowMock },
                 { provide: Client, useClass: ClientMock },
-                { provide: APP_CONFIG, useValue: appConfig },
+                { provide: APP_CONFIG, useValue: mockAppConfig },
                 ContextService,
                 GTMService
             ]
@@ -79,7 +70,7 @@ describe('Observable Client', () => {
         const router = new ApiRoutes(service, a.apiBasePath);
         client = TestBed.get(Client);
 
-        loc.go(`/organizations/abc/${appBasePath}`);
+        loc.go(`/organizations/abc/${mockAppConfig.appBasePath}`);
         someObservableClient = new SomeObservableClient(client, router);
     });
 
