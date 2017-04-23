@@ -1,0 +1,21 @@
+@import '../../common/variables.less';
+tr {
+    font-weight: @table-header-font-weight;
+    color: @header-color;
+    text-align: left;
+    padding: 0 5px 8px 5px;
+    cursor: pointer;
+}
+.header-icon {
+    vertical-align: text-bottom;
+    display: inline-table;
+}
+.arrow-down:before {
+    content: "\2193";
+}
+.arrow-up:before {
+    content: "\2191";
+}
+:host {
+    display: table-header-group !important;
+}
