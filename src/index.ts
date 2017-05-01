@@ -33,6 +33,7 @@ export * from './services/client/observable-client.mock';
 export * from './services/context/app-config';
 export * from './services/context/context';
 export * from './services/context/context-helper';
+export * from './services/context/error-handler';
 export * from './services/context/gtm';
 export * from './services/router/api-routes';
 export * from './services/storage/repository';

@@ -1,13 +1,16 @@
-import { Location }             from '@angular/common';
-import { NgModule }             from '@angular/core';
-import { BrowserModule }        from '@angular/platform-browser';
-import { RouterModule }         from '@angular/router';
+import { Location }         from '@angular/common';
+import {
+    ErrorHandler,
+    NgModule }              from '@angular/core';
+import { BrowserModule }    from '@angular/platform-browser';
+import { RouterModule }     from '@angular/router';
 
-import { AppComponent }         from './app.component';
-import { Demo }                 from './demo';
+import { AppComponent }     from './app.component';
+import { Demo }             from './demo';
 import {
     APP_CONFIG,
     ContextService,
+    UEErrorHandler,
     GTMService,
     IAppConfig,
     Ng2UEUtilsModule,
@@ -46,7 +49,8 @@ const appConfig: IAppConfig = {
         ProgressService,
         TooltipService,
         WindowRef,
-        { provide: APP_CONFIG, useValue: appConfig }
+        { provide: APP_CONFIG, useValue: appConfig },
+        { provide: ErrorHandler, useClass: UEErrorHandler },
     ]
 })
 export class AppModule {}
