@@ -1,19 +1,19 @@
-import { ErrorHandler, Injectable } from '@angular/core';
+import {ErrorHandler, Inject, Injectable} from '@angular/core';
 import { GTMService, IGAEventProps } from './gtm';
-import { IAppConfig } from "./app-config";
+import {APP_CONFIG, IAppConfig} from './app-config';
 
 /**
  * This is a customize error handler that logs all uncaught JavaScript errors to the console, and additionally
  * pushes a Google Tag Manager event to the data layer, in order to log the error in Google Analytics.
  *
- * If the "dataLayer" object is not defined (i.e. GTM is disabled) this handler will only log the error to
- * the JavaScript console, as the default ErrorHandler would.
+ * If the "dataLayer" object is not defined (i.e. GTM is disabled), or no gtmErrorCategory is provided by IAppConfig,
+ * this handler will only log the error to the JavaScript console, as the default ErrorHandler would.
  *
  * The following GTM event structure will be used:
  *
  * category: <IAppConfig.gtmErrorCategory>
  * action: <error message>
- * label: version: <IAppConfig.version>
+ * label: version: <IAppConfig.appVersion>
  * value: 0
  * nonInteraction: true
  *
@@ -50,7 +50,7 @@ import { IAppConfig } from "./app-config";
 @Injectable()
 export class GTMErrorHandler extends ErrorHandler {
 
-    constructor (private gtmService: GTMService, private appConfig: IAppConfig) { super(); }
+    constructor (private gtmService: GTMService, @Inject(APP_CONFIG) private appConfig: IAppConfig) { super(); }
 
     /**
      * Overridden error handler method.
@@ -60,29 +60,52 @@ export class GTMErrorHandler extends ErrorHandler {
      * @param error the error to handle
      */
     public handleError(error) {
+        // Log error event to GTM data layer. It's crucial that this call is made first, as the super call below will
+        // rethrow the error, stopping execution.
+        this.logErrorToGTM(error);
+
         // Let the default error handler log the error to the console.
         super.handleError(error);
-
-        // Log error event to GTM data layer.
-        this.logErrorToGTM(error);
     };
 
     /**
-     * Logs Google Analytics event to GTM data layer, based on provided error.
+     * Logs a Google Analytic event to GTM data layer, based on provided error and app configuration.
+     *
+     * If IAppConfig.appVersion is not defined, no event will be pushed.
      *
      * @param error the error to log
      */
     private logErrorToGTM(error) {
+
+        // If no gtmErrorCategory is defined do not push event to GTM
+        if (!this.appConfig.gtmErrorCategory) {
+            return;
+        }
+
+        // Build GTM event based on application configuration and error
         let event: IGAEventProps = {
-            category: this.appConfig.gtmErrorCategory,
             action: error.toString(),
-            label: 'version: ' + this.appConfig.appVersion,
-            value: 0,
-            noninteraction: true
+            category: this.appConfig.gtmErrorCategory,
+            label: this.getVersionLabel(),
+            noninteraction: true,
+            value: 0
         };
 
         // This call will only log the event when the "dataLayer" object is defined (i.e. GTM is enabled)
         this.gtmService.registerEventTrack(event);
+    }
+
+    /**
+     * Get the version label for the Google Analytics event.
+     *
+     * @returns {string} "version: <IAppConfig.appVersion>"; or a blank string, if no appVersion is defined
+     */
+    private getVersionLabel(): string {
+        if (this.appConfig.appVersion) {
+            return 'version: ' + this.appConfig.appVersion;
+        }
+
+        return '';
     }
 
 }
