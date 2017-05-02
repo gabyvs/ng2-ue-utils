@@ -10,7 +10,7 @@ import { Demo }             from './demo';
 import {
     APP_CONFIG,
     ContextService,
-    UEErrorHandler,
+    GTMErrorHandler,
     GTMService,
     IAppConfig,
     Ng2UEUtilsModule,
@@ -50,7 +50,7 @@ const appConfig: IAppConfig = {
         TooltipService,
         WindowRef,
         { provide: APP_CONFIG, useValue: appConfig },
-        { provide: ErrorHandler, useClass: UEErrorHandler },
+        { provide: ErrorHandler, useClass: GTMErrorHandler },
     ]
 })
 export class AppModule {}
