@@ -5,6 +5,7 @@ export interface IAppConfig {
     appBasePath: string;
     appVersion?: string;
     gtmAppName: string;
+    gtmErrorCategory?: string;
 }
 
 export const APP_CONFIG = new OpaqueToken('AppConfig');
