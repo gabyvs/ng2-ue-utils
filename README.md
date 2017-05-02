@@ -146,6 +146,7 @@ And you are ready to go! :)
 * ClientObserver
 * Context
 * GTMService
+* GTMErrorHandler
 * ObservableClient
 * ObservableClientBase
 * Repository
