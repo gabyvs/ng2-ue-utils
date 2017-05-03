@@ -50,7 +50,7 @@ import {APP_CONFIG, IAppConfig} from './app-config';
 @Injectable()
 export class GTMErrorHandler extends ErrorHandler {
 
-    constructor (private gtmService: GTMService, @Inject(APP_CONFIG) private appConfig: IAppConfig) { super(); }
+    constructor (private gtmService: GTMService, @Inject(APP_CONFIG) private appConfig: IAppConfig) { super(false); }
 
     /**
      * Overridden error handler method.
@@ -60,12 +60,15 @@ export class GTMErrorHandler extends ErrorHandler {
      * @param error the error to handle
      */
     public handleError(error) {
-        // Log error event to GTM data layer. It's crucial that this call is made first, as the super call below will
-        // rethrow the error, stopping execution.
-        this.logErrorToGTM(error);
 
         // Let the default error handler log the error to the console.
         super.handleError(error);
+
+        // Log error event to GTM data layer.
+        this.logErrorToGTM(error);
+
+        // If the exception is not rethrown processes like bootstrap will always succeed, if an error is encountered.
+        throw error;
     };
 
     /**
@@ -82,9 +85,12 @@ export class GTMErrorHandler extends ErrorHandler {
             return;
         }
 
+        // Angular will wrap the original error we wish to log
+        const originalError: any = GTMErrorHandler.findOriginalError(error);
+
         // Build GTM event based on application configuration and error
-        let event: IGAEventProps = {
-            action: error.toString(),
+        const event: IGAEventProps = {
+            action: GTMErrorHandler.extractMessage(originalError),
             category: this.appConfig.gtmErrorCategory,
             label: this.getVersionLabel(),
             noninteraction: true,
@@ -106,6 +112,42 @@ export class GTMErrorHandler extends ErrorHandler {
         }
 
         return '';
+    }
+
+    /**
+     * Get the original error from an Angular wrapped error.
+     *
+     * Note: this function implementation is specific to the version of Angular used. Unfortunately there does not seem
+     * to be any public facilities to manage unpacking a wrapped error. Looking at the Angular source, the structure of
+     * the wrapped error changes often. If Angular is updated this method will more than likely have to change.
+     *
+     * @param error     the wrapped error
+     * @returns {any}   the original error
+     */
+    private static findOriginalError(error: any) : any {
+
+        // Guard against unexpected differences in wrapped error structure
+        if (!error.rejection) {
+            return error;
+        }
+
+        // Locate original error
+        error = error.rejection;
+        while (error && error.originalError) {
+            error = error.originalError;
+        }
+
+        return error;
+    }
+
+    /**
+     * Extract error message from an error object.
+     *
+     * @param error         the error to extract the message from
+     * @returns {string}    the error message
+     */
+    private static extractMessage(error: any): string {
+        return error instanceof Error ? error.message : error.toString();
     }
 
 }
