@@ -50,6 +50,42 @@ import {APP_CONFIG, IAppConfig} from './app-config';
 @Injectable()
 export class GTMErrorHandler extends ErrorHandler {
 
+    /**
+     * Get the original error from an Angular wrapped error.
+     *
+     * Note: this function implementation is specific to the version of Angular used. Unfortunately there does not seem
+     * to be any public facilities to manage unpacking a wrapped error. Looking at the Angular source, the structure of
+     * the wrapped error changes often. If Angular is updated this method will more than likely have to change.
+     *
+     * @param error     the wrapped error
+     * @returns {any}   the original error
+     */
+    private static findOriginalError(error: any): any {
+
+        // Guard against unexpected differences in wrapped error structure
+        if (!error.rejection) {
+            return error;
+        }
+
+        // Locate original error
+        error = error.rejection;
+        while (error && error.originalError) {
+            error = error.originalError;
+        }
+
+        return error;
+    }
+
+    /**
+     * Extract error message from an error object.
+     *
+     * @param error         the error to extract the message from
+     * @returns {string}    the error message
+     */
+    private static extractMessage(error: any): string {
+        return error instanceof Error ? error.message : error.toString();
+    }
+
     constructor (private gtmService: GTMService, @Inject(APP_CONFIG) private appConfig: IAppConfig) { super(false); }
 
     /**
@@ -112,42 +148,6 @@ export class GTMErrorHandler extends ErrorHandler {
         }
 
         return '';
-    }
-
-    /**
-     * Get the original error from an Angular wrapped error.
-     *
-     * Note: this function implementation is specific to the version of Angular used. Unfortunately there does not seem
-     * to be any public facilities to manage unpacking a wrapped error. Looking at the Angular source, the structure of
-     * the wrapped error changes often. If Angular is updated this method will more than likely have to change.
-     *
-     * @param error     the wrapped error
-     * @returns {any}   the original error
-     */
-    private static findOriginalError(error: any) : any {
-
-        // Guard against unexpected differences in wrapped error structure
-        if (!error.rejection) {
-            return error;
-        }
-
-        // Locate original error
-        error = error.rejection;
-        while (error && error.originalError) {
-            error = error.originalError;
-        }
-
-        return error;
-    }
-
-    /**
-     * Extract error message from an error object.
-     *
-     * @param error         the error to extract the message from
-     * @returns {string}    the error message
-     */
-    private static extractMessage(error: any): string {
-        return error instanceof Error ? error.message : error.toString();
     }
 
 }
